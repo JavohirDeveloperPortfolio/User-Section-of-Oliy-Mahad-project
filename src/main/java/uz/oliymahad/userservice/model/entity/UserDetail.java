@@ -1,4 +1,4 @@
-package uz.oliymahad.userservice.model;
+package uz.oliymahad.userservice.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,35 +1,103 @@
 package uz.oliymahad.userservice.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import uz.oliymahad.userservice.model.entity.auth.AuthProviderEnum;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import uz.oliymahad.userservice.model.enums.EAuthProvider;
+
 
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.Set;
 
-@Getter
-@Setter
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Entity
-@Table(name = "users")
-public class UserEntity {
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+@EntityListeners(AuditingEntityListener.class)
+public class UserEntity implements UserDetails {
 
-        @Column(nullable = false)
-        private String email;
+    @Id
+    @GeneratedValue
+    private Long id;
 
-        @Column(nullable = false)
-        private Boolean emailVerified = false;
+    @Column(nullable = false, unique = true)
+    private String phoneNumber;
 
-        @JsonIgnore
-        private String password;
+    @Column(nullable = false)
+    private String password;
 
-        @Enumerated(EnumType.STRING)
-        private AuthProviderEnum provider;
+    private String email;
 
-        private String providerId;
+    @Enumerated(EnumType.STRING)
+    private EAuthProvider provider;
 
-        private String imageUrl;
+    private String providerId;
+
+    private String imageUrl;
+
+    @Column(nullable = false)
+    private Boolean emailVerified = false;
+
+
+    @ManyToMany
+    private Set<RoleEntity> roles;
+
+
+    @OneToOne
+    private UserDetail userDetails;
+
+    @Column(nullable = false, updatable = false)
+    @CreationTimestamp
+    private Timestamp createdAt;
+
+    @UpdateTimestamp
+    private Timestamp updateAt;
+
+    @CreatedBy
+    private String createdBy;
+
+    @LastModifiedBy
+    private String updatedBy;
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.phoneNumber;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
+

@@ -1,7 +1,6 @@
 package uz.oliymahad.userservice.dto;
 
 import lombok.Data;
-import uz.oliymahad.userservice.model.RoleEntity;
 
 import java.util.Set;
 
