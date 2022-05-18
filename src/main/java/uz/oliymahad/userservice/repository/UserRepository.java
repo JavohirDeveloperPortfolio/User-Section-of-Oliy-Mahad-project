@@ -1,4 +1,4 @@
-package uz.oliymahad.userservice.service.repository;
+package uz.oliymahad.userservice.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
