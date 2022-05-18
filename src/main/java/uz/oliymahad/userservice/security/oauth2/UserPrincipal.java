@@ -6,12 +6,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import uz.oliymahad.userservice.model.entity.RoleEntity;
 import uz.oliymahad.userservice.model.entity.UserEntity;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 @Getter
 @Setter
 public class UserPrincipal implements OAuth2User, UserDetails {
@@ -31,18 +30,11 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     }
 
     public static UserPrincipal create(UserEntity user) {
-//        List<GrantedAuthority> authorities = Collections.
-//                singletonList(new SimpleGrantedAuthority("ROLE_"+user.getRole().name()));
-
-        List<GrantedAuthority> authorities = Collections.
-                singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-
-
         return new UserPrincipal(
                 user.getId(),
                 user.getEmail(),
                 user.getPassword(),
-                authorities
+                user.getRoles()
         );
     }
 

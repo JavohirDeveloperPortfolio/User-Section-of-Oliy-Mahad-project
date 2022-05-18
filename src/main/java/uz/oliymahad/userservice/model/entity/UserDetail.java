@@ -27,8 +27,6 @@ public class UserDetail {
 
     private String passport;
 
-    private String email;
-
     private Date birthDate;
 
 }

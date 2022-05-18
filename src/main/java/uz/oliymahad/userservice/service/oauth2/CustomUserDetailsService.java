@@ -1,4 +1,4 @@
-package uz.oliymahad.userservice.service.user;
+package uz.oliymahad.userservice.service.oauth2;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
