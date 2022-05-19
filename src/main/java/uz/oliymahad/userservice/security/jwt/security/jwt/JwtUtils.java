@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import uz.oliymahad.userservice.security.jwt.security.services.UserDetailsImpl;
+import uz.oliymahad.userservice.model.entity.UserEntity;
 
 import java.util.Date;
 
@@ -13,23 +13,35 @@ import java.util.Date;
 public class JwtUtils {
   private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-  @Value("${bezkoder.app.jwtSecret}")
+  @Value("${jwtSecret}")
   private String jwtSecret;
 
-  @Value("${bezkoder.app.jwtExpirationMs}")
-  private int jwtExpirationMs;
+  @Value("${jwtExpirationMs}")
+  private int accessTokenExpiration;
 
-  public String generateJwtToken(UserDetailsImpl userPrincipal) {
-    return generateTokenFromUsername(userPrincipal.getUsername());
+  @Value("${jwtRefreshExpirationMs}")
+  private long refreshTokenExpiration;
+
+  public String[] generateJwtTokens(UserEntity userPrincipal) {
+    return new String[]{
+            generateAccessTokenFromPhoneNumber(userPrincipal.getPhoneNumber()),
+            generateRefreshTokenFromPhoneNumber(userPrincipal.getPhoneNumber())
+    };
   }
 
-  public String generateTokenFromUsername(String username) {
-    return Jwts.builder().setSubject(username).setIssuedAt(new Date())
-        .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)).signWith(SignatureAlgorithm.HS512, jwtSecret)
+  public String generateAccessTokenFromPhoneNumber(String phoneNumber) {
+    return Jwts.builder().setSubject(phoneNumber).setIssuedAt(new Date())
+        .setExpiration(new Date((new Date()).getTime() + accessTokenExpiration)).signWith(SignatureAlgorithm.HS512, jwtSecret)
         .compact();
   }
 
-  public String getUserNameFromJwtToken(String token) {
+  public String generateRefreshTokenFromPhoneNumber(String phoneNumber){
+    return Jwts.builder().setSubject(phoneNumber).setIssuedAt(new Date())
+            .setExpiration(new Date((new Date()).getTime() + refreshTokenExpiration)).signWith(SignatureAlgorithm.HS512, jwtSecret)
+            .compact();
+  }
+
+  public String getPhoneNumberFromJwtToken(String token) {
     return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
   }
 
