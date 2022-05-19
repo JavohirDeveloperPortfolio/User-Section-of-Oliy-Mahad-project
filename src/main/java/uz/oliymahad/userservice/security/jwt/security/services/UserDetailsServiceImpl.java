@@ -6,8 +6,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uz.oliymahad.userservice.security.jwt.models.User;
-import uz.oliymahad.userservice.security.jwt.repository.UserRepository;
+import uz.oliymahad.userservice.model.entity.UserEntity;
+import uz.oliymahad.userservice.repository.UserRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -16,11 +16,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
   @Override
   @Transactional
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    User user = userRepository.findByUsername(username)
-        .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+  public UserDetails loadUserByUsername(String phoneNumber) throws UsernameNotFoundException {
 
-    return UserDetailsImpl.build(user);
+    return userRepository.findByPhoneNumber(phoneNumber)
+        .orElseThrow(() -> new UsernameNotFoundException("User Not Found with phone number : " + phoneNumber));
   }
 
 }

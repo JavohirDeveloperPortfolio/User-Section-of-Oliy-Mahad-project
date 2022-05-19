@@ -15,6 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import uz.oliymahad.userservice.security.jwt.security.jwt.AuthEntryPointJwt;
+import uz.oliymahad.userservice.security.jwt.security.jwt.AuthTokenFilter;
 import uz.oliymahad.userservice.service.UserService;
 import uz.oliymahad.userservice.service.oauth2.CustomOAuth2UserService;
 import uz.oliymahad.userservice.service.oauth2.CustomUserDetailsService;
@@ -40,20 +43,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
 
+    private final AuthTokenFilter authTokenFilter;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf()
                 .disable()
-//                .addFilterBefore(filterProvider, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET,  "/api/v1/auth/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/auth/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/app-v0.0.1/ad/min/**").permitAll()
                 .anyRequest()
                 .authenticated()
-                .and().
-                oauth2Login()
-                .loginPage("/api/auth/login")
+                .and()
+                .oauth2Login()
+//                .loginPage("/api/auth/login")
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService)
                 .and()
@@ -64,7 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                         DefaultOidcUser principal = (DefaultOidcUser) authentication.getPrincipal();
                         String token = userService.authenticate(principal);
-                        response.addHeader("Authorization", "Bearer " +  token);
+                        response.addHeader("Authorization", "Bearer " + token);
                         String targetUrl = "/api/v1/auth/success";
                         RequestDispatcher dis = request.getRequestDispatcher(targetUrl);
                         dis.forward(request, response);
@@ -76,8 +82,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
                     }
                 })
-                .and()
+                .and().exceptionHandling().authenticationEntryPoint(new AuthEntryPointJwt()).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
     }
 
     @Override
