@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import uz.oliymahad.userservice.exception.OAuth2AuthenticationProcessingException;
+import uz.oliymahad.userservice.exception.UserRoleNotFoundException;
 import uz.oliymahad.userservice.model.entity.RoleEntity;
 import uz.oliymahad.userservice.model.entity.UserEntity;
 import uz.oliymahad.userservice.model.enums.EAuthProvider;
@@ -69,7 +70,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private UserEntity registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
-        RoleEntity role = roleRepository.findByRoleName(ERole.ROLE_USER);
+        RoleEntity role = roleRepository.findByRoleName(ERole.ROLE_USER).orElseThrow(()-> new UserRoleNotFoundException("role not found"));
         UserEntity user = new UserEntity();
 
         user.setProvider(EAuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
