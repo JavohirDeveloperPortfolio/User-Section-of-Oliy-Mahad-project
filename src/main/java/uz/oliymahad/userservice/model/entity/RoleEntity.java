@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import uz.oliymahad.userservice.model.enums.ERole;
+import uz.oliymahad.userservice.model.enums.RoleEnum;
 
 import javax.persistence.*;
 
@@ -20,7 +21,7 @@ public class RoleEntity implements GrantedAuthority {
 
     @Column(nullable = false, unique = true)
     @Enumerated(EnumType.STRING)
-    private ERole roleName;
+    private RoleEnum roleName;
 
     @Override
     public String getAuthority() {

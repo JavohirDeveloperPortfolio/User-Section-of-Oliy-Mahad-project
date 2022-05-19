@@ -1,4 +1,4 @@
-package uz.oliymahad.enity.enums;
+package uz.oliymahad.userservice.model.enums;
 
 public enum PermissionEnum {
     COURSE_CREATE("course:create"),

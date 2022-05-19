@@ -1,4 +1,4 @@
-package uz.oliymahad.enity.enums;
+package uz.oliymahad.userservice.model.enums;
 
 
 import org.assertj.core.util.Sets;
@@ -7,20 +7,21 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static uz.oliymahad.enity.enums.PermissionEnum.*;
+import static com.google.common.collect.Sets.*;
+import static uz.oliymahad.userservice.model.enums.PermissionEnum.*;
 
-public enum UserRoleEnum {
+public enum RoleEnum {
 
-    GUEST(Sets.newHashSet()),
-    USER(Sets.newHashSet()),
-    STUDENT(Sets.newHashSet()),
-    TEACHER(Sets.newHashSet()),
-    ADMIN(Sets.newHashSet());
+    GUEST(newHashSet()),
+    USER(newHashSet()),
+    STUDENT(newHashSet()),
+    TEACHER(newHashSet()),
+    ADMIN(newHashSet(TEACHER_CREATE));
 
 
     private final Set<PermissionEnum> permissions;
 
-    UserRoleEnum(Set<PermissionEnum> permissions) {
+    RoleEnum(Set<PermissionEnum> permissions) {
         this.permissions = permissions;
     }
 
