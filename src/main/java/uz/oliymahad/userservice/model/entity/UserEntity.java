@@ -41,7 +41,7 @@ public class UserEntity extends Auditable<String> implements UserDetails {
     @Column(unique = true)
     private String phoneNumber;
 
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private String password;
 
     @Column(unique = true)
@@ -55,7 +55,7 @@ public class UserEntity extends Auditable<String> implements UserDetails {
     @Column(unique = true)
     private String imageUrl;
 
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private Boolean emailVerified = false;
 
     @ManyToMany(fetch = FetchType.EAGER)

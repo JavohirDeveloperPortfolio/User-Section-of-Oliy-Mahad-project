@@ -33,3 +33,6 @@ spring:
   application:
     name: USER-SERVICE
 
+            scope:
+              - email
+              - profile
