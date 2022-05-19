@@ -1,4 +1,4 @@
-package uz.oliymahad.userservice.controller;
+package uz.oliymahad.userservice.controller.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
