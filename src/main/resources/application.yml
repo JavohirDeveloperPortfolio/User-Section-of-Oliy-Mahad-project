@@ -30,6 +30,6 @@ spring:
           google:
             client-id: 517447956930-ks6o0nu247mmb6pe9ag6gl2533443hvf.apps.googleusercontent.com
             client-secret: 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
-#            scope:
-#              - email
-#              - profile
+            scope:
+              - email
+              - profile
