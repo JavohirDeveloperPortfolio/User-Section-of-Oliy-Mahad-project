@@ -2,6 +2,7 @@ package uz.oliymahad.userservice.service;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
 import uz.oliymahad.userservice.dto.UserRegisterDto;
 import uz.oliymahad.userservice.dto.response.ApiResponse;
@@ -13,6 +14,7 @@ import uz.oliymahad.userservice.repository.UserRepository;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -51,5 +53,9 @@ public class UserService {
         userRepository.save(user);
 
         return new ApiResponse("Successfully registered!", true, HttpStatus.OK);
+    }
+
+    public String authenticate(DefaultOidcUser customOauth2User) {
+        return "Bearer default token";
     }
 }
