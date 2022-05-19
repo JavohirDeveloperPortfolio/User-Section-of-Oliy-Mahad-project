@@ -59,6 +59,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                         user.getProvider() + " account. Please use your " + user.getProvider() +
                         " account to login.");
             }
+
             user = updateExistingUser(user, oAuth2UserInfo);
         } else {
             user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
@@ -73,7 +74,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         user.setProvider(EAuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
         user.setProviderId(oAuth2UserInfo.getId());
-        user.getUserDetails().setFirstName(oAuth2UserInfo.getName());
+//        user.getUserDetails().setFirstName(oAuth2UserInfo.getName());
+        user.setEmailVerified(true);
         user.setEmail(oAuth2UserInfo.getEmail());
         user.setImageUrl(oAuth2UserInfo.getImageUrl());
         user.setRoles(new HashSet<>(){{
@@ -84,7 +86,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private UserEntity updateExistingUser(UserEntity existingUser, OAuth2UserInfo oAuth2UserInfo) {
 
-        existingUser.getUserDetails().setFirstName(oAuth2UserInfo.getName());
+//        existingUser.getUserDetails().setFirstName(oAuth2UserInfo.getName());
         existingUser.setImageUrl(oAuth2UserInfo.getImageUrl());
         return userRepository.save(existingUser);
     }

@@ -1,6 +1,8 @@
 package uz.oliymahad.userservice.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
@@ -18,17 +20,13 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.roleRepository = roleRepository;
-    }
 
     public ApiResponse register(UserRegisterDto registerDto){
 
@@ -55,7 +53,7 @@ public class UserService {
         return new ApiResponse("Successfully registered!", true, HttpStatus.OK);
     }
 
-    public String authenticate(DefaultOidcUser customOauth2User) {
+    public String authenticate(Authentication authentication) {
         return "Bearer default token";
     }
 }
