@@ -4,9 +4,9 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/oliy_mahad_db
-    username: postgres
-    password: 8
+    url: jdbc:postgresql://localhost:5432/datasource
+    username: pheonix
+    password: 1596psql
   jpa:
     open-in-view: false
     hibernate:
