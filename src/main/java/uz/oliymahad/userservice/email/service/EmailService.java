@@ -10,9 +10,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
 
-/**
- * Created by abburi on 6/10/17.
- */
+
 
 @Service
 public class EmailService {
