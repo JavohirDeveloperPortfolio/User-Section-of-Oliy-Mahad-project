@@ -18,9 +18,20 @@ import java.io.IOException;
 public class AuthController {
 
     @GetMapping("/login/google")
-    public ResponseEntity<?> loginWithGoogle(HttpServletRequest request, HttpServletResponse response){
+    public ResponseEntity<?> loginWithGoogle(HttpServletResponse response){
         try {
             response.sendRedirect("/oauth2/authorization/google");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok("success");
+    }
+
+
+    @GetMapping("/login/facebook")
+    public ResponseEntity<?> loginWithFacebook(HttpServletRequest request, HttpServletResponse response){
+        try {
+            response.sendRedirect("/oauth2/authorization/facebook");
         } catch (IOException e) {
             e.printStackTrace();
         }
