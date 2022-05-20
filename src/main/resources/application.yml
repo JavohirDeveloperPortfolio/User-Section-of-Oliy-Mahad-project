@@ -21,18 +21,25 @@ spring:
     oauth2:
       client:
         registration:
-#          facebook:
-#            client-id:
-#            client-secret:
-#            scope:
-#              - email
-#              - public_profile
+          facebook:
+            clientId: 1085732058682828
+            clientSecret: fa9412b037c3053033961aaaf394f334
+            accessTokenUri: https://graph.facebook.com/oauth/access_token
+            userAuthorizationUri: https://www.facebook.com/dialog/oauth
+            tokenName: oauth_token
+            authenticationScheme: query
+            clientAuthenticationScheme: form
+            scope:
+              - email
+              - public_profile
           google:
             client-id: 517447956930-ks6o0nu247mmb6pe9ag6gl2533443hvf.apps.googleusercontent.com
             client-secret: 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
   application:
     name: USER-SERVICE
 
+            clientId: 517447956930-ks6o0nu247mmb6pe9ag6gl2533443hvf.apps.googleusercontent.com
+            clientSecret: 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
             scope:
               - email
               - profile
