@@ -22,13 +22,15 @@ spring:
       client:
         registration:
           facebook:
-            clientId: 1085732058682828
-            clientSecret: fa9412b037c3053033961aaaf394f334
+            clientId: 378604534320101
+            clientSecret: 70861a4e9cb50df0faca8c07af5621b0
             accessTokenUri: https://graph.facebook.com/oauth/access_token
             userAuthorizationUri: https://www.facebook.com/dialog/oauth
             tokenName: oauth_token
             authenticationScheme: query
             clientAuthenticationScheme: form
+            resource:
+              userInfoUri: https://graph.facebook.com/me
             scope:
               - email
               - public_profile
