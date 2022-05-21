@@ -1,4 +1,4 @@
-package uz.oliymahad.userservice.security.jwt.security.jwt;
+package uz.oliymahad.userservice.security.jwt;
 
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
