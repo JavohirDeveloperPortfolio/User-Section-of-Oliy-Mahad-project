@@ -78,6 +78,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(new AuthenticationSuccessHandler() {
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                    .userInfoEndpoint()
+                    .userService(customOAuth2UserService)
+                    .and()
+                    .successHandler(new AuthenticationSuccessHandler() {
+                        @Override
+                        public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
 
 
@@ -103,6 +109,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 });
 //                .and().exceptionHandling().authenticationEntryPoint(new AuthEntryPointJwt()).and()
 
+                            String token = userService.authenticate(authentication);
+                            response.addHeader("Authorization", "Bearer " + token);
+                            String targetUrl = "/api/v1/auth/success";
+                            RequestDispatcher dis = request.getRequestDispatcher(targetUrl);
+                            dis.forward(request, response);
+                        }
+                    }).failureHandler(new AuthenticationFailureHandler() {
+                        @Override
+                        public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+                                                            AuthenticationException exception) throws IOException, ServletException {
+                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                        }
+                    })
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override

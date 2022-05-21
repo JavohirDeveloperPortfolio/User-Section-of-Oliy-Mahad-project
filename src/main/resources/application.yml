@@ -35,11 +35,6 @@ spring:
               - email
               - public_profile
           google:
-            client-id: 517447956930-ks6o0nu247mmb6pe9ag6gl2533443hvf.apps.googleusercontent.com
-            client-secret: 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
-  application:
-    name: USER-SERVICE
-
             clientId: 517447956930-ks6o0nu247mmb6pe9ag6gl2533443hvf.apps.googleusercontent.com
             clientSecret: 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
             scope:
