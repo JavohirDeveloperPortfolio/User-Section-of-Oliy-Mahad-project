@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.oliymahad.userservice.dto.request.UserSignUpRequest;
 import uz.oliymahad.userservice.dto.response.ApiResponse;
+import uz.oliymahad.userservice.security.jwt.payload.response.JwtResponse;
 import uz.oliymahad.userservice.service.oauth0.CustomOAuth0UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +37,8 @@ public class AuthController {
     public ResponseEntity<?> loginWithFacebook(HttpServletResponse response){
         try {
             response.sendRedirect("/oauth2/authorization/facebook");
-//            response.sendRedirect("/oauth2/callback/facebook");
+//            response.sendRedirect("
+//            /oauth2/callback/facebook");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -46,8 +48,12 @@ public class AuthController {
 
     @GetMapping("/success")
     public ResponseEntity<?> signInSuccess(HttpServletResponse response) {
+        String accessToken = response.getHeader("access_token");
+        String refreshToken = response.getHeader("refresh_token");
+//        response.setHeader("access_token", null);
+//        response.setHeader("refresh_token", null);
         return ResponseEntity.ok(
-                new ApiResponse("JWT token" + response.getHeader("Authorization"), true, HttpStatus.OK)
+                new JwtResponse(0, accessToken, refreshToken)
         );
     }
 
@@ -65,8 +71,5 @@ public class AuthController {
         return ResponseEntity.ok(oAuth0UserService.validateRefreshToke(jwtRefreshToken));
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<?> test(){
-        return ResponseEntity.ok("Voooooola !!!!");
-    }
+
 }

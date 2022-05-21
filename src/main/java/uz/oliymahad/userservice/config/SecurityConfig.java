@@ -1,5 +1,6 @@
 package uz.oliymahad.userservice.config;
 
+import io.jsonwebtoken.Jws;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,6 +19,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import uz.oliymahad.userservice.security.jwt.AuthEntryPointJwt;
 import uz.oliymahad.userservice.security.jwt.AuthTokenFilter;
+import uz.oliymahad.userservice.security.jwt.JwtProvider;
+import uz.oliymahad.userservice.security.oauth2.UserPrincipal;
 import uz.oliymahad.userservice.service.UserService;
 import uz.oliymahad.userservice.service.oauth2.CustomOAuth2UserService;
 import uz.oliymahad.userservice.service.oauth2.CustomUserDetailsService;
@@ -40,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final PasswordEncoder passwordEncoder;
-    private final UserService userService;
+    private final JwtProvider jwtProvider;
 
     private final AuthTokenFilter authTokenFilter;
 
@@ -49,6 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf()
                 .disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/v1/auth/**").permitAll()
@@ -67,9 +72,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
 
-                        DefaultOidcUser principal = (DefaultOidcUser) authentication.getPrincipal();
-                        String token = userService.authenticate(principal);
-                        response.addHeader("Authorization", "Bearer " + token);
+
+//                        DefaultOidcUser principal = (DefaultOidcUser) authentication.getPrincipal();
+//
+                        String accessToken = jwtProvider.generateAccessToken((UserPrincipal)authentication.getPrincipal());
+                        String refreshToken = jwtProvider.generateRefreshToken((UserPrincipal)authentication.getPrincipal());
+                        response.addHeader("access_token", accessToken);
+                        response.addHeader("refresh_token", refreshToken);
+                        System.out.println("hello world" + authentication.getPrincipal().toString());
                         String targetUrl = "/api/v1/auth/success";
                         RequestDispatcher dis = request.getRequestDispatcher(targetUrl);
                         dis.forward(request, response);
@@ -80,9 +90,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                                         AuthenticationException exception) throws IOException, ServletException {
                         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
                     }
-                })
-                .and().exceptionHandling().authenticationEntryPoint(new AuthEntryPointJwt()).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                });
+//                .and().exceptionHandling().authenticationEntryPoint(new AuthEntryPointJwt()).and()
 
     }
 
