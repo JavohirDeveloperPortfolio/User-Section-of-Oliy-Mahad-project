@@ -11,6 +11,7 @@ import uz.oliymahad.userservice.dto.response.ApiResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Comparator;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,6 +33,7 @@ public class AuthController {
     public ResponseEntity<?> loginWithFacebook(HttpServletRequest request, HttpServletResponse response){
         try {
             response.sendRedirect("/oauth2/authorization/facebook");
+//            response.sendRedirect("/oauth2/callback/facebook");
         } catch (IOException e) {
             e.printStackTrace();
         }
