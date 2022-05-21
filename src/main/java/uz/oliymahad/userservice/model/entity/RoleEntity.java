@@ -22,8 +22,13 @@ public class RoleEntity implements GrantedAuthority {
     @Enumerated(EnumType.STRING)
     private ERole roleName;
 
+    public RoleEntity(ERole roleName) {
+        this.roleName = roleName;
+    }
+
     @Override
     public String getAuthority() {
         return roleName.name();
     }
+
 }

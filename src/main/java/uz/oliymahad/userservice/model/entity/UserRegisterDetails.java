@@ -12,7 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @Entity
-public class UserDetail {
+public class UserRegisterDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

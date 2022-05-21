@@ -19,7 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    @Transactional
+//    @Transactional
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
 
