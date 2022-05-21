@@ -16,15 +16,14 @@ import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import uz.oliymahad.userservice.security.jwt.security.jwt.AuthEntryPointJwt;
-import uz.oliymahad.userservice.security.jwt.security.jwt.AuthTokenFilter;
+import uz.oliymahad.userservice.security.jwt.AuthEntryPointJwt;
+import uz.oliymahad.userservice.security.jwt.AuthTokenFilter;
 import uz.oliymahad.userservice.service.UserService;
 import uz.oliymahad.userservice.service.oauth2.CustomOAuth2UserService;
 import uz.oliymahad.userservice.service.oauth2.CustomUserDetailsService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
