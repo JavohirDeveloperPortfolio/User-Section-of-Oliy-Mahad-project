@@ -11,7 +11,7 @@ import uz.oliymahad.userservice.model.enums.ERole;
 import uz.oliymahad.userservice.repository.RoleRepository;
 import uz.oliymahad.userservice.repository.UserRepository;
 import uz.oliymahad.userservice.security.jwt.payload.response.JwtResponse;
-import uz.oliymahad.userservice.security.jwt.security.jwt.JwtUtils;
+import uz.oliymahad.userservice.security.jwt.JwtUtils;
 
 import java.util.HashSet;
 import java.util.Optional;
