@@ -16,6 +16,7 @@ public class TokenControllerAdvice {
   @ExceptionHandler(value = JwtException.class)
   @ResponseStatus(HttpStatus.FORBIDDEN)
   public ErrorMessage handleTokenRefreshException(JwtException ex, WebRequest request) {
+    System.out.println(ex.getMessage());
     return new ErrorMessage(
         HttpStatus.FORBIDDEN.value(),
         new Date(),
