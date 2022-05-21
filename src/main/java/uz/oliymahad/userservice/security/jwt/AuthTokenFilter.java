@@ -1,9 +1,10 @@
 package uz.oliymahad.userservice.security.jwt;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +22,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Service
 public class AuthTokenFilter extends OncePerRequestFilter {
-  private final JwtUtils jwtUtils;
+  private final JwtProvider jwtProvider;
 
   private final UserDetailsServiceImpl userDetailsService;
 
@@ -32,10 +33,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
     try {
       String jwt = parseJwt(request);
-      if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-        String phoneNumber = jwtUtils.getPhoneNumberFromJwtToken(jwt);
+      Jws<Claims> claimsJws = jwtProvider.validateJwtAccessToken(jwt);
+      if (jwt != null && claimsJws != null) {
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(phoneNumber);
+        String subject = claimsJws.getBody().getSubject();
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(subject);
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
             userDetails.getAuthorities());
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

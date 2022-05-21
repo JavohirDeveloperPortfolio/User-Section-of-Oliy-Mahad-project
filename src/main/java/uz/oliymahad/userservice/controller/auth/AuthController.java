@@ -20,7 +20,7 @@ import java.util.Comparator;
 public class AuthController {
 
     @Autowired
-    CustomOAuth0UserService auth0UserService;
+    CustomOAuth0UserService oAuth0UserService;
     @GetMapping("/login/google")
     public ResponseEntity<?> loginWithGoogle(HttpServletResponse response){
         try {
@@ -55,6 +55,18 @@ public class AuthController {
     public ResponseEntity<?> signUp(
             @RequestBody UserSignUpRequest userSignUpRequest
     ){
-        return ResponseEntity.ok(auth0UserService.signUpUser(userSignUpRequest));
+        return ResponseEntity.ok(oAuth0UserService.signUpUser(userSignUpRequest));
+    }
+
+    @PostMapping("/akdjndn1ad?dand/RE_dqkqekb?FR")
+    public ResponseEntity<?> tokenRefresher(
+            @RequestBody String jwtRefreshToken
+    ){
+        return ResponseEntity.ok(oAuth0UserService.validateRefreshToke(jwtRefreshToken));
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<?> test(){
+        return ResponseEntity.ok("Voooooola !!!!");
     }
 }
