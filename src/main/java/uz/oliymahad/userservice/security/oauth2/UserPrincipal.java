@@ -1,6 +1,7 @@
 package uz.oliymahad.userservice.security.oauth2;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,8 +14,8 @@ import java.util.*;
 
 @Getter
 @Setter
+@RequiredArgsConstructor
 public class UserPrincipal implements OAuth2User, UserDetails {
-
 
     private Long id;
     private String email;

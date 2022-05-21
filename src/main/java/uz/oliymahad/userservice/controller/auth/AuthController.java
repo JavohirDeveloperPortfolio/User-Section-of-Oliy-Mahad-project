@@ -30,7 +30,7 @@ public class AuthController {
 
 
     @GetMapping("/login/facebook")
-    public ResponseEntity<?> loginWithFacebook(HttpServletRequest request, HttpServletResponse response){
+    public ResponseEntity<?> loginWithFacebook(HttpServletResponse response){
         try {
             response.sendRedirect("/oauth2/authorization/facebook");
 //            response.sendRedirect("/oauth2/callback/facebook");
@@ -39,6 +39,7 @@ public class AuthController {
         }
         return ResponseEntity.ok("success");
     }
+
 
     @GetMapping("/success")
     public ResponseEntity<?> signInSuccess(HttpServletResponse response) {
