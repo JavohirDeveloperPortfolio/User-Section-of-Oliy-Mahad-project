@@ -1,5 +1,6 @@
 package uz.oliymahad.userservice.security.jwt.advice;
 
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -12,9 +13,9 @@ import java.util.Date;
 @RestControllerAdvice
 public class TokenControllerAdvice {
 
-  @ExceptionHandler(value = TokenRefreshException.class)
+  @ExceptionHandler(value = JwtException.class)
   @ResponseStatus(HttpStatus.FORBIDDEN)
-  public ErrorMessage handleTokenRefreshException(TokenRefreshException ex, WebRequest request) {
+  public ErrorMessage handleTokenRefreshException(JwtException ex, WebRequest request) {
     return new ErrorMessage(
         HttpStatus.FORBIDDEN.value(),
         new Date(),
