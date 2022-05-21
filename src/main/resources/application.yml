@@ -24,16 +24,10 @@ spring:
           facebook:
             clientId: 378604534320101
             clientSecret: 70861a4e9cb50df0faca8c07af5621b0
-            accessTokenUri: https://graph.facebook.com/v3.0/oauth/access_token
-            userAuthorizationUri: https://www.facebook.com/v3.0/dialog/oauth
-            tokenName: oauth_token
-            authenticationScheme: query
-            clientAuthenticationScheme: form
-            resource:
-              userInfoUri: https://graph.facebook.com/v3.0/me?fields=id,first_name,middle_name,last_name,name,email
             scope:
               - email
               - public_profile
+
           google:
             clientId: 517447956930-ks6o0nu247mmb6pe9ag6gl2533443hvf.apps.googleusercontent.com
             clientSecret: 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
