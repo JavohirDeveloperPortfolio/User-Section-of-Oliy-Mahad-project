@@ -1,16 +1,16 @@
 server:
-  port: 8080
+  port: 8081
 
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/demo_db
     username: postgres
-    password: root
+    password: 7272
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
@@ -30,6 +30,6 @@ spring:
           google:
             client-id: 517447956930-ks6o0nu247mmb6pe9ag6gl2533443hvf.apps.googleusercontent.com
             client-secret: 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
-  application:
-    name: USER-SERVICE
+#  application:
+#    name: USER-SERVICE
 

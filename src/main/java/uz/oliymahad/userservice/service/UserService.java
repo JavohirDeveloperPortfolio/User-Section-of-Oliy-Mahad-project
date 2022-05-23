@@ -1,23 +1,29 @@
 package uz.oliymahad.userservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import uz.oliymahad.userservice.dto.UserRegisterDto;
+import uz.oliymahad.userservice.dto.UserUpdateDto;
 import uz.oliymahad.userservice.dto.response.ApiResponse;
 import uz.oliymahad.userservice.exception.UserRoleNotFoundException;
 import uz.oliymahad.userservice.model.entity.RoleEntity;
 import uz.oliymahad.userservice.model.entity.UserEntity;
+import uz.oliymahad.userservice.model.entity.UserRegisterDetails;
+import uz.oliymahad.userservice.model.enums.EGender;
 import uz.oliymahad.userservice.model.enums.ERole;
 import uz.oliymahad.userservice.repository.RoleRepository;
+import uz.oliymahad.userservice.repository.UserDetailRepository;
 import uz.oliymahad.userservice.repository.UserRepository;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -55,5 +61,29 @@ public class UserService {
 
     public String authenticate(Authentication authentication) {
         return "Bearer default token";
+    }
+
+    public List<Page<UserEntity>> getPage(int page) {
+
+        PageRequest pageable = PageRequest.of(page, 10);
+        Page<UserEntity> entityPage = userRepository.findAll(pageable);
+        return List.of(entityPage);
+    }
+
+    public ApiResponse editUser(UserUpdateDto updateDto, Long id){
+        Optional<UserEntity> user = userRepository.findById(id);
+        if(user.isPresent()){
+            UserEntity userEntity = user.get();
+            UserRegisterDetails registerDetails = userEntity.getUserDetails();
+            registerDetails.setFirstName(updateDto.getFirstName());
+            registerDetails.setLastName(updateDto.getLastName());
+            registerDetails.setBirthDate(updateDto.getBirthDate());
+            registerDetails.setGender(EGender.valueOf(updateDto.getGender()));
+            registerDetails.setPassport(updateDto.getPassport());
+            userEntity.setUserDetails(registerDetails);
+            userRepository.save(userEntity);
+            return new ApiResponse("Successfully updated!", true, HttpStatus.OK);
+        }
+        return new ApiResponse("Failed!", false, HttpStatus.BAD_REQUEST);
     }
 }

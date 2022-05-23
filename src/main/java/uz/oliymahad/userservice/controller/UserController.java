@@ -1,13 +1,14 @@
 package uz.oliymahad.userservice.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uz.oliymahad.userservice.dto.UserRegisterDto;
+import uz.oliymahad.userservice.dto.UserUpdateDto;
 import uz.oliymahad.userservice.dto.response.ApiResponse;
+import uz.oliymahad.userservice.model.entity.UserEntity;
 import uz.oliymahad.userservice.service.UserService;
 
 @RestController
@@ -20,9 +21,15 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
-    public HttpEntity<?> registerUser(@RequestBody UserRegisterDto userRegisterDto){
-        ApiResponse register = userService.register(userRegisterDto);
-        return ResponseEntity.ok(register);
+    @GetMapping("/getPage")
+    public HttpEntity<?> getPage(@RequestParam int page) {
+        return ResponseEntity.ok(userService.getPage(page));
+    }
+
+
+    @PutMapping("/edit")
+    public HttpEntity<?> editUser(@RequestBody UserUpdateDto updateDto, @RequestParam Long id){
+        ApiResponse apiResponse = userService.editUser(updateDto, id);
+        return ResponseEntity.ok(apiResponse);
     }
 }
