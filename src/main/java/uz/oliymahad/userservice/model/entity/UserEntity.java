@@ -30,6 +30,8 @@ public class UserEntity implements UserDetails {
     @GeneratedValue
     private Long id;
 
+
+    private String username;
 //    @Column(nullable = false, unique = true)
     private String phoneNumber;
 
@@ -53,10 +55,11 @@ public class UserEntity implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<RoleEntity> roles;
 
-    @OneToOne
-    private UserDetail userDetails;
 
-    @Column(nullable = false, updatable = false)
+    @OneToOne
+    private UserRegisterDetails userDetails;
+
+//    @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private Timestamp createdAt;
 
