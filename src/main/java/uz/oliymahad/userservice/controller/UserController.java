@@ -20,9 +20,4 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
-    public HttpEntity<?> registerUser(@RequestBody UserRegisterDto userRegisterDto){
-        RestAPIResponse register = userService.register(userRegisterDto);
-        return ResponseEntity.ok(register);
-    }
 }
