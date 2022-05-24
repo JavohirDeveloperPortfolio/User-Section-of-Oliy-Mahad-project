@@ -39,9 +39,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final PasswordEncoder passwordEncoder;
-    private final JWTokenProvider JWTokenProvider;
-
     private final JWTokenFilter JWTokenFilter;
+
+    private final JWTokenProvider jwTokenProvider;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -71,8 +71,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 //                        DefaultOidcUser principal = (DefaultOidcUser) authentication.getPrincipal();
 //
-                        String accessToken = JWTokenProvider.generateAccessToken((UserPrincipal)authentication.getPrincipal());
-                        String refreshToken = JWTokenProvider.generateRefreshToken((UserPrincipal)authentication.getPrincipal());
+                        String accessToken = jwTokenProvider.generateAccessToken((UserPrincipal)authentication.getPrincipal());
+                        String refreshToken = jwTokenProvider.generateRefreshToken((UserPrincipal)authentication.getPrincipal());
                         response.addHeader("access_token", accessToken);
                         response.addHeader("refresh_token", refreshToken);
                         System.out.println("hello world" + authentication.getPrincipal().toString());

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import uz.oliymahad.userservice.exception.custom_ex_model.UserAlreadyRegisteredException;
+import uz.oliymahad.userservice.exception.custom_ex_model.UserAuthenticationException;
 import uz.oliymahad.userservice.security.jwt.advice.ErrorMessage;
 import java.util.Date;
 
@@ -33,6 +34,18 @@ public class ApplicationExceptionHandler {
                 request.getDescription(false));
     }
 
+    @ExceptionHandler(value = UserAuthenticationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorMessage handleUserAuthenticationException(UserAuthenticationException ex, WebRequest request){
+        logger.warn(ex.getMessage());
+        return new ErrorMessage(
+                HttpStatus.CONFLICT.value(),
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+    }
+
     @ExceptionHandler(value = UserAlreadyRegisteredException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorMessage handleUserAlreadyRegisteredException(UserAlreadyRegisteredException ex, WebRequest request){
@@ -44,7 +57,6 @@ public class ApplicationExceptionHandler {
                 request.getDescription(false)
         );
     }
-
     @ExceptionHandler(value = PSQLException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorMessage handlePSQLException(PSQLException ex, WebRequest request){

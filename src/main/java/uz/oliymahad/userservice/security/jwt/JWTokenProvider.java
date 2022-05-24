@@ -5,17 +5,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import uz.oliymahad.userservice.model.entity.UserEntity;
 import uz.oliymahad.userservice.security.oauth2.UserPrincipal;
 
 import java.util.Date;
-
-@Component
+@Service
 public class JWTokenProvider {
   private static final Logger logger = LoggerFactory.getLogger(JWTokenProvider.class);
 
   @Value("${jwt.secret.access}")
-  private String jwtAccessSecret;
+  private  String jwtAccessSecret;
 
   @Value("${jwt.secret.refresh}")
   private String jwtRefreshSecret;

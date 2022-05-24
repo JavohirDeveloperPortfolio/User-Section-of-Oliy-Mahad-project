@@ -22,11 +22,11 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Service
 public class JWTokenFilter extends OncePerRequestFilter {
-  private final JWTokenProvider JWTokenProvider;
-
-  private final UserDetailsServiceImpl userDetailsService;
 
   private static final Logger logger = LoggerFactory.getLogger(JWTokenFilter.class);
+  private final UserDetailsServiceImpl userDetailsService;
+  private final JWTokenProvider jwTokenProvider;
+
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -39,7 +39,7 @@ public class JWTokenFilter extends OncePerRequestFilter {
         return;
       }
 
-      Jws<Claims> claimsJws = JWTokenProvider.validateJwtAccessToken(jwt);
+      Jws<Claims> claimsJws = jwTokenProvider.validateJwtAccessToken(jwt);
       if ( claimsJws != null) {
 
         String subject = claimsJws.getBody().getSubject();
