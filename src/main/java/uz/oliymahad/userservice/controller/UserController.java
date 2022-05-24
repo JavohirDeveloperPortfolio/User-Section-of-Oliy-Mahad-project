@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uz.oliymahad.userservice.dto.UserRegisterDto;
-import uz.oliymahad.userservice.dto.response.ApiResponse;
+import uz.oliymahad.userservice.dto.response.RestAPIResponse;
 import uz.oliymahad.userservice.service.UserService;
 
 @RestController
@@ -22,7 +22,7 @@ public class UserController {
 
     @PostMapping("/register")
     public HttpEntity<?> registerUser(@RequestBody UserRegisterDto userRegisterDto){
-        ApiResponse register = userService.register(userRegisterDto);
+        RestAPIResponse register = userService.register(userRegisterDto);
         return ResponseEntity.ok(register);
     }
 }

@@ -9,12 +9,10 @@ import uz.oliymahad.userservice.model.entity.UserEntity;
 import uz.oliymahad.userservice.security.oauth2.UserPrincipal;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
-public class JwtProvider {
-  private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
+public class JWTokenProvider {
+  private static final Logger logger = LoggerFactory.getLogger(JWTokenProvider.class);
 
   @Value("${jwt.secret.access}")
   private String jwtAccessSecret;

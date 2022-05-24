@@ -23,6 +23,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Data
 @Entity
+@Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
 public class UserEntity implements UserDetails {
 
@@ -32,10 +33,11 @@ public class UserEntity implements UserDetails {
 
 
     private String username;
-//    @Column(nullable = false, unique = true)
+
+    @Column(unique = true)
     private String phoneNumber;
 
-//    @Column(nullable = false)
+    @Column(length = 8)
     private String password;
 
     @Column(unique = true)

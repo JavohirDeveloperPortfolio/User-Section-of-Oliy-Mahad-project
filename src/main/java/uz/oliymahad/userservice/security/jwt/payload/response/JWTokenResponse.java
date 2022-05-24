@@ -5,13 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import net.minidev.json.annotate.JsonIgnore;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class JwtResponse {
+public class JWTokenResponse {
     @JsonProperty("status_code")
     private int statusCode;
 

@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Configuration
-public class ApiConfig {
+public class APIConfiguration {
     @Bean
     public ModelMapper modelMapper(){
         return new ModelMapper();

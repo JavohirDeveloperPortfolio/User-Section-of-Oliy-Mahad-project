@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import uz.oliymahad.userservice.dto.request.RoleRegisterRequest;
 import uz.oliymahad.userservice.service.RoleService;
 
+import javax.validation.Valid;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/app-v0.0.1/ad/min/")
@@ -17,7 +19,7 @@ public class SourceController {
 
     @PostMapping("/role_expansion")
     public ResponseEntity<?> addRole(
-            @RequestBody RoleRegisterRequest request
+            @RequestBody @Valid RoleRegisterRequest request
     ){
         return ResponseEntity.ok(roleService.addRole(request.getRoleName()));
     }

@@ -1,6 +1,6 @@
 package uz.oliymahad.userservice.security.oauth2.user;
 
-import uz.oliymahad.userservice.exception.OAuth2AuthenticationProcessingException;
+import uz.oliymahad.userservice.exception.custom_ex_model.OAuth2AuthenticationProcessingException;
 import uz.oliymahad.userservice.model.enums.EAuthProvider;
 
 import java.util.Map;
