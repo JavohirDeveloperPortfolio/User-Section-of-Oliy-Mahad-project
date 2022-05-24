@@ -1,35 +1,41 @@
 package uz.oliymahad.userservice.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uz.oliymahad.userservice.dto.UserRegisterDto;
+import uz.oliymahad.userservice.dto.UserUpdateDto;
+import uz.oliymahad.userservice.dto.response.ApiResponse;
+import uz.oliymahad.userservice.model.entity.UserEntity;
 import uz.oliymahad.userservice.service.UserService;
 
-@RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/user")
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping()
-    public ResponseEntity<?> userList(
-            @RequestParam(name = "page",defaultValue = "0") Integer page ,
-            @RequestParam(name = "size", defaultValue = "20") Integer size
-    ){
-        return ResponseEntity.ok(userService.list(page, size));
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    @GetMapping("/sort")
-    public ResponseEntity<?> userList(
-            @RequestParam(name = "page",defaultValue = "0", required = false) Integer page ,
-            @RequestParam(name = "size", defaultValue = "20", required = false) Integer size,
-            @RequestParam(name = "direction", defaultValue = "DESC", required = false) String direction,
-            @RequestBody String[] sortBy
-    ){
-        return ResponseEntity.ok(userService.list(page, size, direction, sortBy));
+    @PostMapping("/register")
+    public HttpEntity<?> register(@RequestBody UserRegisterDto registerDto){
+        ApiResponse apiResponse = userService.register(registerDto);
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping("/getPage")
+    public HttpEntity<?> getPage(@RequestParam int page) {
+        return ResponseEntity.ok(userService.getPage(page));
     }
 
 
+    @PutMapping("/edit")
+    public HttpEntity<?> editUser(@RequestBody UserUpdateDto updateDto, @RequestParam Long id){
+        ApiResponse apiResponse = userService.editUser(updateDto, id);
+        return ResponseEntity.ok(apiResponse);
+    }
 }

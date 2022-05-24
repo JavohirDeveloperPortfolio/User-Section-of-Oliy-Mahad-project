@@ -24,6 +24,7 @@ import uz.oliymahad.userservice.security.oauth2.user.OAuth2UserInfoFactory;
 import java.util.HashSet;
 import java.util.Optional;
 
+
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {

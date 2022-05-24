@@ -2,10 +2,12 @@ package uz.oliymahad.userservice.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
 public class UserDetailDto {
+
 
     private long userId;
 
