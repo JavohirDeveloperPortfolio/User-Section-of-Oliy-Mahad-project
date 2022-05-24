@@ -21,6 +21,12 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PostMapping("/register")
+    public HttpEntity<?> register(@RequestBody UserRegisterDto registerDto){
+        ApiResponse apiResponse = userService.register(registerDto);
+        return ResponseEntity.ok(apiResponse);
+    }
+
     @GetMapping("/getPage")
     public HttpEntity<?> getPage(@RequestParam int page) {
         return ResponseEntity.ok(userService.getPage(page));
