@@ -12,11 +12,15 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @Entity
+@Table(name = "user_register_details")
 public class UserRegisterDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @OneToOne
+    private UserEntity user;
 
     private String firstName;
 

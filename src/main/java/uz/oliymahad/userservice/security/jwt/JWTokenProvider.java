@@ -5,25 +5,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import uz.oliymahad.userservice.model.entity.UserEntity;
+import uz.oliymahad.userservice.security.oauth2.UserPrincipal;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+@Service
+public class JWTokenProvider {
+  private static final Logger logger = LoggerFactory.getLogger(JWTokenProvider.class);
 
-@Component
-public class JwtProvider {
-  private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
+  @Value("${jwt.secret.key.access}")
+  private  String jwtAccessSecret;
 
-  @Value("${jwt.secret.access}")
-  private String jwtAccessSecret;
-
-  @Value("${jwt.secret.refresh}")
+  @Value("${jwt.secret.key.refresh}")
   private String jwtRefreshSecret;
-  @Value("${jwtExpirationMs}")
+  @Value("${jwt.secret.expiration.access}")
   private int accessTokenExpiration;
 
-  @Value("${jwtRefreshExpirationMs}")
+  @Value("${jwt.secret.expiration.refresh}")
   private long refreshTokenExpiration;
 
   public String[] generateJwtTokens(UserEntity userPrincipal) {
@@ -35,21 +34,29 @@ public class JwtProvider {
 
   public String generateAccessToken(UserEntity user) {
     String subj = user.getPhoneNumber() == null ? user.getEmail() : user.getPhoneNumber();
-    return Jwts.builder().setSubject(subj).claim("role",user.getRoles()).setIssuedAt(new Date())
+    return "Bearer " +  Jwts.builder().setSubject(subj).claim("role",user.getRoles()).setIssuedAt(new Date())
             .setExpiration(new Date((new Date()).getTime() + accessTokenExpiration)).signWith(SignatureAlgorithm.HS512, jwtAccessSecret)
             .compact();
   }
 
-  public String generateAccessToken(String subject, Object role) {
-    Map<String, Object> claims = new HashMap<>();
-    claims.put("role",role);
-    return Jwts.builder().setSubject(subject).setClaims(claims).setIssuedAt(new Date())
+  public String generateRefreshToken(UserEntity user){
+    String subj = user.getPhoneNumber() == null ? user.getEmail() : user.getPhoneNumber();
+    return "Bearer " + Jwts.builder().setSubject(subj).claim("role",user.getRoles()).setIssuedAt(new Date())
+            .setExpiration(new Date((new Date()).getTime() + refreshTokenExpiration)).signWith(SignatureAlgorithm.HS512, jwtRefreshSecret)
+            .compact();
+  }
+
+
+  public String generateAccessToken(UserPrincipal user) {
+    String subj = user.getEmail();
+    return "Bearer " + Jwts.builder().setSubject(subj).claim("role",user.getAuthorities()).setIssuedAt(new Date())
             .setExpiration(new Date((new Date()).getTime() + accessTokenExpiration)).signWith(SignatureAlgorithm.HS512, jwtAccessSecret)
             .compact();
   }
-  public String generateRefreshToken(UserEntity user){
-    String subj = user.getPhoneNumber() == null ? user.getEmail() : user.getPhoneNumber();
-    return Jwts.builder().setSubject(subj).claim("role",user.getRoles()).setIssuedAt(new Date())
+
+  public String generateRefreshToken(UserPrincipal user){
+    String subj = user.getEmail();
+    return "Bearer " + Jwts.builder().setSubject(subj).claim("role",user.getAuthorities()).setIssuedAt(new Date())
             .setExpiration(new Date((new Date()).getTime() + refreshTokenExpiration)).signWith(SignatureAlgorithm.HS512, jwtRefreshSecret)
             .compact();
   }

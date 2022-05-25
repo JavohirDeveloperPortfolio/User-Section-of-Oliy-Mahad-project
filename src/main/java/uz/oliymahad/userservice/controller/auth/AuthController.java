@@ -1,16 +1,16 @@
 package uz.oliymahad.userservice.controller.auth;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uz.oliymahad.userservice.dto.request.UserSignUpRequest;
-import uz.oliymahad.userservice.dto.response.ApiResponse;
+import uz.oliymahad.userservice.dto.request.UserLoginRequest;
+import uz.oliymahad.userservice.dto.request.UserRegisterRequest;
+import uz.oliymahad.userservice.exception.custom_ex_model.UserAlreadyRegisteredException;
+import uz.oliymahad.userservice.security.jwt.payload.response.JWTokenResponse;
 import uz.oliymahad.userservice.service.oauth0.CustomOAuth0UserService;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
@@ -18,10 +18,9 @@ import java.io.IOException;
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
-    @Autowired
-    CustomOAuth0UserService oAuth0UserService;
+    private final CustomOAuth0UserService oAuth0UserService;
     @GetMapping("/login/google")
-    public ResponseEntity<?> loginWithGoogle(HttpServletRequest request, HttpServletResponse response){
+    public ResponseEntity<?> loginWithGoogle(HttpServletResponse response){
         try {
             response.sendRedirect("/oauth2/authorization/google");
         } catch (IOException e) {
@@ -30,29 +29,50 @@ public class AuthController {
         return ResponseEntity.ok("success");
     }
 
+
+    @GetMapping("/login/facebook")
+    public ResponseEntity<?> loginWithFacebook(HttpServletResponse response){
+        try {
+            response.sendRedirect("/oauth2/authorization/facebook");
+//            response.sendRedirect("
+//            /oauth2/callback/facebook");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok("success");
+    }
+
+
     @GetMapping("/success")
     public ResponseEntity<?> signInSuccess(HttpServletResponse response) {
+        String accessToken = response.getHeader("access_token");
+        String refreshToken = response.getHeader("refresh_token");
+//        response.setHeader("access_token", null);
+//        response.setHeader("refresh_token", null);
         return ResponseEntity.ok(
-                new ApiResponse("JWT token" + response.getHeader("Authorization"), true, HttpStatus.OK)
+                new JWTokenResponse(0, accessToken, refreshToken)
         );
     }
 
-    @PostMapping("/sign_up")
-    public ResponseEntity<?> signUp(
-            @RequestBody UserSignUpRequest userSignUpRequest
-    ){
-        return ResponseEntity.ok(oAuth0UserService.signUpUser(userSignUpRequest));
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(
+            @RequestBody @Valid UserRegisterRequest userRegisterRequest
+    ) throws UserAlreadyRegisteredException {
+        return ResponseEntity.ok(oAuth0UserService.registerUser(userRegisterRequest));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(
+            @RequestBody @Valid UserLoginRequest userLoginRequest
+    ) throws UserAlreadyRegisteredException {
+        return ResponseEntity.ok(oAuth0UserService.loginUser(userLoginRequest));
     }
 
     @PostMapping("/akdjndn1ad?dand/RE_dqkqekb?FR")
     public ResponseEntity<?> tokenRefresher(
             @RequestBody String jwtRefreshToken
     ){
-        return ResponseEntity.ok(oAuth0UserService.validateRefreshToke(jwtRefreshToken));
+        return ResponseEntity.ok(oAuth0UserService.validateRefreshToken(jwtRefreshToken));
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<?> test(){
-        return ResponseEntity.ok("Voooooola !!!!");
-    }
 }

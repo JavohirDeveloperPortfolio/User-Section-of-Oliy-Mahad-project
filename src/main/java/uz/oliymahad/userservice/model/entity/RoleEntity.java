@@ -3,6 +3,7 @@ package uz.oliymahad.userservice.model.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import uz.oliymahad.userservice.model.enums.ERole;
 
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Data
 @Entity
+@Table(name = "role")
 public class RoleEntity implements GrantedAuthority {
 
     @Id
@@ -26,6 +28,7 @@ public class RoleEntity implements GrantedAuthority {
         this.roleName = roleName;
     }
 
+//    @JsonIgnore
     @Override
     public String getAuthority() {
         return roleName.name();

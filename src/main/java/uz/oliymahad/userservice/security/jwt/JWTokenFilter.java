@@ -21,20 +21,26 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @Service
-public class AuthTokenFilter extends OncePerRequestFilter {
-  private final JwtProvider jwtProvider;
+public class JWTokenFilter extends OncePerRequestFilter {
 
+  private static final Logger logger = LoggerFactory.getLogger(JWTokenFilter.class);
   private final UserDetailsServiceImpl userDetailsService;
+  private final JWTokenProvider jwTokenProvider;
 
-  private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
     try {
       String jwt = parseJwt(request);
-      Jws<Claims> claimsJws = jwtProvider.validateJwtAccessToken(jwt);
-      if (jwt != null && claimsJws != null) {
+
+      if(jwt == null){
+        filterChain.doFilter(request, response);
+        return;
+      }
+
+      Jws<Claims> claimsJws = jwTokenProvider.validateJwtAccessToken(jwt);
+      if ( claimsJws != null) {
 
         String subject = claimsJws.getBody().getSubject();
 
@@ -56,7 +62,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     String headerAuth = request.getHeader("Authorization");
 
     if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-      return headerAuth.substring(7, headerAuth.length());
+      return headerAuth.substring(7);
     }
 
     return null;

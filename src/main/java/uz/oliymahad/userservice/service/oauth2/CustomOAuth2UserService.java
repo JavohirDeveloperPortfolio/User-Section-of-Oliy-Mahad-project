@@ -9,8 +9,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import uz.oliymahad.userservice.exception.OAuth2AuthenticationProcessingException;
-import uz.oliymahad.userservice.exception.UserRoleNotFoundException;
+import uz.oliymahad.userservice.exception.custom_ex_model.OAuth2AuthenticationProcessingException;
+import uz.oliymahad.userservice.exception.custom_ex_model.UserRoleNotFoundException;
 import uz.oliymahad.userservice.model.entity.RoleEntity;
 import uz.oliymahad.userservice.model.entity.UserEntity;
 import uz.oliymahad.userservice.model.enums.EAuthProvider;
@@ -23,6 +23,7 @@ import uz.oliymahad.userservice.security.oauth2.user.OAuth2UserInfoFactory;
 
 import java.util.HashSet;
 import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor

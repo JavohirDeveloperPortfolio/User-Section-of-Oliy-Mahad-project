@@ -1,28 +1,27 @@
 package uz.oliymahad.userservice.controller;
 
-import org.springframework.http.HttpEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import uz.oliymahad.userservice.dto.UserRegisterDto;
-import uz.oliymahad.userservice.dto.response.ApiResponse;
+import org.springframework.web.bind.annotation.*;
+import uz.oliymahad.userservice.dto.request.DataPageRequest;
 import uz.oliymahad.userservice.service.UserService;
+import uz.oliymahad.userservice.service.oauth0.CustomOAuth0UserService;
 
+@RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/v1/user")
 public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    private final CustomOAuth0UserService oAuth0UserService;
+
+    @GetMapping()
+    public ResponseEntity<?> userList(
+            @RequestBody DataPageRequest dataPageRequest,
+            @RequestParam(name = "search") String search
+    ) {
+        return ResponseEntity.ok(userService.list(dataPageRequest, search));
     }
 
-    @PostMapping("/register")
-    public HttpEntity<?> registerUser(@RequestBody UserRegisterDto userRegisterDto){
-        ApiResponse register = userService.register(userRegisterDto);
-        return ResponseEntity.ok(register);
-    }
 }
