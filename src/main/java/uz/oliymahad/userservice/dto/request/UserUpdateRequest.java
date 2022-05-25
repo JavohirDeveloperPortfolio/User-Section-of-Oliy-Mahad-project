@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uz.oliymahad.userservice.annotation.phone_num_constraint.PhoneNumber;
 
 import java.util.Date;
 
@@ -12,6 +13,9 @@ import java.util.Date;
 @Getter
 @Setter
 public class UserUpdateRequest {
+
+    @PhoneNumber
+    private String phoneNumber;
 
     private String firstName;
 
