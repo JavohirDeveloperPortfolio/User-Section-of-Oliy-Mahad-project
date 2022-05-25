@@ -1,5 +1,6 @@
 package uz.oliymahad.userservice.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 
@@ -7,16 +8,18 @@ import org.springframework.http.HttpStatus;
 @NoArgsConstructor
 @Getter
 @Setter
+@JsonIgnoreProperties
 public class RestAPIResponse {
 
     private String message;
     private boolean success;
-    private HttpStatus status;
-    private Object object;
+    private HttpStatus statusCode;
 
-    public RestAPIResponse(String message, boolean success, HttpStatus status) {
+    private Object data;
+
+    public RestAPIResponse(String message, boolean success, HttpStatus statusCode) {
         this.message = message;
         this.success = success;
-        this.status = status;
+        this.statusCode = statusCode;
     }
 }
