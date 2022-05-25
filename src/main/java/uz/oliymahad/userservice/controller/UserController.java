@@ -21,6 +21,7 @@ public class UserController {
             @RequestBody DataPageRequest dataPageRequest,
             @RequestParam(name = "search") String search
     ) {
+        //TODO remove @RequestBody for Begzod aka
         return ResponseEntity.ok(userService.list(dataPageRequest, search));
     }
 
