@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uz.oliymahad.userservice.model.entity.UserEntity;
-import uz.oliymahad.userservice.security.oauth2.UserPrincipal;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -36,29 +35,21 @@ public class JwtProvider {
 
   public String generateAccessToken(UserEntity user) {
     String subj = user.getPhoneNumber() == null ? user.getEmail() : user.getPhoneNumber();
-    return "Bearer " +  Jwts.builder().setSubject(subj).claim("role",user.getRoles()).setIssuedAt(new Date())
+    return Jwts.builder().setSubject(subj).claim("role",user.getRoles()).setIssuedAt(new Date())
             .setExpiration(new Date((new Date()).getTime() + accessTokenExpiration)).signWith(SignatureAlgorithm.HS512, jwtAccessSecret)
             .compact();
   }
 
+  public String generateAccessToken(String subject, Object role) {
+    Map<String, Object> claims = new HashMap<>();
+    claims.put("role",role);
+    return Jwts.builder().setSubject(subject).setClaims(claims).setIssuedAt(new Date())
+            .setExpiration(new Date((new Date()).getTime() + accessTokenExpiration)).signWith(SignatureAlgorithm.HS512, jwtAccessSecret)
+            .compact();
+  }
   public String generateRefreshToken(UserEntity user){
     String subj = user.getPhoneNumber() == null ? user.getEmail() : user.getPhoneNumber();
-    return "Bearer " + Jwts.builder().setSubject(subj).claim("role",user.getRoles()).setIssuedAt(new Date())
-            .setExpiration(new Date((new Date()).getTime() + refreshTokenExpiration)).signWith(SignatureAlgorithm.HS512, jwtRefreshSecret)
-            .compact();
-  }
-
-
-  public String generateAccessToken(UserPrincipal user) {
-    String subj = user.getEmail();
-    return "Bearer " + Jwts.builder().setSubject(subj).claim("role",user.getAuthorities()).setIssuedAt(new Date())
-            .setExpiration(new Date((new Date()).getTime() + accessTokenExpiration)).signWith(SignatureAlgorithm.HS512, jwtAccessSecret)
-            .compact();
-  }
-
-  public String generateRefreshToken(UserPrincipal user){
-    String subj = user.getEmail();
-    return "Bearer " + Jwts.builder().setSubject(subj).claim("role",user.getAuthorities()).setIssuedAt(new Date())
+    return Jwts.builder().setSubject(subj).claim("role",user.getRoles()).setIssuedAt(new Date())
             .setExpiration(new Date((new Date()).getTime() + refreshTokenExpiration)).signWith(SignatureAlgorithm.HS512, jwtRefreshSecret)
             .compact();
   }
