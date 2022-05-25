@@ -10,17 +10,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.oliymahad.userservice.dto.request.UserLoginRequest;
 import uz.oliymahad.userservice.dto.request.UserRegisterRequest;
-import uz.oliymahad.userservice.exception.custom_ex_model.UserInvalidPasswordException;
 import uz.oliymahad.userservice.exception.custom_ex_model.UserAlreadyRegisteredException;
+import uz.oliymahad.userservice.exception.custom_ex_model.UserInvalidPasswordException;
 import uz.oliymahad.userservice.exception.custom_ex_model.UserNotFoundException;
 import uz.oliymahad.userservice.exception.custom_ex_model.UserRoleNotFoundException;
 import uz.oliymahad.userservice.model.entity.UserEntity;
 import uz.oliymahad.userservice.model.enums.ERole;
 import uz.oliymahad.userservice.repository.RoleRepository;
 import uz.oliymahad.userservice.repository.UserRepository;
+import uz.oliymahad.userservice.security.jwt.JWTokenProvider;
 import uz.oliymahad.userservice.security.jwt.UserDetailsServiceImpl;
 import uz.oliymahad.userservice.security.jwt.payload.response.JWTokenResponse;
-import uz.oliymahad.userservice.security.jwt.JWTokenProvider;
 
 import java.util.HashSet;
 

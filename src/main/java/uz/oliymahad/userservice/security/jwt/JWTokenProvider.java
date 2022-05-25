@@ -14,15 +14,15 @@ import java.util.Date;
 public class JWTokenProvider {
   private static final Logger logger = LoggerFactory.getLogger(JWTokenProvider.class);
 
-  @Value("${jwt.secret.access}")
+  @Value("${jwt.secret.key.access}")
   private  String jwtAccessSecret;
 
-  @Value("${jwt.secret.refresh}")
+  @Value("${jwt.secret.key.refresh}")
   private String jwtRefreshSecret;
-  @Value("${jwtExpirationMs}")
+  @Value("${jwt.secret.expiration.access}")
   private int accessTokenExpiration;
 
-  @Value("${jwtRefreshExpirationMs}")
+  @Value("${jwt.secret.expiration.refresh}")
   private long refreshTokenExpiration;
 
   public String[] generateJwtTokens(UserEntity userPrincipal) {

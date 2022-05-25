@@ -31,17 +31,15 @@ public class UserEntity implements UserDetails {
     @GeneratedValue
     private Long id;
 
-
     private String username;
-
     @Column(unique = true)
     private String phoneNumber;
 
-    @Column(length = 8)
-    private String password;
-
     @Column(unique = true)
     private String email;
+
+    @Column(length = 8)
+    private String password;
 
     @Enumerated(EnumType.STRING)
     private EAuthProvider provider;
@@ -53,13 +51,11 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private Boolean emailVerified = false;
 
-
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<RoleEntity> roles;
 
-
     @OneToOne
-    private UserRegisterDetails userDetails;
+    private UserRegisterDetails userRegisterDetails;
 
 //    @Column(nullable = false, updatable = false)
     @CreationTimestamp
@@ -70,6 +66,7 @@ public class UserEntity implements UserDetails {
 
     @CreatedBy
     private String createdBy;
+
 
     @LastModifiedBy
     private String updatedBy;

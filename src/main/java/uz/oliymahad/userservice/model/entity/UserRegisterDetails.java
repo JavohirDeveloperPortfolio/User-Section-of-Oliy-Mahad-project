@@ -19,6 +19,9 @@ public class UserRegisterDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @OneToOne
+    private UserEntity user;
+
     private String firstName;
 
     private String lastName;
