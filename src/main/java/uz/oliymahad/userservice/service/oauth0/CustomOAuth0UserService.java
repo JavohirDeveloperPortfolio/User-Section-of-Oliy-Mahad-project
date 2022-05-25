@@ -42,7 +42,7 @@ public class CustomOAuth0UserService {
         UserEntity user = new UserEntity();
         try {
             userRegisterRequest.setPassword(passwordEncoder.encode(userRegisterRequest.getPassword()));
-            user.setRoles(new HashSet<>() {{
+            user.setRoles(new HashSet<>() {{ // TODO remove connect to db for Begzod aka
                 add(roleRepository.findByRoleName(ERole.ROLE_USER).orElseThrow(
                         () -> new UserRoleNotFoundException("ROLE NOT FOUND")
                 ));
