@@ -25,10 +25,7 @@ import uz.oliymahad.userservice.repository.UserRepository;
 import uz.oliymahad.userservice.security.jwt.JWTokenProvider;
 import uz.oliymahad.userservice.security.jwt.UserDetailsServiceImpl;
 import uz.oliymahad.userservice.security.jwt.payload.response.JWTokenResponse;
-
-import java.lang.reflect.Parameter;
 import java.util.HashSet;
-
 import static org.springframework.http.HttpStatus.OK;
 
 @Service
@@ -43,21 +40,24 @@ public class CustomOAuth0UserService {
     private final JWTokenProvider jwTokenProvider;
 
     public JWTokenResponse registerUser(UserRegisterRequest userRegisterRequest)
-            throws UserAlreadyRegisteredException{
+            throws UserAlreadyRegisteredException {
         String[] tokens = new String[2];
         UserEntity user = new UserEntity();
         try {
             userRegisterRequest.setPassword(passwordEncoder.encode(userRegisterRequest.getPassword()));
             user.setRoles(new HashSet<>() {{
-                add(new RoleEntity(1, ERole.ROLE_USER));
+                add(new RoleEntity(1,ERole.ROLE_USER));
             }});
             modelMapper.map(userRegisterRequest, user);
             UserEntity entity = repository.save(user);
             tokens = jwTokenProvider.generateJwtTokens(entity);
 
-        } catch (IllegalArgumentException | ClassCastException | IllegalStateException |
-                 InvalidDataAccessApiUsageException e) {
+        } catch (
+                IllegalArgumentException | ClassCastException | IllegalStateException |
+                InvalidDataAccessApiUsageException e
+        ) {
             logger.error(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         } catch (Exception e) {
             logger.warn(e.getMessage());
             throw new UserAlreadyRegisteredException(

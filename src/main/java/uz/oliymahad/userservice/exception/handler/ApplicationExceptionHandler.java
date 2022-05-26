@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,12 +24,13 @@ import java.util.Date;
 public class ApplicationExceptionHandler {
     private final static Logger logger = LoggerFactory.getLogger(ApplicationExceptionHandler.class);
 
-    @ExceptionHandler(value = IllegalArgumentException.class)
+    @ExceptionHandler(value = {IllegalArgumentException.class,ClassCastException.class, IllegalStateException.class,
+            InvalidDataAccessApiUsageException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorMessageResponse handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request){
         logger.warn(ex.getMessage());
         return new ErrorMessageResponse(
-                HttpStatus.FORBIDDEN.value(),
+                HttpStatus.NOT_IMPLEMENTED.value(),
                 new Date(),
                 ex.getMessage(),
                 request.getDescription(false));
