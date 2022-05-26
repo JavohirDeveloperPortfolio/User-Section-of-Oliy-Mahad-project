@@ -20,8 +20,8 @@ public class UserController {
     public ResponseEntity<?> userList(
             @RequestParam(name = "search",required = false) String search,
             @RequestParam(name = "categories", required = false) String[] categories,
-            @RequestParam(name = "page", required = false) int page,
-            @RequestParam(name = "size", required = false) int size,
+            @RequestParam(name = "page", required = false,defaultValue = "0") Integer page,
+            @RequestParam(name = "size", required = false, defaultValue = "15") Integer size,
             @RequestParam(name = "order",defaultValue = "DESC") String order
 
     ) {
