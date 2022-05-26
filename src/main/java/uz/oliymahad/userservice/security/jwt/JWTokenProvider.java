@@ -4,7 +4,6 @@ import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import uz.oliymahad.userservice.model.entity.UserEntity;
 import uz.oliymahad.userservice.security.oauth2.UserPrincipal;

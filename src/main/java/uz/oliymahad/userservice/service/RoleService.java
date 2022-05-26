@@ -18,9 +18,7 @@ public class RoleService {
 
     public RoleEntity addRole(String roleName){
         try {
-            String s = roleName.toUpperCase();
-            if(s.contains("ROLE_") && s.indexOf("ROLE_") == 0) return roleRepository.save(new RoleEntity(ERole.valueOf(roleName)));
-            return roleRepository.save(new RoleEntity(ERole.valueOf("ROLE_"+s)));
+            return roleRepository.save(new RoleEntity(ERole.valueOf(roleName)));
         }catch (RuntimeException e){
             logger.error(e.getMessage());
         }
