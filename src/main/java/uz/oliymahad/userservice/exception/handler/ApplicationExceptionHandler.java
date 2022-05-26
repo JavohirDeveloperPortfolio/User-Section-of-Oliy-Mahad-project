@@ -86,7 +86,7 @@ public class ApplicationExceptionHandler {
         return new ErrorMessageResponse(
                 HttpStatus.NOT_ACCEPTABLE.value(),
                 new Date(),
-                ex.getMessage(),
+                ex.getFieldError().getDefaultMessage(),
                 request.getDescription(false)
         );
     }

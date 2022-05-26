@@ -1,18 +1,16 @@
 package uz.oliymahad.userservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
-import uz.oliymahad.userservice.dto.request.DataPageRequest;
+import uz.oliymahad.userservice.converter.UserDataModelConverter;
+import uz.oliymahad.userservice.model.entity.UserEntity;
 import uz.oliymahad.userservice.repository.UserRepository;
-
-import static org.springframework.data.domain.Sort.Direction.*;
 
 @Service
 @RequiredArgsConstructor
@@ -21,22 +19,27 @@ public class UserService {
     private final static Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
 
-    public Page list(DataPageRequest dataPageRequest, String search) throws IllegalArgumentException{
+    private final ModelMapper modelMapper;
 
-        int page = dataPageRequest.getPage() == null ? 0 : dataPageRequest.getPage();
-        int size = dataPageRequest.getSize() == null ? 15 : dataPageRequest.getSize();
-        var direction = dataPageRequest.getDirection().equals("ASC") ? ASC : DESC;
-
-        if(dataPageRequest.getProperties() == null && search == null)
-            return userRepository.findAll(
+    public Page<?> list(String search, String[] categories, int page, int size, String order) {
+        Page<UserEntity> list;
+        if(categories == null && search == null)
+             list = userRepository.findAll(
                     PageRequest.of(
                             page,
                             size
                     )
             );
-
-        if(dataPageRequest.getProperties() == null && search != null)
-            return userRepository.
+        else if (categories != null && search == null) {
+            list = userRepository.findAll(
+                    PageRequest.of(
+                            page,
+                            size,
+                            Sort.Direction.valueOf(order),
+                            categories
+                    ));
+        } else if(categories == null)
+            list = userRepository.
                     findAllByPhoneNumberContainingIgnoreCaseOrEmailContainingIgnoreCaseOrUsernameContainingIgnoreCase(
                             search,
                             search,
@@ -44,7 +47,9 @@ public class UserService {
                             PageRequest.of(page,size)
                     );
 
-        return userRepository.
+//        assert categories != null;
+        else
+            list = userRepository.
                 findAllByPhoneNumberContainingIgnoreCaseOrEmailContainingIgnoreCaseOrUsernameContainingIgnoreCase(
                         search,
                         search,
@@ -52,11 +57,12 @@ public class UserService {
                         PageRequest.of(
                                 page,
                                 size,
-                                direction,
-                                dataPageRequest.getProperties()
+                                Sort.Direction.valueOf(order),
+                                categories
                         )
                 );
+
+
+        return UserDataModelConverter.converter(list);
     }
-
-
 }
