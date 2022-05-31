@@ -46,7 +46,7 @@ public class UserController {
             @RequestParam(required = true) Long id,
             @RequestBody UserUpdateRequest userUpdateRequest
     ){
-        return ResponseEntity.ok(new RestAPIResponse(OK.name(), true, OK.value(),userService.updateUser(userUpdateRequest)));
+        return ResponseEntity.ok(new RestAPIResponse(OK.name(), true, OK.value(),userService.updateUser(userUpdateRequest, id)));
     }
     @PutMapping("/{userId}/auth")
     @PreAuthorize(value = "hasAnyRole(\"ADMIN\")")
