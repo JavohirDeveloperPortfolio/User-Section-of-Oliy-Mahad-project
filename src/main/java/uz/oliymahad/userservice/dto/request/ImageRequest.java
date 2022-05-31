@@ -13,6 +13,6 @@ import javax.validation.constraints.Size;
 public class ImageRequest {
     private String content;
     private String contentType;
-    @Size(max = 2000)
+    @Size(max = 5000)
     private long size;
 }

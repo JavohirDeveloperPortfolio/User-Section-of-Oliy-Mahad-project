@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import uz.oliymahad.userservice.converter.UserDataModelConverter;
 import uz.oliymahad.userservice.dto.request.ImageRequest;
 import uz.oliymahad.userservice.dto.request.UserUpdateRequest;
+import uz.oliymahad.userservice.dto.response.RestAPIResponse;
 import uz.oliymahad.userservice.dto.response.UserDataResponse;
 import uz.oliymahad.userservice.exception.custom_ex_model.UserNotFoundException;
 import uz.oliymahad.userservice.model.entity.RoleEntity;
@@ -40,7 +41,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
-    private final  String  baseImagePath = "/Users/ismoilovdavron/IdeaProjects/User-Section-of-Oliy-Mahad-project/images/avatar/";
+    private final  String  baseImagePath = "C:\\Users\\99897\\IdeaProjects\\User-Section-of-Oliy-Mahad-project\\images\\avatar";
 
     public Page<?> list(String search, String[] categories, int page, int size, String order) {
         Page<UserEntity> list;
@@ -89,27 +90,18 @@ public class UserService {
 
     public UserDataResponse updateUser(UserUpdateRequest userUpdateRequest, long id) {
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> {
-            throw new UserNotFoundException(id + " user not found");
+            throw new UserNotFoundException("User not found with id - " + id);
         });
+        if(userUpdateRequest.getPassword() != null){
+            userUpdateRequest.setPassword(passwordEncoder.encode(userUpdateRequest.getPassword()));
+        }
 
-        if (userUpdateRequest.getEmail() != null)
-            userEntity.setEmail(userUpdateRequest.getEmail());
-
-        if (userUpdateRequest.getPassword() != null)
-            userEntity.setPassword(passwordEncoder.encode(
-                userUpdateRequest.getPassword()
-            ));
-
-        if (userUpdateRequest.getPhoneNumber() != null)
-            userEntity.setPhoneNumber(userUpdateRequest.getPhoneNumber());
-
-        String save = imageSave(userUpdateRequest.getImage() , userEntity.getImageUrl());
-
-        userEntity.setImageUrl(save);
-
-        UserEntity save1 = userRepository.save(userEntity);
-
-        return modelMapper.map(save1, UserDataResponse.class);
+        if(userUpdateRequest.getImage() != null){
+            String saveImage = imageSave(userUpdateRequest.getImage() , userEntity.getImageUrl());
+            userEntity.setImageUrl(saveImage);
+        }
+        modelMapper.map(userUpdateRequest, userEntity);
+        return modelMapper.map(userRepository.save(userEntity), UserDataResponse.class);
 
     }
 
@@ -131,5 +123,9 @@ public class UserService {
 
 
         return uploadUrl;
+    }
+
+    public RestAPIResponse updateUserRole(Long userId, Integer roleId) {
+        return null;
     }
 }
