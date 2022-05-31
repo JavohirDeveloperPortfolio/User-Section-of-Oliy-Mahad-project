@@ -1,6 +1,6 @@
 package uz.oliymahad.userservice.service;
 
-import com.sun.mail.util.BASE64DecoderStream;
+
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.binary.Base64;
 import org.modelmapper.ModelMapper;
@@ -34,7 +34,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
-    private String baseImagePath = "/Users/ismoilovdavron/IdeaProjects/User-Section-of-Oliy-Mahad-project/images/avatar/";
+    private final  String  baseImagePath = "/Users/ismoilovdavron/IdeaProjects/User-Section-of-Oliy-Mahad-project/images/avatar/";
 
     public Page<?> list(String search, String[] categories, int page, int size, String order) {
         Page<UserEntity> list;
@@ -97,7 +97,7 @@ public class UserService {
         if (userUpdateRequest.getPhoneNumber() != null)
             userEntity.setPhoneNumber(userUpdateRequest.getPhoneNumber());
 
-        String save = imageSave(userUpdateRequest.getImage());
+        String save = imageSave(userUpdateRequest.getImage() , userEntity.getImageUrl());
 
         userEntity.setImageUrl(save);
 
@@ -107,18 +107,23 @@ public class UserService {
 
     }
 
-    private String imageSave(ImageRequest imageRequest) {
+    private String imageSave(ImageRequest imageRequest , String oldImageUrl) {
         byte[] de = Base64.decodeBase64(imageRequest.getContent());
-        BufferedImage image = null;
         String uploadUrl = null;
         try {
-            image = ImageIO.read(new ByteArrayInputStream(de));
+            BufferedImage image = ImageIO.read(new ByteArrayInputStream(de));
             uploadUrl = baseImagePath + UUID.randomUUID() + "." + imageRequest.getContentType();
             File f = new File(uploadUrl);
             ImageIO.write(image, imageRequest.getContentType(), f);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if(oldImageUrl!= null){
+            File file = new File(oldImageUrl);
+            file.delete();
+        }
+
+
         return uploadUrl;
     }
 }
