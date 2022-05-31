@@ -5,19 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import net.minidev.json.annotate.JsonIgnore;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class JwtResponse {
-    @JsonProperty("status_code")
+public class JWTokenResponse {
     private int statusCode;
 
-    @JsonProperty("access_token")
+    private String message;
+
     private String accessToken;
 
-    @JsonProperty("refresh_token")
     private String refreshToken;
 }

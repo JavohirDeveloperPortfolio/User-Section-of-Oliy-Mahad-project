@@ -4,27 +4,24 @@ import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import uz.oliymahad.userservice.model.entity.UserEntity;
 import uz.oliymahad.userservice.security.oauth2.UserPrincipal;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+@Service
+public class JWTokenProvider {
+  private static final Logger logger = LoggerFactory.getLogger(JWTokenProvider.class);
 
-@Component
-public class JwtProvider {
-  private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
+  @Value("${jwt.secret.key.access}")
+  private  String jwtAccessSecret;
 
-  @Value("${jwt.secret.access}")
-  private String jwtAccessSecret;
-
-  @Value("${jwt.secret.refresh}")
+  @Value("${jwt.secret.key.refresh}")
   private String jwtRefreshSecret;
-  @Value("${jwtExpirationMs}")
+  @Value("${jwt.secret.expiration.access}")
   private int accessTokenExpiration;
 
-  @Value("${jwtRefreshExpirationMs}")
+  @Value("${jwt.secret.expiration.refresh}")
   private long refreshTokenExpiration;
 
   public String[] generateJwtTokens(UserEntity userPrincipal) {

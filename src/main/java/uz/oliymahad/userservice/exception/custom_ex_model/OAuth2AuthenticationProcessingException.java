@@ -1,4 +1,4 @@
-package uz.oliymahad.userservice.exception;
+package uz.oliymahad.userservice.exception.custom_ex_model;
 
 import org.springframework.security.core.AuthenticationException;
 

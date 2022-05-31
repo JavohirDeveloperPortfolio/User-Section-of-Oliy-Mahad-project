@@ -1,5 +1,7 @@
 package uz.oliymahad.userservice.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import uz.oliymahad.userservice.audit.Auditable;
 import uz.oliymahad.userservice.model.enums.EAuthProvider;
 
 
@@ -23,8 +26,10 @@ import java.util.Set;
 @NoArgsConstructor
 @Data
 @Entity
+@Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
-public class UserEntity implements UserDetails {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class UserEntity extends Auditable<String> implements UserDetails {
 
     @Id
     @GeneratedValue
@@ -32,7 +37,8 @@ public class UserEntity implements UserDetails {
 
 
     private String username;
-//    @Column(nullable = false, unique = true)
+
+    @Column(unique = true)
     private String phoneNumber;
 
 //    @Column(nullable = false)
@@ -46,31 +52,18 @@ public class UserEntity implements UserDetails {
 
     private String providerId;
 
+    @Column(unique = true)
     private String imageUrl;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private Boolean emailVerified = false;
-
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<RoleEntity> roles;
 
 
     @OneToOne
-    private UserRegisterDetails userDetails;
-
-//    @Column(nullable = false, updatable = false)
-    @CreationTimestamp
-    private Timestamp createdAt;
-
-    @UpdateTimestamp
-    private Timestamp updateAt;
-
-    @CreatedBy
-    private String createdBy;
-
-    @LastModifiedBy
-    private String updatedBy;
+    private UserRegisterDetails userRegisterDetails;
 
 
     @Override
@@ -80,7 +73,7 @@ public class UserEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.phoneNumber;
+        return this.phoneNumber != null ? this.phoneNumber : this.email;
     }
 
     @Override

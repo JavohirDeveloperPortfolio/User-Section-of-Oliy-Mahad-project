@@ -1,27 +1,28 @@
 package uz.oliymahad.userservice.controller.auth;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import uz.oliymahad.userservice.dto.request.UserSignUpRequest;
-import uz.oliymahad.userservice.dto.response.ApiResponse;
-import uz.oliymahad.userservice.security.jwt.payload.response.JwtResponse;
+import uz.oliymahad.userservice.dto.request.UserLoginRequest;
+import uz.oliymahad.userservice.dto.request.UserRegisterRequest;
+import uz.oliymahad.userservice.exception.custom_ex_model.UserAlreadyRegisteredException;
+import uz.oliymahad.userservice.exception.custom_ex_model.UserAuthenticationException;
+import uz.oliymahad.userservice.security.jwt.payload.response.JWTokenResponse;
 import uz.oliymahad.userservice.service.oauth0.CustomOAuth0UserService;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Comparator;
+
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
-    @Autowired
-    CustomOAuth0UserService oAuth0UserService;
+    private final CustomOAuth0UserService oAuth0UserService;
     @GetMapping("/login/google")
     public ResponseEntity<?> loginWithGoogle(HttpServletResponse response){
         try {
@@ -29,7 +30,7 @@ public class AuthController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok(OK.name());
     }
 
 
@@ -53,23 +54,30 @@ public class AuthController {
 //        response.setHeader("access_token", null);
 //        response.setHeader("refresh_token", null);
         return ResponseEntity.ok(
-                new JwtResponse(0, accessToken, refreshToken)
+                new JWTokenResponse(OK.value(), OK.name(), accessToken, refreshToken)
         );
     }
 
-    @PostMapping("/sign_up")
-    public ResponseEntity<?> signUp(
-            @RequestBody UserSignUpRequest userSignUpRequest
-    ){
-        return ResponseEntity.ok(oAuth0UserService.signUpUser(userSignUpRequest));
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(
+            @RequestBody @Valid UserRegisterRequest userRegisterRequest
+    ) throws UserAlreadyRegisteredException, MethodArgumentNotValidException {
+
+        return ResponseEntity.ok(oAuth0UserService.registerUser(userRegisterRequest));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(
+            @RequestBody @Valid UserLoginRequest userLoginRequest
+    ) throws UserAuthenticationException {
+        return ResponseEntity.ok(oAuth0UserService.loginUser(userLoginRequest));
     }
 
     @PostMapping("/akdjndn1ad?dand/RE_dqkqekb?FR")
     public ResponseEntity<?> tokenRefresher(
             @RequestBody String jwtRefreshToken
     ){
-        return ResponseEntity.ok(oAuth0UserService.validateRefreshToke(jwtRefreshToken));
+        return ResponseEntity.ok(oAuth0UserService.validateRefreshToken(jwtRefreshToken));
     }
-
 
 }

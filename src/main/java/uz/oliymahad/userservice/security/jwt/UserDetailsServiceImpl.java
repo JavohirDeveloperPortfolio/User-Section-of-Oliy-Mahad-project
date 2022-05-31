@@ -22,9 +22,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     return jwtSubj.contains("@") ?
             userRepository.findByEmail(jwtSubj).orElseThrow(
-                    () -> new UsernameNotFoundException("User Not Found with : " + jwtSubj)) :
+                    () -> new UsernameNotFoundException("User not found with - " + jwtSubj)) :
             userRepository.findByPhoneNumber(jwtSubj).orElseThrow(
-                    () -> new UsernameNotFoundException("User Not Found with : " + jwtSubj));
+                    () -> new UsernameNotFoundException("User not found with - " + jwtSubj));
   }
 
 }
