@@ -20,5 +20,5 @@ public class UserUpdateRequest {
 
     private String password;
 
-    private String image;
+    private ImageRequest image;
 }
