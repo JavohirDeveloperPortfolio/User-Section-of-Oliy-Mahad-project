@@ -62,9 +62,8 @@ public class UserEntity extends Auditable<String> implements UserDetails {
     private Set<RoleEntity> roles;
 
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private UserRegisterDetails userRegisterDetails;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
