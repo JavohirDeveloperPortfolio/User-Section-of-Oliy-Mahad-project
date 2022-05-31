@@ -58,7 +58,7 @@ public class UserEntity extends Auditable<String> implements UserDetails {
 //    @Column(nullable = false)
     private Boolean emailVerified = false;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<RoleEntity> roles;
 
 

@@ -3,6 +3,7 @@ package uz.oliymahad.userservice.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uz.oliymahad.userservice.dto.request.UserUpdateRequest;
 import uz.oliymahad.userservice.dto.response.RestAPIResponse;
 import uz.oliymahad.userservice.service.UserService;
 import uz.oliymahad.userservice.service.oauth0.CustomOAuth0UserService;
@@ -20,8 +21,8 @@ public class UserController {
     public ResponseEntity<?> userList(
             @RequestParam(name = "search",required = false) String search,
             @RequestParam(name = "categories", required = false) String[] categories,
-            @RequestParam(name = "page", required = false) int page,
-            @RequestParam(name = "size", required = false) int size,
+            @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(name = "size", required = false, defaultValue = "20") Integer size,
             @RequestParam(name = "order",defaultValue = "DESC") String order
 
     ) {
@@ -33,6 +34,14 @@ public class UserController {
                 size,
                 order
         )));
+    }
+
+    @PostMapping()
+    public ResponseEntity<?> modifyUser(
+            @RequestParam(required = true) Long id,
+            @RequestBody UserUpdateRequest userUpdateRequest
+    ){
+        return ResponseEntity.ok(new RestAPIResponse(OK.name(), true, OK.value(),userService.updateUser(userUpdateRequest)));
     }
 
 }

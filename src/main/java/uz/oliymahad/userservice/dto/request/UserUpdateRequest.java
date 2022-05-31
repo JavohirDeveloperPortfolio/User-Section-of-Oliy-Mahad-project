@@ -4,24 +4,21 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
+import uz.oliymahad.userservice.annotation.phone_num_constraint.PhoneNumber;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 
-import java.util.Date;
-
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserUpdateRequest {
-
-    private String firstName;
-
-    private String lastName;
-
-    private String passport;
+    private String phoneNumber;
 
     private String email;
 
-    private String gender;
+    private String password;
 
-    private Date birthDate;
+    private String image;
 }

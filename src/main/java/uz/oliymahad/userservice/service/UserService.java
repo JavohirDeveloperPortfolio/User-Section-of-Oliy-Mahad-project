@@ -9,6 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uz.oliymahad.userservice.converter.UserDataModelConverter;
+import uz.oliymahad.userservice.dto.request.UserUpdateRequest;
+import uz.oliymahad.userservice.dto.response.UserDataResponse;
 import uz.oliymahad.userservice.model.entity.UserEntity;
 import uz.oliymahad.userservice.repository.UserRepository;
 
@@ -64,5 +66,10 @@ public class UserService {
 
 
         return UserDataModelConverter.converter(list);
+    }
+
+    public UserDataResponse updateUser(UserUpdateRequest userUpdateRequest) {
+
+        return new UserDataResponse();
     }
 }
