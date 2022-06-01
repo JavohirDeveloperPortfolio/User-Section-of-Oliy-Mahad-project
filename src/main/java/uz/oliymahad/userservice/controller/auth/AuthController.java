@@ -51,8 +51,6 @@ public class AuthController {
     public ResponseEntity<?> signInSuccess(HttpServletResponse response) {
         String accessToken = response.getHeader("access_token");
         String refreshToken = response.getHeader("refresh_token");
-//        response.setHeader("access_token", null);
-//        response.setHeader("refresh_token", null);
         return ResponseEntity.ok(
                 new JWTokenResponse(OK.value(), OK.name(), accessToken, refreshToken)
         );

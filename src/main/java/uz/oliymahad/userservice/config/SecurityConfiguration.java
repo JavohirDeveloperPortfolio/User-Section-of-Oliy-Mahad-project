@@ -75,7 +75,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         String refreshToken = jwtProvider.generateRefreshToken((UserPrincipal)authentication.getPrincipal());
                         response.addHeader("access_token", accessToken);
                         response.addHeader("refresh_token", refreshToken);
-                        System.out.println("hello world" + authentication.getPrincipal().toString());
                         String targetUrl = "/api/v1/auth/success";
                         RequestDispatcher dis = request.getRequestDispatcher(targetUrl);
                         dis.forward(request, response);
