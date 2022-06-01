@@ -92,7 +92,7 @@ public class UserService {
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> {
             throw new UserNotFoundException("User not found with id - " + id);
         });
-        if(userUpdateRequest.getPassword() != null){
+          if(userUpdateRequest.getPassword() != null){
             userUpdateRequest.setPassword(passwordEncoder.encode(userUpdateRequest.getPassword()));
         }
 
@@ -100,6 +100,7 @@ public class UserService {
             String saveImage = imageSave(userUpdateRequest.getImage() , userEntity.getImageUrl());
             userEntity.setImageUrl(saveImage);
         }
+
         modelMapper.map(userUpdateRequest, userEntity);
         return modelMapper.map(userRepository.save(userEntity), UserDataResponse.class);
 

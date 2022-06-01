@@ -8,10 +8,10 @@ public enum ERole {
     ROLE_ADMIN(2),
     ROLE_OWNER(3);
 
-    public final int id;
+    public int id;
 
     ERole(int id) {
-        this.id = ERole.values().length;
+        this.id = id;
     }
 
     public static ERole getRoleUser(int roleId) throws RoleNotFoundException {

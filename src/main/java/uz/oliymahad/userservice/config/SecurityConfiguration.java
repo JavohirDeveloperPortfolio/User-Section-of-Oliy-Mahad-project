@@ -53,8 +53,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .and()
             .addFilterBefore(jwTokenFilter, UsernamePasswordAuthenticationFilter.class)
             .authorizeRequests()
-            .antMatchers("/api/v1/user/**").permitAll()
             .antMatchers("/api/v1/auth/**").permitAll()
+            .antMatchers("/api/v1/user/**").permitAll()
             .antMatchers("/app/v1/admin/**").permitAll()
             .antMatchers("/swagger-ui.html**", "/swagger-resources/**",
                 "/v2/api-docs**", "/webjars/**", "/swagger-ui/**").permitAll()
