@@ -62,7 +62,7 @@ public class JWTokenProvider {
 
 
   public Jws<Claims> validateJwtAccessToken(String authToken) {
-    try {
+    try{
       return Jwts.parser().setSigningKey(jwtAccessSecret).parseClaimsJws(authToken);
     } catch (SignatureException e) {
       logger.error("Invalid JWT signature: {}", e.getMessage());

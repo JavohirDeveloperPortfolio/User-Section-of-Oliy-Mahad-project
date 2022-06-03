@@ -14,6 +14,7 @@ import uz.oliymahad.userservice.service.oauth0.CustomOAuth0UserService;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Arrays;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -77,5 +78,4 @@ public class AuthController {
     ){
         return ResponseEntity.ok(oAuth0UserService.validateRefreshToken(jwtRefreshToken));
     }
-
 }
