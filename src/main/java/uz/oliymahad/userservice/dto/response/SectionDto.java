@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class SectionDto {
     private String name;
-    private boolean role;
+    private boolean visibility;
     private boolean edit;
     private boolean delete;
     private boolean info;
