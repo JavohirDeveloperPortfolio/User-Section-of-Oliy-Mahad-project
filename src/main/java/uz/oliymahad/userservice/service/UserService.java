@@ -1,12 +1,14 @@
 package uz.oliymahad.userservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.codec.binary.Base64;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.oliymahad.userservice.converter.UserDataModelConverter;
 import uz.oliymahad.userservice.dto.request.ImageRequest;

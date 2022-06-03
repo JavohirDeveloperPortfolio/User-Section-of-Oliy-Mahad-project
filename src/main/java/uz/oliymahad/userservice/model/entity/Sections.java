@@ -17,7 +17,7 @@ public class Sections {
     @Column(name = "id", nullable = false)
     private Long id;
     private String name;
-    private int  role;
+    private int  visibilty;
     private int edit ;
     private int delete;
     private int info;
