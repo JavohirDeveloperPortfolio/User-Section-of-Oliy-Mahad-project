@@ -54,4 +54,51 @@ public class Test {
      *
      *
      */
+
+
+    /**
+     *
+     *
+     *
+     *    section{
+     *
+     *    name : users
+     *    list<permission> permissions;
+     *
+     *
+     *
+     *    }
+     *
+     *    permission :
+     *        role_name :  Admin :
+     *         visibili : t
+     *        edit :
+     *        delete
+     *        info:
+     *
+     *
+     * {
+     *     name : course,
+     *     permission : [
+     *     {
+     *         role : admin,
+     *         visibili : true
+     *         edit:
+     *     }
+     *     ]
+     * }
+     *
+     *
+     *
+     *
+     * c
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     */
 }

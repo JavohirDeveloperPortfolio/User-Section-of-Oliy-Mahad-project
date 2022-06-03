@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class SectionDto {
-    private String name;
-    private boolean role;
-    private boolean edit;
+public class PermissionRequestDto {
+    private String roleName;
+    private boolean visibility;
+    private boolean editable;
     private boolean delete;
+    private boolean update;
     private boolean info;
-
 }
