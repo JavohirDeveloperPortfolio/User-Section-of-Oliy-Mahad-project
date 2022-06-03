@@ -48,19 +48,22 @@ public class UserController {
     ){
         return ResponseEntity.ok(new RestAPIResponse(OK.name(), true, OK.value(),userService.updateUser(userUpdateRequest, id)));
     }
-    @PutMapping("/{userId}/auth")
-    @PreAuthorize(value = "hasAnyRole(\"ADMIN\")")
-    public ResponseEntity<?> updateUserRole(
-            @RequestParam(required = true) Integer roleId,
-            @PathVariable Long userId
-    ) throws RoleNotFoundException {
-        return ResponseEntity.ok(
-                new RestAPIResponse(
-                        OK.name(),
-                        true,
-                        OK.value(),
-                        userService.updateUserRole(userId, roleId)
-                )
-        );
-    }
+
+
+
+//    @PutMapping("/{userId}/auth")
+//    @PreAuthorize(value = "hasAnyRole(\"ADMIN\")")
+//    public ResponseEntity<?> updateUserRole(
+//            @RequestParam(required = true) Integer roleId,
+//            @PathVariable Long userId
+//    ) throws RoleNotFoundException {
+//        return ResponseEntity.ok(
+//                new RestAPIResponse(
+//                        OK.name(),
+//                        true,
+//                        OK.value(),
+//                        userService.updateUserRole(userId, roleId)
+//                )
+//        );
+//    }
 }
