@@ -9,6 +9,7 @@ import uz.oliymahad.userservice.model.enums.ERole;
 import uz.oliymahad.userservice.repository.SectionRepository;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class SectionService {
@@ -28,63 +29,65 @@ public class SectionService {
         Sections sections = new Sections();
         sections.setName(sectionRequestDto.getName());
         List<PermissionRequestDto> permissions = sectionRequestDto.getPermissions();
+        AtomicInteger vis = new AtomicInteger();
+        AtomicInteger edit = new AtomicInteger();
+        AtomicInteger delete = new AtomicInteger();
+        AtomicInteger info= new AtomicInteger();
         permissions.forEach(pe -> {
-            int vis = 0;
-            int edit = 0;
-            int delete = 0;
-            int info= 0;
 
-            if (pe.getRoleName().equals(ERole.ROLE_ADMIN.name()) && pe.isVisibility()) {
-                vis += 2;
+
+            if (pe.getRoleName().equals(ERole.ROLE_ADMIN) && pe.isVisibility()) {
+                vis.addAndGet(2);
             }
-            if (pe.getRoleName().equals(ERole.ROLE_USER.name()) && pe.isVisibility()) {
-                vis += 0;
+            if (pe.getRoleName().equals(ERole.ROLE_USER) && pe.isVisibility()) {
+                vis.addAndGet(0);
             }
-            if (pe.getRoleName().equals(ERole.ROLE_OWNER.name()) && pe.isVisibility()) {
-                vis += 4;
+            if (pe.getRoleName().equals(ERole.ROLE_OWNER) && pe.isVisibility()) {
+                vis.addAndGet(4);
             }
 
 
 
 
-            if (pe.getRoleName().equals(ERole.ROLE_ADMIN.name()) && pe.isEditable()) {
-                edit += 2;
+            if (pe.getRoleName().equals(ERole.ROLE_ADMIN) && pe.isEditable()) {
+                edit.addAndGet(2);
             }
-            if (pe.getRoleName().equals(ERole.ROLE_USER.name()) && pe.isEditable()) {
-                edit += 0;
+            if (pe.getRoleName().equals(ERole.ROLE_USER) && pe.isEditable()) {
+                edit.addAndGet(0);
             }
-            if (pe.getRoleName().equals(ERole.ROLE_OWNER.name()) && pe.isEditable()) {
-                edit += 4;
-            }
-
-
-
-            if (pe.getRoleName().equals(ERole.ROLE_ADMIN.name()) && pe.isDelete()) {
-                delete += 2;
-            }
-            if (pe.getRoleName().equals(ERole.ROLE_USER.name()) && pe.isDelete()) {
-                delete += 0;
-            }
-            if (pe.getRoleName().equals(ERole.ROLE_OWNER.name()) && pe.isDelete()) {
-                delete += 4;
+            if (pe.getRoleName().equals(ERole.ROLE_OWNER) && pe.isEditable()) {
+                edit.addAndGet(4);
             }
 
 
-            if (pe.getRoleName().equals(ERole.ROLE_ADMIN.name()) && pe.isInfo()) {
-                info += 2;
+
+            if (pe.getRoleName().equals(ERole.ROLE_ADMIN) && pe.isDelete()) {
+                delete.addAndGet(2);
             }
-            if (pe.getRoleName().equals(ERole.ROLE_USER.name()) && pe.isInfo()) {
-                info += 0;
+            if (pe.getRoleName().equals(ERole.ROLE_USER) && pe.isDelete()) {
+                delete.addAndGet(0);
             }
-            if (pe.getRoleName().equals(ERole.ROLE_OWNER.name()) && pe.isInfo()) {
-                info += 4;
+            if (pe.getRoleName().equals(ERole.ROLE_OWNER) && pe.isDelete()) {
+                delete.addAndGet(4);
             }
 
-            sections.setEdit(edit);
-            sections.setDelete(delete);
-            sections.setInfo(info);
-            sections.setVisibilty(vis);
+
+            if (pe.getRoleName().equals(ERole.ROLE_ADMIN) && pe.isInfo()) {
+                info.addAndGet(2);
+            }
+            if (pe.getRoleName().equals(ERole.ROLE_USER) && pe.isInfo()) {
+                info.addAndGet(0);
+            }
+            if (pe.getRoleName().equals(ERole.ROLE_OWNER) && pe.isInfo()) {
+                info.addAndGet(4);
+            }
+
+
         });
+        sections.setEdit(edit.get());
+        sections.setDelete(delete.get());
+        sections.setInfo(info.get());
+        sections.setVisibilty(vis.get());
        sectionRepository.save(sections);
     }
 }
