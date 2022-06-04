@@ -3,8 +3,6 @@ package uz.oliymahad.userservice.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import lombok.RequiredArgsConstructor;
-
-
 import org.springframework.stereotype.Service;
 import uz.oliymahad.userservice.dto.request.PermissionRequestDto;
 import uz.oliymahad.userservice.dto.request.SectionRequestDto;
@@ -16,13 +14,9 @@ import uz.oliymahad.userservice.model.enums.ERole;
 import uz.oliymahad.userservice.repository.SectionRepository;
 import uz.oliymahad.userservice.security.jwt.JWTokenProvider;
 import uz.oliymahad.userservice.security.jwt.UserDetailsServiceImpl;
-import uz.oliymahad.userservice.service.oauth2.CustomUserDetailsService;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -91,7 +85,7 @@ public class SectionService {
         sections.setEdit(edit.get());
         sections.setDelete(delete.get());
         sections.setInfo(info.get());
-        sections.setVisibilty(vis.get());
+        sections.setVisibility(vis.get());
         sectionRepository.save(sections);
     }
 
@@ -112,21 +106,21 @@ public class SectionService {
                 sectionDto.setName(sections.getName());
 
                 if (roleName.equals(ERole.ROLE_USER)) {
-                    sectionDto.setVisibility(((sections.getVisibilty() & 1) > 0));
+                    sectionDto.setVisibility(((sections.getVisibility() & 1) > 0));
                     sectionDto.setDelete(((sections.getDelete() & 1) > 0));
                     sectionDto.setEdit(((sections.getEdit() & 1) > 0));
                     sectionDto.setInfo(((sections.getInfo() & 1) > 0));
                 }
 
                 if (roleName.equals(ERole.ROLE_ADMIN)) {
-                    sectionDto.setVisibility(((sections.getVisibilty() & 2) > 0));
+                    sectionDto.setVisibility(((sections.getVisibility() & 2) > 0));
                     sectionDto.setDelete(((sections.getDelete() & 2) > 0));
                     sectionDto.setEdit(((sections.getEdit() & 2) > 0));
                     sectionDto.setInfo(((sections.getInfo() & 2) > 0));
                 }
 
                 if (roleName.equals(ERole.ROLE_OWNER)) {
-                    sectionDto.setVisibility(((sections.getVisibilty() & 4) > 0));
+                    sectionDto.setVisibility(((sections.getVisibility() & 4) > 0));
                     sectionDto.setDelete(((sections.getDelete() & 4) > 0));
                     sectionDto.setEdit(((sections.getEdit() & 4) > 0));
                     sectionDto.setInfo(((sections.getInfo() & 4) > 0));
