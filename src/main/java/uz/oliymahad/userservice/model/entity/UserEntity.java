@@ -1,6 +1,9 @@
 package uz.oliymahad.userservice.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -10,6 +13,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import uz.oliymahad.userservice.audit.Auditable;
 import uz.oliymahad.userservice.model.enums.EAuthProvider;
 
 
@@ -25,52 +29,43 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
-public class UserEntity implements UserDetails {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Builder
+public class UserEntity extends Auditable<String> implements UserDetails {
 
     @Id
     @GeneratedValue
     private Long id;
 
+
     private String username;
+
     @Column(unique = true)
     private String phoneNumber;
 
+//    @Column(nullable = false)
+    private String password;
+
     @Column(unique = true)
     private String email;
-
-    @Column(length = 8)
-    private String password;
 
     @Enumerated(EnumType.STRING)
     private EAuthProvider provider;
 
     private String providerId;
 
+    @Column(unique = true)
     private String imageUrl;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private Boolean emailVerified = false;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<RoleEntity> roles;
 
-    @OneToOne
+
+    @OneToOne(fetch = FetchType.EAGER)
     private UserRegisterDetails userRegisterDetails;
-
-//    @Column(nullable = false, updatable = false)
-    @CreationTimestamp
-    private Timestamp createdAt;
-
-    @UpdateTimestamp
-    private Timestamp updateAt;
-
-    @CreatedBy
-    private String createdBy;
-
-
-    @LastModifiedBy
-    private String updatedBy;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -79,7 +74,7 @@ public class UserEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.phoneNumber;
+        return this.phoneNumber != null ? this.phoneNumber : this.email;
     }
 
     @Override

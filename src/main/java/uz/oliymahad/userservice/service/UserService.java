@@ -1,26 +1,35 @@
 package uz.oliymahad.userservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import uz.oliymahad.userservice.dto.request.DataPageRequest;
+import uz.oliymahad.userservice.converter.UserDataModelConverter;
+import uz.oliymahad.userservice.dto.request.ImageRequest;
 import uz.oliymahad.userservice.dto.request.UserUpdateRequest;
-import uz.oliymahad.userservice.dto.response.RestAPIResponse;
+import uz.oliymahad.userservice.dto.response.UserDataResponse;
+import uz.oliymahad.userservice.exception.custom_ex_model.UserNotFoundException;
+import uz.oliymahad.userservice.model.entity.RoleEntity;
+import uz.oliymahad.userservice.exception.custom_ex_model.UserNotFoundException;
 import uz.oliymahad.userservice.model.entity.UserEntity;
+import uz.oliymahad.userservice.model.enums.ERole;
 import uz.oliymahad.userservice.repository.UserRepository;
 
-import java.util.Optional;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
-import static org.springframework.data.domain.Sort.Direction.*;
+import javax.management.relation.RoleNotFoundException;
+import java.util.Arrays;
 
 @Service
 @RequiredArgsConstructor
@@ -28,24 +37,29 @@ public class UserService {
 
     private final static Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
-    private final ModelMapper mapper;
+    private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final  String  baseImagePath = "/Users/ismoilovdavron/IdeaProjects/User-Section-of-Oliy-Mahad-project/images/avatar/";
 
-    public Page list(DataPageRequest dataPageRequest, String search) throws IllegalArgumentException{
-
-        int page = dataPageRequest.getPage() == null ? 0 : dataPageRequest.getPage();
-        int size = dataPageRequest.getSize() == null ? 15 : dataPageRequest.getSize();
-        var direction = dataPageRequest.getDirection().equals("ASC") ? ASC : DESC;
-
-        if(dataPageRequest.getProperties() == null && search == null)
-            return userRepository.findAll(
+    public Page<?> list(String search, String[] categories, int page, int size, String order) {
+        Page<UserEntity> list;
+        if (categories == null && search == null)
+            list = userRepository.findAll(
                     PageRequest.of(
                             page,
                             size
                     )
             );
-
-        if(dataPageRequest.getProperties() == null && search != null)
-            return userRepository.
+        else if (categories != null && search == null) {
+            list = userRepository.findAll(
+                    PageRequest.of(
+                            page,
+                            size,
+                            Sort.Direction.valueOf(order),
+                            categories
+                    ));
+        } else if(categories == null)
+            list = userRepository.
                     findAllByPhoneNumberContainingIgnoreCaseOrEmailContainingIgnoreCaseOrUsernameContainingIgnoreCase(
                             search,
                             search,
@@ -53,7 +67,9 @@ public class UserService {
                             PageRequest.of(page,size)
                     );
 
-        return userRepository.
+//        assert categories != null;
+        else
+            list = userRepository.
                 findAllByPhoneNumberContainingIgnoreCaseOrEmailContainingIgnoreCaseOrUsernameContainingIgnoreCase(
                         search,
                         search,
@@ -61,28 +77,58 @@ public class UserService {
                         PageRequest.of(
                                 page,
                                 size,
-                                direction,
-                                dataPageRequest.getProperties()
+                                Sort.Direction.valueOf(order),
+                                categories
                         )
                 );
+
+
+        return UserDataModelConverter.converter(list);
     }
 
-    public Page<UserEntity> getPage(int page, int size){
-        PageRequest pageable = PageRequest.of(page, 2);
-        Page<UserEntity> entityPage = userRepository.findAll(pageable);
-        return entityPage;
+    public UserDataResponse updateUser(UserUpdateRequest userUpdateRequest, long id) {
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> {
+            throw new UserNotFoundException(id + " user not found");
+        });
+
+        if (userUpdateRequest.getEmail() != null)
+            userEntity.setEmail(userUpdateRequest.getEmail());
+
+        if (userUpdateRequest.getPassword() != null)
+            userEntity.setPassword(passwordEncoder.encode(
+                userUpdateRequest.getPassword()
+            ));
+
+        if (userUpdateRequest.getPhoneNumber() != null)
+            userEntity.setPhoneNumber(userUpdateRequest.getPhoneNumber());
+
+        String save = imageSave(userUpdateRequest.getImage() , userEntity.getImageUrl());
+
+        userEntity.setImageUrl(save);
+
+        UserEntity save1 = userRepository.save(userEntity);
+
+        return modelMapper.map(save1, UserDataResponse.class);
+
     }
 
-    public RestAPIResponse editUser(UserUpdateRequest updateRequest, long id){
-        Optional<UserEntity> entityOptional = userRepository.findById(id);
-
-        if(entityOptional.isPresent()){
-            UserEntity entity = mapper.map(updateRequest, UserEntity.class);
-            entity.setId(id);
-            userRepository.save(entity);
-            return new RestAPIResponse("Successfully updated!", true, HttpStatus.OK);
-
+    private String imageSave(ImageRequest imageRequest , String oldImageUrl) {
+        byte[] de = Base64.decodeBase64(imageRequest.getContent());
+        String uploadUrl = null;
+        try {
+            BufferedImage image = ImageIO.read(new ByteArrayInputStream(de));
+            uploadUrl = baseImagePath + UUID.randomUUID() + "." + imageRequest.getContentType();
+            File f = new File(uploadUrl);
+            ImageIO.write(image, imageRequest.getContentType(), f);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return new RestAPIResponse("Wrong id", false, HttpStatus.NO_CONTENT);
+        if(oldImageUrl!= null){
+            File file = new File(oldImageUrl);
+            file.delete();
+        }
+
+
+        return uploadUrl;
     }
 }

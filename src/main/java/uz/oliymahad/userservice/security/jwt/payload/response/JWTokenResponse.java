@@ -11,12 +11,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JWTokenResponse {
-    @JsonProperty("status_code")
     private int statusCode;
 
-    @JsonProperty("access_token")
+    private String message;
+
     private String accessToken;
 
-    @JsonProperty("refresh_token")
     private String refreshToken;
 }

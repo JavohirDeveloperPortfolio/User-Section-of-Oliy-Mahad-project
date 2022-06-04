@@ -1,12 +1,12 @@
 server:
-  port: 8081
+  port: 8080
 
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/db_oliy_mahad
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
-    password: 1596psql
+    password: 7272
   jpa:
     open-in-view: false
     hibernate:
@@ -30,6 +30,6 @@ spring:
           google:
             client-id: 517447956930-ks6o0nu247mmb6pe9ag6gl2533443hvf.apps.googleusercontent.com
             client-secret: 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
-#  application:
-#    name: USER-SERVICE
+  application:
+    name: USER-SERVICE
 

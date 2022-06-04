@@ -1,42 +1,69 @@
 package uz.oliymahad.userservice.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import uz.oliymahad.userservice.dto.request.DataPageRequest;
 import uz.oliymahad.userservice.dto.request.UserUpdateRequest;
 import uz.oliymahad.userservice.dto.response.RestAPIResponse;
 import uz.oliymahad.userservice.service.UserService;
 import uz.oliymahad.userservice.service.oauth0.CustomOAuth0UserService;
 
+import javax.management.relation.RoleNotFoundException;
+
+import static org.springframework.http.HttpStatus.OK;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {
-
     private final UserService userService;
 
     private final CustomOAuth0UserService oAuth0UserService;
 
+    @PreAuthorize(value = "hasAnyRole(\"ADMIN\")")
     @GetMapping()
     public ResponseEntity<?> userList(
-            @RequestBody DataPageRequest dataPageRequest,
-            @RequestParam(name = "search") String search
+            @RequestParam(name = "search",required = false) String search,
+            @RequestParam(name = "categories", required = false) String[] categories,
+            @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(name = "size", required = false, defaultValue = "20") Integer size,
+            @RequestParam(name = "order",defaultValue = "DESC") String order
+
     ) {
-        return ResponseEntity.ok(userService.list(dataPageRequest, search));
+        //TODO - DONE
+        return ResponseEntity.ok(new RestAPIResponse(OK.name(),true, OK.value(), userService.list(
+                search,
+                categories,
+                page,
+                size,
+                order
+        )));
     }
 
-    @GetMapping("/getPage")
-    public HttpEntity<?> getPage(@RequestParam("page") Integer page, @RequestParam("size") Integer size) {
-        return ResponseEntity.ok(userService.getPage(page,size));
+    @PutMapping()
+    public ResponseEntity<?> modifyUser(
+            @RequestParam(required = true) Long id,
+            @RequestBody UserUpdateRequest userUpdateRequest
+    ){
+        return ResponseEntity.ok(new RestAPIResponse(OK.name(), true, OK.value(),userService.updateUser(userUpdateRequest, id)));
     }
 
 
-    @PutMapping("/edit")
-    public HttpEntity<?> editUser(@RequestBody UserUpdateRequest updateRequest, @RequestParam Long id){
-        RestAPIResponse apiResponse = userService.editUser(updateRequest, id);
-        return ResponseEntity.ok(apiResponse);
-    }
 
+//    @PutMapping("/{userId}/auth")
+//    @PreAuthorize(value = "hasAnyRole(\"ADMIN\")")
+//    public ResponseEntity<?> updateUserRole(
+//            @RequestParam(required = true) Integer roleId,
+//            @PathVariable Long userId
+//    ) throws RoleNotFoundException {
+//        return ResponseEntity.ok(
+//                new RestAPIResponse(
+//                        OK.name(),
+//                        true,
+//                        OK.value(),
+//                        userService.updateUserRole(userId, roleId)
+//                )
+//        );
+//    }
 }
