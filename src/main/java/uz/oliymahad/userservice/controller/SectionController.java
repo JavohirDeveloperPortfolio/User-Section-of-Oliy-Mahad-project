@@ -22,13 +22,13 @@ import java.util.Set;
 public class SectionController {
     private final SectionService sectionService;
 
-    @PostMapping
+    @PostMapping("/edit")
     public Boolean addSection(@RequestBody SectionRequestDto sectionRequestDto) {
         sectionService.addSection(sectionRequestDto);
         return true;
     }
 
-    @GetMapping
+    @GetMapping("/get")
     public ResponseEntity<?> getSections(HttpServletRequest request) {
         return  ResponseEntity.ok(sectionService.getSections(request));
     }

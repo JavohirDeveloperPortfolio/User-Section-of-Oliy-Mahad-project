@@ -10,9 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
-    @Query("select (count(u) > 0) from UserEntity u where u.phoneNumber = ?1")
-    Boolean existsByPhoneNumber(String phoneNumber);
-    @Query("select u from UserEntity u where u.email = ?1")
     Optional<UserEntity> findByEmail(String email);
 
     Optional<UserEntity> findByUsername(String username);

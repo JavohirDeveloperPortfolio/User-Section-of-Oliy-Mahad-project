@@ -71,13 +71,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private UserEntity registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
-        RoleEntity role = roleRepository.findByRoleName(ERole.ROLE_USER);
+        RoleEntity role = roleRepository.findByRoleName(ERole.ROLE_USER).orElseThrow(()-> new UserRoleNotFoundException("role not found"));
         UserEntity user = new UserEntity();
 
         user.setProvider(EAuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
         user.setProviderId(oAuth2UserInfo.getId());
-//        user.getUserDetails().setFirstName(oAuth2UserInfo.getName());
-        user.setEmailVerified(true);
         user.getUserRegisterDetails().setFirstName(oAuth2UserInfo.getName());
         user.setEmail(oAuth2UserInfo.getEmail());
         user.setImageUrl(oAuth2UserInfo.getImageUrl());

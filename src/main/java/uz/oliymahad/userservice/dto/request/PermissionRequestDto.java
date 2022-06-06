@@ -9,9 +9,7 @@ import uz.oliymahad.userservice.model.enums.ERole;
 @NoArgsConstructor
 @Data
 public class PermissionRequestDto {
-    private ERole roleName;
     private boolean visibility;
-    private boolean editable;
     private boolean delete;
     private boolean update;
     private boolean info;

@@ -14,7 +14,6 @@ import uz.oliymahad.userservice.service.oauth0.CustomOAuth0UserService;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Comparator;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -41,18 +40,6 @@ public class AuthController {
             response.sendRedirect("/oauth2/authorization/facebook");
 //            response.sendRedirect("
 //            /oauth2/callback/facebook");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.ok("success");
-    }
-
-
-    @GetMapping("/login/facebook")
-    public ResponseEntity<?> loginWithFacebook(HttpServletResponse response){
-        try {
-            response.sendRedirect("/oauth2/authorization/facebook");
-//            response.sendRedirect("/oauth2/callback/facebook");
         } catch (IOException e) {
             e.printStackTrace();
         }
