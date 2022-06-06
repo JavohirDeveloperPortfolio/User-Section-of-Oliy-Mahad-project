@@ -69,48 +69,4 @@ public class SectionService {
             sectionRepository.save(editSection(sectionRequestDto, sections1));
         }
     }
-
-    public List<SectionDto> getSections(HttpServletRequest request) {
-        String headerAuth = request.getHeader("Authorization");
-        String token = headerAuth.substring(7);
-        Jws<Claims> claimsJws = jwTokenProvider.validateJwtAccessToken(token);
-        String subject = claimsJws.getBody().getSubject();
-
-
-        UserEntity userDetails = (UserEntity) userDetailsService.loadUserByUsername(subject);
-        List<SectionDto> result = new ArrayList<>();
-        for (RoleEntity role : userDetails.getRoles()) {
-
-            ERole roleName = role.getRoleName();
-            for (Sections sections : sectionRepository.findAll()) {
-                SectionDto sectionDto = new SectionDto();
-                sectionDto.setName(sections.getName());
-
-                if (roleName.equals(ERole.ROLE_USER)) {
-                    sectionDto.setVisibility(((sections.getVisibility() & 1) > 0));
-                    sectionDto.setDelete(((sections.getDelete() & 1) > 0));
-                    sectionDto.setEdit(((sections.getEdit() & 1) > 0));
-                    sectionDto.setInfo(((sections.getInfo() & 1) > 0));
-                }
-
-                if (roleName.equals(ERole.ROLE_ADMIN)) {
-                    sectionDto.setVisibility(((sections.getVisibility() & 2) > 0));
-                    sectionDto.setDelete(((sections.getDelete() & 2) > 0));
-                    sectionDto.setEdit(((sections.getEdit() & 2) > 0));
-                    sectionDto.setInfo(((sections.getInfo() & 2) > 0));
-                }
-
-                if (roleName.equals(ERole.ROLE_OWNER)) {
-                    sectionDto.setVisibility(((sections.getVisibility() & 4) > 0));
-                    sectionDto.setDelete(((sections.getDelete() & 4) > 0));
-                    sectionDto.setEdit(((sections.getEdit() & 4) > 0));
-                    sectionDto.setInfo(((sections.getInfo() & 4) > 0));
-                }
-                result.add(sectionDto);
-            }
-
-        }
-
-        return result;
-    }
 }
