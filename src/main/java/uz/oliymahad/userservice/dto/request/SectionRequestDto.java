@@ -12,5 +12,7 @@ import java.util.List;
 @Data
 public class SectionRequestDto {
     private String name;
-    private List<PermissionRequestDto> permissions;
+    private List<Boolean> permissions0;
+    private List<Boolean> permissions1;
+    private List<Boolean> permissions2;
 }

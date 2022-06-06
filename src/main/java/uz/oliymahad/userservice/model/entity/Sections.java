@@ -1,8 +1,6 @@
 package uz.oliymahad.userservice.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import uz.oliymahad.userservice.model.enums.ERole;
 
 import javax.persistence.*;
@@ -10,7 +8,8 @@ import javax.persistence.*;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Setter
+@Getter
 public class Sections {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

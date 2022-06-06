@@ -17,6 +17,7 @@ import uz.oliymahad.userservice.security.jwt.UserDetailsServiceImpl;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -27,66 +28,46 @@ public class SectionService {
     private final JWTokenProvider jwTokenProvider;
     private final UserDetailsServiceImpl userDetailsService;
 
+    private Sections editSection(SectionRequestDto sectionRequestDto, Sections sections){
+        int value = 0;
+        if (sectionRequestDto.getPermissions0().get(0)) value |= 1 << 0;
+        if (sectionRequestDto.getPermissions1().get(0)) value |= 1 << 1;
+        if (sectionRequestDto.getPermissions2().get(0)) value |= 1 << 2;
+        sections.setVisibility(value);
+
+        value = 0;
+        if (sectionRequestDto.getPermissions0().get(1)) value |= 1 << 0;
+        if (sectionRequestDto.getPermissions1().get(1)) value |= 1 << 1;
+        if (sectionRequestDto.getPermissions2().get(1)) value |= 1 << 2;
+        sections.setEdit(value);
+
+        value = 0;
+        if (sectionRequestDto.getPermissions0().get(2)) value |= 1 << 0;
+        if (sectionRequestDto.getPermissions1().get(2)) value |= 1 << 1;
+        if (sectionRequestDto.getPermissions2().get(2)) value |= 1 << 2;
+        sections.setDelete(value);
+
+        value = 0;
+        if (sectionRequestDto.getPermissions0().get(3)) value |= 1 << 0;
+        if (sectionRequestDto.getPermissions1().get(3)) value |= 1 << 1;
+        if (sectionRequestDto.getPermissions2().get(3)) value |= 1 << 2;
+        sections.setInfo(value);
+
+        return sections;
+    }
+
+
     public void addSection(SectionRequestDto sectionRequestDto) {
 
-        Sections sections = new Sections();
-        sections.setName(sectionRequestDto.getName());
-        List<PermissionRequestDto> permissions = sectionRequestDto.getPermissions();
-        AtomicInteger vis = new AtomicInteger();
-        AtomicInteger edit = new AtomicInteger();
-        AtomicInteger delete = new AtomicInteger();
-        AtomicInteger info = new AtomicInteger();
-        permissions.forEach(pe -> {
-            if (pe.getRoleName().equals(ERole.ROLE_ADMIN) && pe.isVisibility()) {
-                vis.addAndGet(2);
-            }
-            if (pe.getRoleName().equals(ERole.ROLE_USER) && pe.isVisibility()) {
-                vis.addAndGet(0);
-            }
-            if (pe.getRoleName().equals(ERole.ROLE_OWNER) && pe.isVisibility()) {
-                vis.addAndGet(4);
-            }
-
-
-            if (pe.getRoleName().equals(ERole.ROLE_ADMIN) && pe.isEditable()) {
-                edit.addAndGet(2);
-            }
-            if (pe.getRoleName().equals(ERole.ROLE_USER) && pe.isEditable()) {
-                edit.addAndGet(0);
-            }
-            if (pe.getRoleName().equals(ERole.ROLE_OWNER) && pe.isEditable()) {
-                edit.addAndGet(4);
-            }
-
-
-            if (pe.getRoleName().equals(ERole.ROLE_ADMIN) && pe.isDelete()) {
-                delete.addAndGet(2);
-            }
-            if (pe.getRoleName().equals(ERole.ROLE_USER) && pe.isDelete()) {
-                delete.addAndGet(0);
-            }
-            if (pe.getRoleName().equals(ERole.ROLE_OWNER) && pe.isDelete()) {
-                delete.addAndGet(4);
-            }
-
-
-            if (pe.getRoleName().equals(ERole.ROLE_ADMIN) && pe.isInfo()) {
-                info.addAndGet(2);
-            }
-            if (pe.getRoleName().equals(ERole.ROLE_USER) && pe.isInfo()) {
-                info.addAndGet(0);
-            }
-            if (pe.getRoleName().equals(ERole.ROLE_OWNER) && pe.isInfo()) {
-                info.addAndGet(4);
-            }
-
-
-        });
-        sections.setEdit(edit.get());
-        sections.setDelete(delete.get());
-        sections.setInfo(info.get());
-        sections.setVisibility(vis.get());
-        sectionRepository.save(sections);
+        Optional<Sections> sections = sectionRepository.findByName(sectionRequestDto.getName());
+        if (sections.isPresent()){
+            sectionRepository.save(editSection(sectionRequestDto, sections.get()));
+        }
+        else {
+            Sections sections1 = new Sections();
+            sections1.setName(sectionRequestDto.getName());
+            sectionRepository.save(editSection(sectionRequestDto, sections1));
+        }
     }
 
     public List<SectionDto> getSections(HttpServletRequest request) {

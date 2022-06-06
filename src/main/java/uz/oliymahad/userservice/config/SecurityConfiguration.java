@@ -35,7 +35,7 @@ import java.io.IOException;
     securedEnabled = true
 )
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
+    
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final PasswordEncoder passwordEncoder;
@@ -82,7 +82,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     RequestDispatcher dis = request.getRequestDispatcher(targetUrl);
                     dis.forward(request, response);
                 }
-            }).failureHandler(new AuthenticationFailureHandler() {
+            }) .failureHandler(new AuthenticationFailureHandler() {
                 @Override
                 public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                                     AuthenticationException exception) throws IOException, ServletException {
