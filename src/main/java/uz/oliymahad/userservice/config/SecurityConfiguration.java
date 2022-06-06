@@ -35,7 +35,7 @@ import java.io.IOException;
     securedEnabled = true
 )
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
+    
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final PasswordEncoder passwordEncoder;
