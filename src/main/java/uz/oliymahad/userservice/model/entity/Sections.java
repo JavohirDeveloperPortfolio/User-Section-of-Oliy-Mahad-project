@@ -17,7 +17,7 @@ public class Sections {
     private Long id;
     private String name;
     private int  visibility;
-    private int edit ;
+    private int update ;
     private int delete;
     private int info;
 
