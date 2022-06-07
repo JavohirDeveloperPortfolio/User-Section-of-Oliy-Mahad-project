@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uz.oliymahad.userservice.annotation.phone_num_constraint.PhoneNumber;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Getter
@@ -15,8 +16,10 @@ import javax.validation.constraints.NotBlank;
 public class UserRegisterRequest {
 
     @PhoneNumber
-    @NotBlank
     private String phoneNumber;
+
+    @Email
+    private String email;
 
     @NotBlank
     private String password;

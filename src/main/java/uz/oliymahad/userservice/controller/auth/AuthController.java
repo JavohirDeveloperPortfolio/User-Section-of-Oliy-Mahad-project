@@ -54,6 +54,7 @@ public class AuthController {
         String refreshToken = response.getHeader("refresh_token");
         return ResponseEntity.ok(
                 new JWTokenResponse(OK.value(), OK.name(), accessToken, refreshToken)
+
         );
     }
 

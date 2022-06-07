@@ -5,16 +5,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
+import java.util.Date;
+
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserUpdateRequest {
-    private String phoneNumber;
+@Getter
+@Setter
+public class UserDetailsUpdateRequest {
+
+    private String firstName;
+
+    private String lastName;
+
+    private String passport;
 
     private String email;
 
-    private String password;
+    private String gender;
 
-    private ImageRequest image;
+    private Date birthDate;
 }
