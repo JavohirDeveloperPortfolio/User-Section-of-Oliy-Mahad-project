@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uz.oliymahad.userservice.dto.response.SectionAccessResponse;
+import uz.oliymahad.userservice.model.entity.Sections;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,4 +22,5 @@ public class JWTokenResponse {
     private String accessToken;
 
     private String refreshToken;
+
 }

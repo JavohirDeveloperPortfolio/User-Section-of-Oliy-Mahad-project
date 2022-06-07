@@ -2,7 +2,7 @@ package uz.oliymahad.userservice.service;
 
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.codec.binary.Base64;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

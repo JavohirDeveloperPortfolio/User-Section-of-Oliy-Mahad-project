@@ -6,11 +6,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 @SpringBootApplication
-@EnableEurekaClient
+//@EnableEurekaClient
 public class UserServiceApplication implements CommandLineRunner {
     @Autowired
     private UserRepository userRepository;
@@ -46,10 +46,10 @@ public class UserServiceApplication implements CommandLineRunner {
             Arrays.stream(ERole.values()).forEach(r ->
                     roleRepository.save(new RoleEntity(r.id, r))
             );
-
+            System.out.println();passwordEncoder.encode("1234");
             UserEntity entity = new UserEntity(
                     passwordEncoder.encode("123456789"),
-                    "email@email.com",
+                    "+998998886633",
                     new HashSet<>() {{
                         add(new RoleEntity(ERole.ROLE_OWNER.id, ERole.ROLE_OWNER));
                     }}
@@ -63,5 +63,7 @@ public class UserServiceApplication implements CommandLineRunner {
         }
 
 
+
     }
+
 }

@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import uz.oliymahad.userservice.dto.request.UserLoginRequest;
 import uz.oliymahad.userservice.dto.request.UserRegisterRequest;
+import uz.oliymahad.userservice.dto.response.SectionAccessResponse;
 import uz.oliymahad.userservice.exception.custom_ex_model.UserAlreadyRegisteredException;
 import uz.oliymahad.userservice.exception.custom_ex_model.UserInvalidPasswordException;
 import uz.oliymahad.userservice.exception.custom_ex_model.UserNotFoundException;
@@ -25,7 +26,12 @@ import uz.oliymahad.userservice.repository.UserRepository;
 import uz.oliymahad.userservice.security.jwt.JWTokenProvider;
 import uz.oliymahad.userservice.security.jwt.UserDetailsServiceImpl;
 import uz.oliymahad.userservice.security.jwt.payload.response.JWTokenResponse;
+import uz.oliymahad.userservice.service.SectionService;
+
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import static org.springframework.http.HttpStatus.OK;
 
 @Service
@@ -38,6 +44,7 @@ public class CustomOAuth0UserService {
     private final UserDetailsServiceImpl userDetailsService;
     private final ModelMapper modelMapper;
     private final JWTokenProvider jwTokenProvider;
+    private final SectionService sectionService;
 
     public JWTokenResponse registerUser(UserRegisterRequest userRegisterRequest)
             throws UserAlreadyRegisteredException {
