@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ContentDto {
+    private int ordinal;
     private String roleName;
     private SectionPermissionDto permissions;
 }

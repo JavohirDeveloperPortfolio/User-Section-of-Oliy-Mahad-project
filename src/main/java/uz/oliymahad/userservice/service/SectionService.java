@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import uz.oliymahad.userservice.dto.request.SectionRequestDto;
 import uz.oliymahad.userservice.dto.response.*;
 import uz.oliymahad.userservice.model.entity.Sections;
+import uz.oliymahad.userservice.model.enums.ERole;
 import uz.oliymahad.userservice.repository.SectionRepository;
 import uz.oliymahad.userservice.security.jwt.JWTokenProvider;
 import uz.oliymahad.userservice.security.jwt.UserDetailsServiceImpl;
@@ -81,31 +82,22 @@ public class SectionService {
             return new RestAPIResponse("Section not found", false,HttpStatus.NOT_FOUND.value());
         }
         Sections sections = optionalSections.get();
-        SectionPermissionDto role_user = getPermissionToSection("ROLE_USER", sections);
-        SectionPermissionDto role_owner = getPermissionToSection("ROLE_OWNER", sections);
-        SectionPermissionDto role_admin = getPermissionToSection("ROLE_ADMIN", sections);
-        ContentDto contentDto1 = new ContentDto("ROLE_USER",role_user);
-        ContentDto contentDto2 = new ContentDto("ROLE_ADMIN",role_admin);
-        ContentDto contentDto3 = new ContentDto("ROLE_OWNER",role_owner);
+        SectionPermissionDto role_user = getPermissionToSection(ERole.ROLE_USER, sections);
+        SectionPermissionDto role_owner = getPermissionToSection(ERole.ROLE_OWNER, sections);
+        SectionPermissionDto role_admin = getPermissionToSection(ERole.ROLE_ADMIN, sections);
+        ContentDto contentDto1 = new ContentDto(ERole.ROLE_USER.ordinal(), ERole.ROLE_USER.name(),role_user);
+        ContentDto contentDto2 = new ContentDto(ERole.ROLE_ADMIN.ordinal(), ERole.ROLE_ADMIN.name(),role_admin);
+        ContentDto contentDto3 = new ContentDto(ERole.ROLE_OWNER.ordinal(),ERole.ROLE_OWNER.name(),role_owner);
         List<ContentDto> contentDtoList = new ArrayList<>();
         contentDtoList.add(contentDto1);
         contentDtoList.add(contentDto2);
         contentDtoList.add(contentDto3);
-        SectionResponse sectionResponse = new SectionResponse(sections.getName(),contentDtoList);
+        SectionResponse sectionResponse = new SectionResponse(sections.getId(),sections.getName(),contentDtoList);
         return new RestAPIResponse("Section",true,HttpStatus.OK.value(),sectionResponse);
     }
 
-    public SectionPermissionDto getPermissionToSection (String role,Sections sections) {
-        int number = 0;
-        if (role.equals("ROLE_USER")) {
-            number = 0;
-        }
-        if (role.equals("ROLE_ADMIN")){
-            number = 1;
-        }
-        if (role.equals("ROLE_OWNER")) {
-            number = 2;
-        }
+    public SectionPermissionDto getPermissionToSection (ERole role,Sections sections) {
+        int number = role.ordinal();
         SectionPermissionDto permission = new SectionPermissionDto();
         if (((1 << number) & sections.getVisibility()) > 0) {
             permission.setVisibility(true);

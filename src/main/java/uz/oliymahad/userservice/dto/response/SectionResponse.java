@@ -9,6 +9,7 @@ import java.util.List;
 @Data
 public class SectionResponse {
 
+    private Long id;
     private String sectionName;
     private List<ContentDto> content;
 
