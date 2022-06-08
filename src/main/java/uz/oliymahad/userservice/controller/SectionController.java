@@ -4,10 +4,12 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import uz.oliymahad.userservice.dto.request.SectionRequestDto;
+import uz.oliymahad.userservice.dto.response.RestAPIResponse;
 import uz.oliymahad.userservice.model.entity.RoleEntity;
 import uz.oliymahad.userservice.model.enums.ERole;
 import uz.oliymahad.userservice.security.jwt.JWTokenProvider;
@@ -29,7 +31,14 @@ public class SectionController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<?> getSections(HttpServletRequest request) {
-        return  ResponseEntity.ok(sectionService.getSections(request));
+    public ResponseEntity<?> getSections() {
+        return  ResponseEntity.ok(sectionService.getList());
     }
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<?> getSectionById ( @PathVariable Long id) {
+        RestAPIResponse restAPIResponse = sectionService.getSection(id);
+        return ResponseEntity.status(restAPIResponse.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(restAPIResponse);
+    }
+
 }

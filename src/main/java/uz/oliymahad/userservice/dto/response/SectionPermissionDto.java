@@ -5,13 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-@Setter
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SectionDto {
-
-    private Long id;
-    private String name;
+@Getter
+@Setter
+public class SectionPermissionDto {
+    private boolean visibility;
+    private boolean update;
+    private boolean delete;
+    private boolean info;
 }
