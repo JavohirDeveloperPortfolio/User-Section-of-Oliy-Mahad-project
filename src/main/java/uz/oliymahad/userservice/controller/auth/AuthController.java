@@ -2,6 +2,7 @@ package uz.oliymahad.userservice.controller.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import uz.oliymahad.userservice.dto.request.UserLoginRequest;
@@ -20,6 +21,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
+@PreAuthorize(value = "permitAll()")
 public class AuthController {
 
     private final CustomOAuth0UserService oAuth0UserService;

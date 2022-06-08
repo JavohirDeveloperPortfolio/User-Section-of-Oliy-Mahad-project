@@ -16,7 +16,7 @@ import java.util.List;
 
 @Configuration
 @EnableSwagger2
-public class SwaggerConfig  {
+public class SwaggerConfiguration {
 
 
     @Bean
