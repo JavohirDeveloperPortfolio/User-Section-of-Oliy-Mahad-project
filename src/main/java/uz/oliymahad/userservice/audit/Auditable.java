@@ -10,6 +10,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Getter
@@ -20,10 +21,10 @@ import java.time.LocalDate;
 public abstract class Auditable<T> {
     //    @Column(nullable = false, updatable = false)
     @CreationTimestamp
-    private LocalDate creationTimestamp;
+    private LocalDateTime creationTimestamp;
 
     @UpdateTimestamp
-    private LocalDate updateTimestamp;
+    private LocalDateTime updateTimestamp;
 
     @CreatedBy
     private T createdBy;
