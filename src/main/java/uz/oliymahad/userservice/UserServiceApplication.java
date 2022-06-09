@@ -1,16 +1,20 @@
 package uz.oliymahad.userservice;
 
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import uz.oliymahad.userservice.model.entity.RoleEntity;
 import uz.oliymahad.userservice.model.entity.UserEntity;
 import uz.oliymahad.userservice.model.enums.ERole;
@@ -19,10 +23,10 @@ import uz.oliymahad.userservice.repository.UserRepository;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 
 @SpringBootApplication
-//@EnableEurekaClient
+@EnableEurekaClient
+@EnableFeignClients
 public class UserServiceApplication implements CommandLineRunner {
     @Autowired
     private UserRepository userRepository;
@@ -61,30 +65,5 @@ public class UserServiceApplication implements CommandLineRunner {
         }
 
 
-    }
-
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOriginPatterns(List.of("*"));
-//        configuration.setAllowCredentials(true);
-//        configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Headers",
-//                "Access-Control-Allow-Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers",
-//                "Origin", "Cache-Control", "Content-Type", "Authorization", "Ack", "ack", "/**"));
-//        configuration.setAllowedMethods(Arrays.asList("DELETE", "GET", "POST", "PATCH", "PUT"));
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
-
-    @Bean
-    CorsConfigurationSource corsConfigurationSource(){
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedOrigin("*");
-        configuration.setAllowedMethods(List.of("GET","PUT","POST","DELETE","OPTIONS","PATCH"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**",configuration);
-        return source;
     }
 }
