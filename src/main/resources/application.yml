@@ -6,7 +6,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/oliy_mahad_db
     username: postgres
-    password: 12345
+    password: 1
   jpa:
     open-in-view: false
     hibernate:
