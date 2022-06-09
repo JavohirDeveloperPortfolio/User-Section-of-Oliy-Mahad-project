@@ -16,6 +16,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByPhoneNumber(String phoneNumber);
 
+    Page<UserEntity> findByRoles(Integer roleId,Pageable pageable);
+
     Page<UserEntity> findAllByPhoneNumberContainingIgnoreCaseOrEmailContainingIgnoreCaseOrUsernameContainingIgnoreCase(
             String phoneNumber,
             String email,

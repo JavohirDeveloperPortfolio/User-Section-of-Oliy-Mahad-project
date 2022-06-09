@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,6 +26,7 @@ import java.util.HashSet;
 
 @SpringBootApplication
 @EnableEurekaClient
+@EnableFeignClients
 public class UserServiceApplication implements CommandLineRunner {
     @Autowired
     private UserRepository userRepository;
