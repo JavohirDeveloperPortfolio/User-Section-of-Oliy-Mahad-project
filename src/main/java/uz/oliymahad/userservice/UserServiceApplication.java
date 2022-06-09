@@ -46,7 +46,7 @@ public class UserServiceApplication implements CommandLineRunner {
             Arrays.stream(ERole.values()).forEach(r ->
                     roleRepository.save(new RoleEntity(r.id, r))
             );
-            System.out.println();passwordEncoder.encode("1234");
+            System.out.println(passwordEncoder.encode("1234"));
             UserEntity entity = new UserEntity(
                     passwordEncoder.encode("123456789"),
                     "+998998886633",
