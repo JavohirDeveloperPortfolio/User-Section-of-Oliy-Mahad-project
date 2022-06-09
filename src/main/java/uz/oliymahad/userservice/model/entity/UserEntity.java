@@ -99,9 +99,9 @@ public class UserEntity extends Auditable<String> implements UserDetails {
         return true;
     }
 
-    public UserEntity(String password, String email, Set<RoleEntity> roles) {
+    public UserEntity(String password, String phoneNumber, Set<RoleEntity> roles) {
         this.password = password;
-        this.email = email;
+        this.phoneNumber = phoneNumber;
         this.roles = roles;
     }
 }
