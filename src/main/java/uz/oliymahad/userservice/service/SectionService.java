@@ -73,12 +73,11 @@ public class SectionService {
 
     public RestAPIResponse getList() {
         List<Sections> sectionList = sectionRepository.findAll();
-        List<SectionDto> sectionDtoList = new ArrayList<>();
-        for (Sections sections: sectionList) {
-            SectionDto sectionDto = modelMapper.map(sections, SectionDto.class);
-            sectionDtoList.add(sectionDto);
+        List<SectionResponse> sectionResponseList = new ArrayList<>();
+        for (Sections sections : sectionList) {
+            sectionResponseList.add((SectionResponse) getSection(sections.getId()).getData());
         }
-        return new RestAPIResponse("Section list",true, HttpStatus.OK.value(),sectionDtoList);
+        return new RestAPIResponse("Section list",true, HttpStatus.OK.value(),sectionResponseList);
     }
 
     public RestAPIResponse getSection(Long id) {
