@@ -96,7 +96,7 @@ public class SectionService {
     }
 
     public SectionPermissionDto getPermissionToSection (ERole role,Sections sections) {
-        int number = role.ordinal();
+        int number = role.ordinal() - 1;
         SectionPermissionDto permission = new SectionPermissionDto();
         if (((1 << number) & sections.getVisibility()) > 0) {
             permission.setVisibility(true);
@@ -120,9 +120,4 @@ public class SectionService {
         }
         return permission;
     }
-
-
-
-
-
 }

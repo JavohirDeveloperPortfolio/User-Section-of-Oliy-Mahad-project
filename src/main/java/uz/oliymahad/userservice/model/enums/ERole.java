@@ -4,9 +4,9 @@ import javax.management.relation.RoleNotFoundException;
 import java.util.Arrays;
 
 public enum ERole {
-    ROLE_USER(0),
-    ROLE_ADMIN(1),
-    ROLE_OWNER(2);
+    ROLE_USER(1),
+    ROLE_ADMIN(2),
+    ROLE_OWNER(3);
 
 //    public final int id;
 //
