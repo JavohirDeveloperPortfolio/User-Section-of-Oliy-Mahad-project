@@ -11,7 +11,7 @@ import uz.oliymahad.userservice.repository.RoleRepository;
 
 @RequiredArgsConstructor
 @Service
-public class RoleService {
+public class RoleService{
 
     private static final Logger logger = LoggerFactory.getLogger(RoleService.class);
     private final RoleRepository roleRepository;
