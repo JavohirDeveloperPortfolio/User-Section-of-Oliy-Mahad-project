@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import uz.oliymahad.userservice.dto.response.RestAPIResponse;
 import uz.oliymahad.userservice.dto.response.admin.AdminSectionDto;
 import uz.oliymahad.userservice.dto.response.admin.CourseSectionDto;
 import uz.oliymahad.userservice.dto.response.SectionDto;
@@ -28,7 +29,7 @@ public class AdminSectionService {
     private final CourseFeign courseFeign;
 
 
-    public AdminSectionDto getAdminSection(String sectionName, Pageable pageable) {
+    public RestAPIResponse getAdminSection(String sectionName, Pageable pageable) {
 
         SectionDto sectionDto = getAccesses(sectionName);
         if (sectionName.equals("User")) {
@@ -36,14 +37,14 @@ public class AdminSectionService {
             adminSectionDto.setHeaders(List.of("id","name","username","phoneNumber"));
             adminSectionDto.setBody(getUserListWithAccess(pageable,sectionDto));
             adminSectionDto.setVisibility(sectionDto.isVisibility());
-            return adminSectionDto;
+            return new RestAPIResponse("User list",true,200,adminSectionDto);
         }
         else if(sectionName.equals("Course")){
             AdminSectionDto<CourseSectionDto>  adminSectionDto = new AdminSectionDto<>();
             adminSectionDto.setHeaders(List.of("name","description","price","duration"));
             adminSectionDto.setBody(getCourseListWithAccess(pageable,sectionDto));
             adminSectionDto.setVisibility(sectionDto.isVisibility());
-            return adminSectionDto;
+            return new RestAPIResponse("Course List",true,200,adminSectionDto);
         }
         return null;
 
