@@ -127,9 +127,6 @@ public class SectionService {
         return permission;
     }
 
-        return result;
-    }
-
     public List<SectionAccessResponse> getAccessForSections(){
         Collection<? extends GrantedAuthority> authorities =
                 SecurityContextHolder.getContext().getAuthentication().getAuthorities();
