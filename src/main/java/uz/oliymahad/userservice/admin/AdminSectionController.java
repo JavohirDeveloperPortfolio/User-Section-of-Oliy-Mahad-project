@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import uz.oliymahad.userservice.feign.CourseFeign;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,7 +14,6 @@ import uz.oliymahad.userservice.feign.CourseFeign;
 public class AdminSectionController {
 
     private final AdminSectionService adminSectionService;
-    private final CourseFeign courseFeign;
 
     @GetMapping
     public ResponseEntity<?> getSections(
@@ -24,7 +22,5 @@ public class AdminSectionController {
     ){
         return ResponseEntity.ok().body(adminSectionService.getAdminSection(sectionName,pageable));
     }
-
-
 
 }
