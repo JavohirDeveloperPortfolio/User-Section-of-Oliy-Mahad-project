@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import uz.oliymahad.userservice.converter.UserDataModelConverter;
 import uz.oliymahad.userservice.dto.request.ImageRequest;
 import uz.oliymahad.userservice.dto.request.UserUpdateRequest;
-import uz.oliymahad.userservice.dto.response.ProfileResponse;
 import uz.oliymahad.userservice.dto.response.RestAPIResponse;
 import uz.oliymahad.userservice.dto.response.UserDataResponse;
 import uz.oliymahad.userservice.exception.custom_ex_model.UserNotFoundException;
@@ -129,6 +128,7 @@ public class UserService {
 
 
         return uploadUrl;
+<<<<<<<<< Temporary merge branch 1
     }
 
     public RestAPIResponse updateUserRole(Long userId, Integer roleId) {

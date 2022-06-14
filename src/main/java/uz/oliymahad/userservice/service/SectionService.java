@@ -5,10 +5,14 @@ import io.jsonwebtoken.Jws;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import uz.oliymahad.userservice.dto.request.RolePermission;
 import uz.oliymahad.userservice.dto.request.SectionRequestDto;
 import uz.oliymahad.userservice.dto.response.*;
+import uz.oliymahad.userservice.dto.response.SectionAccessResponse;
+import uz.oliymahad.userservice.dto.response.SectionDto;
 import uz.oliymahad.userservice.model.entity.RoleEntity;
 import uz.oliymahad.userservice.model.entity.Sections;
 import uz.oliymahad.userservice.model.entity.UserEntity;
@@ -19,10 +23,13 @@ import uz.oliymahad.userservice.security.jwt.UserDetailsServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import static uz.oliymahad.userservice.model.enums.ERole.*;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
@@ -120,4 +127,21 @@ public class SectionService {
         return permission;
     }
 
+        return result;
+    }
+
+    public List<SectionAccessResponse> getAccessForSections(){
+        Collection<? extends GrantedAuthority> authorities =
+                SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+        RoleEntity role = (RoleEntity) authorities.iterator().next();
+
+        List<SectionAccessResponse> responseList = new ArrayList<>() ;
+        int val = (int) Math.pow(2,role.getRoleName().getVal());
+         for (Sections section : sectionRepository.findAll()) {
+            if((section.getVisibility() & val) > 0){
+                responseList.add(new SectionAccessResponse(section.getId(), section.getName()));
+            }
+        }
+        return responseList;
+    }
 }

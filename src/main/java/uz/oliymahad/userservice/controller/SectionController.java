@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import uz.oliymahad.userservice.dto.request.SectionRequestDto;
@@ -16,6 +19,7 @@ import uz.oliymahad.userservice.security.jwt.JWTokenProvider;
 import uz.oliymahad.userservice.service.SectionService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
 import java.util.Set;
 
 @RestController
@@ -30,6 +34,10 @@ public class SectionController {
         return true;
     }
 
+    @GetMapping()
+    public ResponseEntity<?> getAccessForSections() {
+
+        return  ResponseEntity.ok(sectionService.getAccessForSections());
     @GetMapping("/get")
     public ResponseEntity<?> getSections() {
         return  ResponseEntity.ok(sectionService.getList());

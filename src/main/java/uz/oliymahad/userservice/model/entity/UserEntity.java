@@ -104,5 +104,7 @@ public class UserEntity extends Auditable<String> implements UserDetails {
         this.phoneNumber = phoneNumber;
         this.roles = roles;
     }
+
+
 }
 
