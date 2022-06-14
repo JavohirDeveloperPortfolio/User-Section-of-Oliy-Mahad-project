@@ -14,7 +14,5 @@ public class UserSectionDto {
     private String name;
     private String username;
     private String phoneNumber;
-    private boolean delete;
-    private boolean edit;
-    private boolean info;
+
 }

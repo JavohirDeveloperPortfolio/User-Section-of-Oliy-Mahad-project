@@ -15,7 +15,5 @@ public class CourseSectionDto {
     private double price;
     private float duration;
 
-    private boolean delete;
-    private boolean info;
-    private boolean edit;
+
 }
