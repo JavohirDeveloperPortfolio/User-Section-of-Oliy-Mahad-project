@@ -22,4 +22,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             String username,
             Pageable pageable
     );
+
+
 }

@@ -7,5 +7,7 @@ import uz.oliymahad.userservice.model.entity.UserRegisterDetails;
 import java.util.Optional;
 
 public interface UserDetailRepository extends JpaRepository<UserRegisterDetails, Long> {
+    Optional<UserRegisterDetails> findByUser(UserEntity user);
+
 
 }
