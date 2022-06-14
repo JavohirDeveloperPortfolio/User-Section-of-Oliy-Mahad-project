@@ -1,10 +1,14 @@
 package uz.oliymahad.userservice.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import uz.oliymahad.userservice.model.enums.ERole;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PermissionRequestDto {
     private boolean visibility;
     private boolean update;

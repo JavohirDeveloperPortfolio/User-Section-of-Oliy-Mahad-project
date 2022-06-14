@@ -3,10 +3,12 @@ package uz.oliymahad.userservice.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uz.oliymahad.userservice.dto.request.RolePermission;
 import uz.oliymahad.userservice.dto.request.SectionRequestDto;
-import uz.oliymahad.userservice.dto.response.SectionDto;
+import uz.oliymahad.userservice.dto.response.*;
 import uz.oliymahad.userservice.model.entity.RoleEntity;
 import uz.oliymahad.userservice.model.entity.Sections;
 import uz.oliymahad.userservice.model.entity.UserEntity;
@@ -29,14 +31,15 @@ public class SectionService {
     private final SectionRepository sectionRepository;
     private final JWTokenProvider jwTokenProvider;
     private final UserDetailsServiceImpl userDetailsService;
+    private final ModelMapper modelMapper;
 
     private Sections editSection(SectionRequestDto sectionRequestDto, Sections sections){
         int power = 0;
 
         for (RolePermission rolePermission : sectionRequestDto.getRolePermissionList()){
-            if (rolePermission.getRoleName() == ROLE_USER.name()) power = 0;
-            if (rolePermission.getRoleName() == ROLE_ADMIN.name()) power = 1;
-            if (rolePermission.getRoleName() == ROLE_OWNER.name()) power = 2;
+            if (rolePermission.getRoleName().equals(ROLE_USER.name())) power = 0;
+            if (rolePermission.getRoleName().equals(ROLE_ADMIN.name())) power = 1;
+            if (rolePermission.getRoleName().equals(ROLE_OWNER.name())) power = 2;
 
             int permissionValue = 0;
             if (rolePermission.getPermissionRequestDto().getVisibility()) sections.setVisibility(sections.getVisibility() | 1 << power);
@@ -61,47 +64,60 @@ public class SectionService {
         }
     }
 
-    public List<SectionDto> getSections(HttpServletRequest request) {
-        String headerAuth = request.getHeader("Authorization");
-        String token = headerAuth.substring(7);
-        Jws<Claims> claimsJws = jwTokenProvider.validateJwtAccessToken(token);
-        String subject = claimsJws.getBody().getSubject();
-
-
-        UserEntity userDetails = (UserEntity) userDetailsService.loadUserByUsername(subject);
-        List<SectionDto> result = new ArrayList<>();
-        for (RoleEntity role : userDetails.getRoles()) {
-
-            ERole roleName = role.getRoleName();
-            for (Sections sections : sectionRepository.findAll()) {
-                SectionDto sectionDto = new SectionDto();
-                sectionDto.setName(sections.getName());
-
-                if (roleName.equals(ROLE_USER)) {
-                    sectionDto.setVisibility(((sections.getVisibility() & 1) > 0));
-                    sectionDto.setDelete(((sections.getDelete() & 1) > 0));
-                    sectionDto.setEdit(((sections.getUpdate() & 1) > 0));
-                    sectionDto.setInfo(((sections.getInfo() & 1) > 0));
-                }
-
-                if (roleName.equals(ERole.ROLE_ADMIN)) {
-                    sectionDto.setVisibility(((sections.getVisibility() & 2) > 0));
-                    sectionDto.setDelete(((sections.getDelete() & 2) > 0));
-                    sectionDto.setEdit(((sections.getUpdate() & 2) > 0));
-                    sectionDto.setInfo(((sections.getInfo() & 2) > 0));
-                }
-
-                if (roleName.equals(ERole.ROLE_OWNER)) {
-                    sectionDto.setVisibility(((sections.getVisibility() & 4) > 0));
-                    sectionDto.setDelete(((sections.getDelete() & 4) > 0));
-                    sectionDto.setEdit(((sections.getUpdate() & 4) > 0));
-                    sectionDto.setInfo(((sections.getInfo() & 4) > 0));
-                }
-                result.add(sectionDto);
-            }
-
+    public RestAPIResponse getList() {
+        List<Sections> sectionList = sectionRepository.findAll();
+        List<SectionDto> sectionDtoList = new ArrayList<>();
+        for (Sections sections: sectionList) {
+            SectionDto sectionDto = modelMapper.map(sections, SectionDto.class);
+            sectionDtoList.add(sectionDto);
         }
-
-        return result;
+        return new RestAPIResponse("Section list",true, HttpStatus.OK.value(),sectionDtoList);
     }
+
+    public RestAPIResponse getSection(Long id) {
+        Optional<Sections> optionalSections = sectionRepository.findById(id);
+        if (optionalSections.isEmpty()) {
+            return new RestAPIResponse("Section not found", false,HttpStatus.NOT_FOUND.value());
+        }
+        Sections sections = optionalSections.get();
+        SectionPermissionDto role_user = getPermissionToSection(ERole.ROLE_USER, sections);
+        SectionPermissionDto role_owner = getPermissionToSection(ERole.ROLE_OWNER, sections);
+        SectionPermissionDto role_admin = getPermissionToSection(ERole.ROLE_ADMIN, sections);
+        ContentDto contentDto1 = new ContentDto(ERole.ROLE_USER.ordinal(), ERole.ROLE_USER.name(),role_user);
+        ContentDto contentDto2 = new ContentDto(ERole.ROLE_ADMIN.ordinal(), ERole.ROLE_ADMIN.name(),role_admin);
+        ContentDto contentDto3 = new ContentDto(ERole.ROLE_OWNER.ordinal(),ERole.ROLE_OWNER.name(),role_owner);
+        List<ContentDto> contentDtoList = new ArrayList<>();
+        contentDtoList.add(contentDto1);
+        contentDtoList.add(contentDto2);
+        contentDtoList.add(contentDto3);
+        SectionResponse sectionResponse = new SectionResponse(sections.getId(),sections.getName(),contentDtoList);
+        return new RestAPIResponse("Section",true, HttpStatus.OK.value(),sectionResponse);
+    }
+
+    public SectionPermissionDto getPermissionToSection (ERole role,Sections sections) {
+        int number = role.ordinal() - 1;
+        SectionPermissionDto permission = new SectionPermissionDto();
+        if (((1 << number) & sections.getVisibility()) > 0) {
+            permission.setVisibility(true);
+        }else {
+            permission.setVisibility(false);
+        }
+        if (((1 << number) & sections.getUpdate()) > 0) {
+            permission.setUpdate(true);
+        }else {
+            permission.setUpdate(false);
+        }
+        if (((1 << number) & sections.getDelete()) > 0) {
+            permission.setDelete(true);
+        }else {
+            permission.setDelete(false);
+        }
+        if (((1 << number) & sections.getInfo()) > 0) {
+            permission.setInfo(true);
+        }else {
+            permission.setInfo(false);
+        }
+        return permission;
+    }
+
 }
