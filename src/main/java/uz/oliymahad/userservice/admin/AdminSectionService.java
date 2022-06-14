@@ -29,20 +29,26 @@ public class AdminSectionService {
     private final CourseFeign courseFeign;
 
 
-    public RestAPIResponse getAdminSection(String sectionName, Pageable pageable) {
+    public RestAPIResponse getAdminSection(Long sectionId, Pageable pageable) {
+        SectionDto sectionDto = getAccesses(sectionId);
 
-        SectionDto sectionDto = getAccesses(sectionName);
-        if (sectionName.equals("User")) {
+        if(sectionDto == null)
+            return new RestAPIResponse("Section not found",false,404);
+
+        if (sectionId == sectionRepository.findByName("User").get().getId()) {
             AdminSectionDto<UserSectionDto> adminSectionDto = new AdminSectionDto<>();
             adminSectionDto.setHeaders(List.of("id","name","username","phoneNumber"));
-            adminSectionDto.setBody(getUserListWithAccess(pageable,sectionDto));
+            adminSectionDto.setBody(getUserListWithAccess(pageable));
             adminSectionDto.setVisibility(sectionDto.isVisibility());
+            adminSectionDto.setEdit(sectionDto.isEdit());
+            adminSectionDto.setDelete(sectionDto.isDelete());
+            adminSectionDto.setInfo(sectionDto.isInfo());
             return new RestAPIResponse("User list",true,200,adminSectionDto);
         }
-        else if(sectionName.equals("Course")){
+        else if(sectionId == sectionRepository.findByName("Course").get().getId()){
             AdminSectionDto<CourseSectionDto>  adminSectionDto = new AdminSectionDto<>();
             adminSectionDto.setHeaders(List.of("name","description","price","duration"));
-            adminSectionDto.setBody(getCourseListWithAccess(pageable,sectionDto));
+            adminSectionDto.setBody(getCourseListWithAccess(pageable));
             adminSectionDto.setVisibility(sectionDto.isVisibility());
             return new RestAPIResponse("Course List",true,200,adminSectionDto);
         }
@@ -50,20 +56,19 @@ public class AdminSectionService {
 
     }
 
-    public List<UserSectionDto> getUserListWithAccess(Pageable pageable,SectionDto sectionDto) {
+    public List<UserSectionDto> getUserListWithAccess(Pageable pageable) {
 
         List<UserSectionDto> userSectionDtos = new ArrayList<>();
 
         for (UserEntity userEntity : userRepository.findAll(pageable)) {
             UserSectionDto userSectionDto = new UserSectionDto();
-            userSectionDto.setUsername(userEntity.getUsername());
+            if(userEntity.getUsername() != null)
+                userSectionDto.setUsername(userEntity.getUsername());
             userSectionDto.setId(userEntity.getId());
-            userSectionDto.setName(userEntity.getUserRegisterDetails().getFirstName());
-            userSectionDto.setPhoneNumber(userEntity.getPhoneNumber());
-            userSectionDto.setDelete(sectionDto.isDelete());
-            userSectionDto.setEdit(sectionDto.isEdit());
-            userSectionDto.setInfo(sectionDto.isInfo());
-
+            if(userEntity.getUserRegisterDetails() != null && userEntity.getUserRegisterDetails().getFirstName() != null)
+                userSectionDto.setName(userEntity.getUserRegisterDetails().getFirstName());
+            if(userEntity.getPhoneNumber() != null)
+                userSectionDto.setPhoneNumber(userEntity.getPhoneNumber());
             userSectionDtos.add(userSectionDto);
         }
 
@@ -71,11 +76,14 @@ public class AdminSectionService {
 
     }
 
-    private SectionDto getAccesses( String sectionName) {
+    private SectionDto getAccesses( Long sectionId) {
         RoleEntity roleEntity = (RoleEntity) SecurityContextHolder.getContext().getAuthentication().getAuthorities().iterator().next();
         int roleId = roleEntity.getRoleName().id;
-        Optional<Sections> byName = sectionRepository.findByName(sectionName);
-        Sections sections = byName.get();
+        Optional<Sections> optionalSections = sectionRepository.findById(sectionId);
+        if(optionalSections.isEmpty())
+            return null;
+
+        Sections sections = optionalSections.get();
 
         SectionDto sectionDto = new SectionDto();
         sectionDto.setName(sections.getName());
@@ -92,13 +100,8 @@ public class AdminSectionService {
         return sectionDto;
     }
 
-    private List<CourseSectionDto> getCourseListWithAccess(Pageable pageable,SectionDto sectionDto){
+    private List<CourseSectionDto> getCourseListWithAccess(Pageable pageable){
         List<CourseSectionDto> courseList = courseFeign.getCourseList(pageable);
-        for (CourseSectionDto courseSectionDto : courseList) {
-            courseSectionDto.setEdit(sectionDto.isEdit());
-            courseSectionDto.setDelete(sectionDto.isDelete());
-            courseSectionDto.setInfo(sectionDto.isInfo());
-        }
         return courseList;
     }
 }

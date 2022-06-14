@@ -16,4 +16,7 @@ public class AdminSectionDto<T> {
     private List<String> headers;
     private List<T> body;
     private boolean visibility;
+    private boolean delete;
+    private boolean edit;
+    private boolean info;
 }

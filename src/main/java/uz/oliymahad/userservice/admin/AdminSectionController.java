@@ -18,9 +18,9 @@ public class AdminSectionController {
     @GetMapping
     public ResponseEntity<?> getSections(
            Pageable pageable,
-           @RequestParam String sectionName
+           @RequestParam(name = "id") Long sectionId
     ){
-        return ResponseEntity.ok().body(adminSectionService.getAdminSection(sectionName,pageable));
+        return ResponseEntity.ok().body(adminSectionService.getAdminSection(sectionId,pageable));
     }
 
 }
