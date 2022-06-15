@@ -15,11 +15,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import uz.oliymahad.userservice.audit.Auditable;
 import uz.oliymahad.userservice.model.enums.EAuthProvider;
+import uz.oliymahad.userservice.model.enums.ERole;
 
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -34,7 +36,7 @@ import java.util.Set;
 public class UserEntity extends Auditable<String> implements UserDetails {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
 
@@ -96,5 +98,13 @@ public class UserEntity extends Auditable<String> implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public UserEntity(String password, String phoneNumber, Set<RoleEntity> roles) {
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.roles = roles;
+    }
+
+
 }
 

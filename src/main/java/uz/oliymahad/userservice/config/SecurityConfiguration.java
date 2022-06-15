@@ -20,22 +20,22 @@ import uz.oliymahad.userservice.security.jwt.JWTokenProvider;
 import uz.oliymahad.userservice.security.oauth2.UserPrincipal;
 import uz.oliymahad.userservice.service.oauth2.CustomOAuth2UserService;
 import uz.oliymahad.userservice.service.oauth2.CustomUserDetailsService;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(
-    prePostEnabled = true,
-    securedEnabled = true
+        prePostEnabled = true,
+        securedEnabled = true
 )
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    
+
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final PasswordEncoder passwordEncoder;
@@ -53,8 +53,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .and()
             .addFilterBefore(jwTokenFilter, UsernamePasswordAuthenticationFilter.class)
             .authorizeRequests()
-            .antMatchers("/api/v1/user/**").permitAll()
             .antMatchers("/api/v1/auth/**").permitAll()
+            .antMatchers("/api/v1/user/**").permitAll()
             .antMatchers("/app/v1/admin/**").permitAll()
             .antMatchers("/swagger-ui.html**", "/swagger-resources/**",
                 "/v2/api-docs**", "/webjars/**", "/swagger-ui/**").permitAll()
@@ -71,6 +71,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
 
+
 //                        DefaultOidcUser principal = (DefaultOidcUser) authentication.getPrincipal();
 //
                     String accessToken = jwtProvider.generateAccessToken((UserPrincipal) authentication.getPrincipal());
@@ -82,7 +83,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     RequestDispatcher dis = request.getRequestDispatcher(targetUrl);
                     dis.forward(request, response);
                 }
-            }) .failureHandler(new AuthenticationFailureHandler() {
+            }).failureHandler(new AuthenticationFailureHandler() {
                 @Override
                 public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                                     AuthenticationException exception) throws IOException, ServletException {

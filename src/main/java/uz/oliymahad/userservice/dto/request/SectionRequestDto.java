@@ -1,18 +1,18 @@
 package uz.oliymahad.userservice.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
-import java.security.Permission;
 import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SectionRequestDto {
-    private String name;
-    private List<Boolean> permissions0;
-    private List<Boolean> permissions1;
-    private List<Boolean> permissions2;
+    private String sectionName;
+    @JsonProperty("content")
+    private List<RolePermission> rolePermissionList;
 }

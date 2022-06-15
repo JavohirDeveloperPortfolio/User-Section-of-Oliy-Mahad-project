@@ -10,6 +10,8 @@ import uz.oliymahad.userservice.service.UserService;
 import uz.oliymahad.userservice.service.oauth0.CustomOAuth0UserService;
 
 import javax.management.relation.RoleNotFoundException;
+import javax.validation.Valid;
+import javax.ws.rs.Path;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -44,12 +46,18 @@ public class UserController {
     @PutMapping()
     public ResponseEntity<?> modifyUser(
             @RequestParam(required = true) Long id,
-            @RequestBody UserUpdateRequest userUpdateRequest
+            @RequestBody @Valid UserUpdateRequest userUpdateRequest
     ){
         return ResponseEntity.ok(new RestAPIResponse(OK.name(), true, OK.value(),userService.updateUser(userUpdateRequest, id)));
     }
 
 
+    @GetMapping("/{phonenumber}")
+    public ResponseEntity<?> getUserByPhone(@PathVariable String phonenumber){
+        return ResponseEntity.ok( new RestAPIResponse(OK.name(), true , OK.value(),
+            userService.getByPhone(phonenumber)));
+
+    }
 
 //    @PutMapping("/{userId}/auth")
 //    @PreAuthorize(value = "hasAnyRole(\"ADMIN\")")

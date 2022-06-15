@@ -4,17 +4,20 @@ import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import uz.oliymahad.userservice.model.entity.UserEntity;
 import uz.oliymahad.userservice.security.oauth2.UserPrincipal;
 
 import java.util.Date;
-@Service
-public class JWTokenProvider {
-  private static final Logger logger = LoggerFactory.getLogger(JWTokenProvider.class);
+import java.util.HashMap;
+import java.util.Map;
+
+@Component
+public class JwtProvider {
+  private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
 
   @Value("${jwt.secret.key.access}")
-  private  String jwtAccessSecret;
+  private String jwtAccessSecret;
 
   @Value("${jwt.secret.key.refresh}")
   private String jwtRefreshSecret;
@@ -62,7 +65,7 @@ public class JWTokenProvider {
 
 
   public Jws<Claims> validateJwtAccessToken(String authToken) {
-    try{
+    try {
       return Jwts.parser().setSigningKey(jwtAccessSecret).parseClaimsJws(authToken);
     } catch (SignatureException e) {
       logger.error("Invalid JWT signature: {}", e.getMessage());
