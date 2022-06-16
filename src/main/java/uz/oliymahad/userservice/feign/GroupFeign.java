@@ -6,10 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import uz.oliymahad.userservice.dto.admin.CourseSectionDto;
+import uz.oliymahad.userservice.dto.admin.GroupSectionDto;
 
 @FeignClient("COURCE-SERVICE")
 @Component
-public interface CourseFeign {
-    @GetMapping("/api/course/get/list")
-    Page<CourseSectionDto> getCourseList(Pageable pageable);
+public interface GroupFeign {
+    @GetMapping("/api/group/getGroupPage")
+    Page<GroupSectionDto> getGroupList(Pageable pageable);
 }
