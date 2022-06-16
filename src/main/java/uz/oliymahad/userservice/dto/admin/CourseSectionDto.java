@@ -10,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CourseSectionDto {
+    private Long id;
     private String name;
     private String description;
     private double price;
