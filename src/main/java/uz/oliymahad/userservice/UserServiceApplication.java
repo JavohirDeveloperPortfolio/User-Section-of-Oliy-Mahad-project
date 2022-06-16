@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,7 +24,8 @@ import java.util.HashSet;
 import java.util.List;
 
 @SpringBootApplication
-//@EnableEurekaClient
+@EnableEurekaClient
+@EnableFeignClients
 public class UserServiceApplication implements CommandLineRunner {
     @Autowired
     private UserRepository userRepository;

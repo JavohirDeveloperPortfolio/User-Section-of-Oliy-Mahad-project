@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import uz.oliymahad.userservice.dto.admin.CourseSectionDto;
 import uz.oliymahad.userservice.dto.admin.GroupSectionDto;
 
-@FeignClient("COURCE-SERVICE")
-@Component
+@FeignClient(name = "localhost",url = "http://localhost:8081")
 public interface GroupFeign {
     @GetMapping("/api/group/getGroupPage")
     Page<GroupSectionDto> getGroupList(Pageable pageable);
