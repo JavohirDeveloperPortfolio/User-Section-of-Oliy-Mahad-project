@@ -44,6 +44,7 @@ public class AdminSectionService {
 
 
     public RestAPIResponse getSections (Long id, Pageable pageable) {
+        System.out.println("fd");
         Optional<Sections> optionalSections = sectionRepository.findById(id);
         if (optionalSections.isEmpty()) {
             return new RestAPIResponse("Finding item not found with  : " + id,false, HttpStatus.NOT_FOUND.value());
@@ -123,5 +124,5 @@ public class AdminSectionService {
         return permission;
     }
 
-    
+
 }
