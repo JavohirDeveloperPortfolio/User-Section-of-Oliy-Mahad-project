@@ -6,7 +6,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/oliy_mahad_db
     username: postgres
-    password: D
+    password: 1
   jpa:
     open-in-view: false
     hibernate:
@@ -30,6 +30,9 @@ spring:
           google:
             client-id: 517447956930-ks6o0nu247mmb6pe9ag6gl2533443hvf.apps.googleusercontent.com
             client-secret: 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
+#            scope:
+#              - email
+#              - profile
   application:
     name: USER-SERVICE
 
