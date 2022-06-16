@@ -90,9 +90,9 @@ public class SectionService {
         SectionPermissionDto role_user = getPermissionToSection(ERole.ROLE_USER, sections);
         SectionPermissionDto role_owner = getPermissionToSection(ERole.ROLE_OWNER, sections);
         SectionPermissionDto role_admin = getPermissionToSection(ERole.ROLE_ADMIN, sections);
-        ContentDto contentDto1 = new ContentDto(ERole.ROLE_USER.ordinal(), ERole.ROLE_USER.name(),role_user);
-        ContentDto contentDto2 = new ContentDto(ERole.ROLE_ADMIN.ordinal(), ERole.ROLE_ADMIN.name(),role_admin);
-        ContentDto contentDto3 = new ContentDto(ERole.ROLE_OWNER.ordinal(),ERole.ROLE_OWNER.name(),role_owner);
+        ContentDto contentDto1 = new ContentDto(ERole.ROLE_USER.getId(), ERole.ROLE_USER.name(),role_user);
+        ContentDto contentDto2 = new ContentDto(ERole.ROLE_ADMIN.getId(), ERole.ROLE_ADMIN.name(),role_admin);
+        ContentDto contentDto3 = new ContentDto(ERole.ROLE_OWNER.getId(),ERole.ROLE_OWNER.name(),role_owner);
         List<ContentDto> contentDtoList = new ArrayList<>();
         contentDtoList.add(contentDto1);
         contentDtoList.add(contentDto2);
@@ -102,27 +102,19 @@ public class SectionService {
     }
 
     public SectionPermissionDto getPermissionToSection (ERole role,Sections sections) {
-        int number = role.ordinal() - 1;
+        int number = role.getVal();
         SectionPermissionDto permission = new SectionPermissionDto();
         if (((1 << number) & sections.getVisibility()) > 0) {
             permission.setVisibility(true);
-        }else {
-            permission.setVisibility(false);
         }
         if (((1 << number) & sections.getUpdate()) > 0) {
             permission.setUpdate(true);
-        }else {
-            permission.setUpdate(false);
         }
         if (((1 << number) & sections.getDelete()) > 0) {
             permission.setDelete(true);
-        }else {
-            permission.setDelete(false);
         }
         if (((1 << number) & sections.getInfo()) > 0) {
             permission.setInfo(true);
-        }else {
-            permission.setInfo(false);
         }
         return permission;
     }
