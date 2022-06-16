@@ -2,12 +2,10 @@ package uz.oliymahad.userservice.controller.admin;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uz.oliymahad.userservice.dto.request.RoleRegisterRequest;
 import uz.oliymahad.userservice.service.RoleService;
+import uz.oliymahad.userservice.service.UserService;
 
 import javax.validation.Valid;
 
@@ -16,11 +14,19 @@ import javax.validation.Valid;
 @RequestMapping("/api/v1/admin/")
 public class SourceController {
     private final RoleService roleService;
+    private final UserService userService;
 
     @PostMapping("/role_expansion")
     public ResponseEntity<?> addRole(
             @RequestBody @Valid RoleRegisterRequest request
     ){
         return ResponseEntity.ok(roleService.addRole(request.getRoleName()));
+    }
+
+    @PutMapping("/changeUserToAdmin/{id}")
+    public ResponseEntity<?> changeUserToAdmin(
+            @PathVariable Long id
+    ){
+        return ResponseEntity.ok(userService.changeUserToAdmin(id));
     }
 }

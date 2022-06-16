@@ -90,7 +90,7 @@ public class AdminSectionService {
     public AdminSectionDto<CourseSectionDto> getCourse (Pageable pageable, Sections sections) {
         AdminSectionDto<CourseSectionDto> adminSectionDto = new AdminSectionDto<>();
         adminSectionDto.setHeaders(List.of("id","name","description","price","duration"));
-        adminSectionDto.setBody(courseFeign.getCourseList(pageable));
+//        adminSectionDto.setBody(courseFeign.getCourseList(pageable));
         adminSectionDto.setEdit(getPermission(sections).isUpdate());
         adminSectionDto.setDelete(getPermission(sections).isDelete());
         adminSectionDto.setInfo(getPermission(sections).isInfo());

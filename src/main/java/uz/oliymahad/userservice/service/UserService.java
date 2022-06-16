@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.oliymahad.userservice.converter.UserDataModelConverter;
@@ -19,22 +18,19 @@ import uz.oliymahad.userservice.dto.response.ProfileResponse;
 import uz.oliymahad.userservice.dto.response.RestAPIResponse;
 import uz.oliymahad.userservice.dto.response.UserDataResponse;
 import uz.oliymahad.userservice.exception.custom_ex_model.UserNotFoundException;
-import uz.oliymahad.userservice.model.entity.RoleEntity;
-import uz.oliymahad.userservice.exception.custom_ex_model.UserNotFoundException;
 import uz.oliymahad.userservice.model.entity.UserEntity;
 import uz.oliymahad.userservice.model.entity.UserRegisterDetails;
 import uz.oliymahad.userservice.model.enums.ERole;
+import uz.oliymahad.userservice.repository.RoleRepository;
 import uz.oliymahad.userservice.repository.UserDetailRepository;
 import uz.oliymahad.userservice.repository.UserRepository;
-
-import javax.management.relation.RoleNotFoundException;
-import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -47,6 +43,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final String baseImagePath = "C:\\Users\\99897\\IdeaProjects\\User-Section-of-Oliy-Mahad-project\\images\\avatar";
     private final UserDetailRepository userDetailRepository;
+    private final RoleRepository roleRepository;
 
     public Page<?> list(String search, String[] categories, int page, int size, String order) {
         Page<UserEntity> list;
@@ -132,7 +129,15 @@ public class UserService {
     }
 
     public RestAPIResponse updateUserRole(Long userId, Integer roleId) {
-        return null;
+        if(userRepository.findById(userId).isEmpty())
+            return new RestAPIResponse("User Not Found",false,404);
+        if(roleRepository.findById(roleId).isEmpty())
+            return new RestAPIResponse("Role Not Found",false,404);
+
+        UserEntity user = userRepository.findById(userId).get();
+        user.setRoles(Set.of(roleRepository.findById(roleId).get()));
+        userRepository.save(user);
+        return new RestAPIResponse("Change User Role",true,200);
     }
 
     public ProfileResponse getByPhone(String phonenumber) {
@@ -148,5 +153,9 @@ public class UserService {
         response.setFirstName(userRegisterDetails.getFirstName());
         response.setImageUrl(userEntity.getImageUrl());
         return response;
+    }
+
+    public RestAPIResponse changeUserToAdmin(Long userId){
+        return updateUserRole(userId,roleRepository.findByRoleName(ERole.ROLE_ADMIN).get().getId());
     }
 }
