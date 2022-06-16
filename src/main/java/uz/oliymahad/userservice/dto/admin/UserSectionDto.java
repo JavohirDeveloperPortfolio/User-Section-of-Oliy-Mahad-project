@@ -1,16 +1,15 @@
-package uz.oliymahad.userservice.dto.response;
+package uz.oliymahad.userservice.dto.admin;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
-public class SectionDto {
-
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserSectionDto {
     private Long id;
-    private String name;
+    private String phoneNumber;
 }

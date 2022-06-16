@@ -9,7 +9,8 @@ import uz.oliymahad.userservice.model.entity.UserEntity;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
+public interface
+UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByEmail(String email);
 
     Optional<UserEntity> findByUsername(String username);
@@ -22,6 +23,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             String username,
             Pageable pageable
     );
+
 
 
 }

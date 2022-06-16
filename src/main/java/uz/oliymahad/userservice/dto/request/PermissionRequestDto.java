@@ -8,7 +8,7 @@ import uz.oliymahad.userservice.model.enums.ERole;
 @NoArgsConstructor
 @Getter
 @Setter
-@JsonIgnoreProperties(ignoreUnknown = true)
+//@JsonIgnoreProperties(ignoreUnknown = true)
 public class PermissionRequestDto {
     private boolean visibility;
     private boolean update;
