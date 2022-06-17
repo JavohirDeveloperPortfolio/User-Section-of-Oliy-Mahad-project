@@ -5,15 +5,13 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import uz.oliymahad.userservice.dto.admin.AdminSectionDto;
-import uz.oliymahad.userservice.dto.admin.CourseSectionDto;
-import uz.oliymahad.userservice.dto.admin.GroupSectionDto;
-import uz.oliymahad.userservice.dto.admin.UserSectionDto;
+import uz.oliymahad.userservice.dto.admin.*;
 import uz.oliymahad.userservice.dto.response.RestAPIResponse;
 import uz.oliymahad.userservice.dto.response.SectionPermissionDto;
 import uz.oliymahad.userservice.dto.response.UserDataResponse;
@@ -34,7 +32,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AdminSectionService {
+public class AdminSectionService implements Section {
 
     private final SectionRepository sectionRepository;
     private final UserRepository userRepository;
@@ -53,16 +51,16 @@ public class AdminSectionService {
         Sections sections = optionalSections.get();
         Object data = null;
         switch (sections.getName()) {
-            case "users" :
+            case USERS :
                 data = getUser(pageable,sections);
                 break;
-            case "course" :
+            case COURSE :
                 data = getCourse(pageable,sections);
                 break;
-            case "queue" :
+            case QUEUE :
                 data = getQueue(pageable,sections);
                 break;
-            case "group" :
+            case GROUP :
                 data = getGroup(pageable,sections);
                 break;
         }
@@ -107,7 +105,7 @@ public class AdminSectionService {
     public AdminSectionDto getQueue (Pageable pageable, Sections sections) {
         AdminSectionDto adminSectionDto = new AdminSectionDto();
         adminSectionDto.setHeaders(List.of(""));
-        RestAPIResponse apiResponse = queueFeign.getQueue(pageable);
+        RestAPIResponse apiResponse = queueFeign.getQueue((PageRequest) pageable);
         adminSectionDto.setBody(apiResponse.getData());
         modelMapper.map(getPermission(sections),adminSectionDto);
         return adminSectionDto;
@@ -129,5 +127,6 @@ public class AdminSectionService {
         return permission;
     }
 
-
+    public static void main(String[] args) {
+    }
 }
