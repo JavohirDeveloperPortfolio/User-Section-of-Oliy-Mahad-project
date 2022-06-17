@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import uz.oliymahad.userservice.dto.admin.CourseSectionDto;
 import uz.oliymahad.userservice.dto.admin.GroupSectionDto;
+import uz.oliymahad.userservice.dto.response.RestAPIResponse;
 
-@FeignClient("COURCE-SERVICE")
-@Component
+@FeignClient(name = "localhost",url = "http://localhost:8081")
 public interface GroupFeign {
-    @GetMapping("/api/group/getGroupPage")
-    Page<GroupSectionDto> getGroupList(Pageable pageable);
+    @GetMapping("/api/v1/group/getGroups")
+    RestAPIResponse getGroupPage (Pageable pageable);
 }
