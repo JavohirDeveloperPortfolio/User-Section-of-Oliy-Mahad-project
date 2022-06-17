@@ -18,7 +18,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/user")
-public class UserController {
+public class    UserController {
     private final UserService userService;
 
     private final CustomOAuth0UserService oAuth0UserService;

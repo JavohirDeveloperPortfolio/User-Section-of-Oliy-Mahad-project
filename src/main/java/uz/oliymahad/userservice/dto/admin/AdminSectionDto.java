@@ -12,10 +12,10 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminSectionDto<T> {
+public class AdminSectionDto {
     private boolean delete;
     private boolean info;
-    private boolean edit;
+    private boolean update;
     private List<String> headers;
-    private Page<T> body;
+    private Object body;
 }
