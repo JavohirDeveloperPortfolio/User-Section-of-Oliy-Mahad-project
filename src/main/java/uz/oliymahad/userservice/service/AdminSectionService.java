@@ -19,6 +19,7 @@ import uz.oliymahad.userservice.dto.response.SectionPermissionDto;
 import uz.oliymahad.userservice.dto.response.UserDataResponse;
 import uz.oliymahad.userservice.feign.CourseFeign;
 import uz.oliymahad.userservice.feign.GroupFeign;
+import uz.oliymahad.userservice.feign.QueueFeign;
 import uz.oliymahad.userservice.model.entity.RoleEntity;
 import uz.oliymahad.userservice.model.entity.Sections;
 import uz.oliymahad.userservice.model.entity.UserEntity;
@@ -41,6 +42,7 @@ public class AdminSectionService {
     private final CourseFeign courseFeign;
     private final GroupFeign groupFeign;
     private final UserDetailRepository userDetailRepository;
+    private final QueueFeign queueFeign;
 
 
     public RestAPIResponse getSections (Long id, Pageable pageable) {
@@ -58,6 +60,7 @@ public class AdminSectionService {
                 data = getCourse(pageable,sections);
                 break;
             case "queue" :
+                data = getQueue(pageable,sections);
                 break;
             case "group" :
                 data = getGroup(pageable,sections);
@@ -66,44 +69,47 @@ public class AdminSectionService {
         return new RestAPIResponse("Data list", true , HttpStatus.OK.value(),data);
     }
 
-    public AdminSectionDto<UserSectionDto> getUser(Pageable pageable, Sections sections) {
+    public AdminSectionDto getUser(Pageable pageable, Sections sections) {
         Page<UserEntity> userEntities = userRepository.findAll(pageable);
         List<UserSectionDto> list = userEntities.getContent().size() > 0 ?
                 userEntities.getContent().stream().map(u -> modelMapper.map(u, UserSectionDto.class)).toList() :
                 new ArrayList<>();
         PageImpl<UserSectionDto> userSectionDtos = new PageImpl<>(list, userEntities.getPageable(), userEntities.getTotalPages());
         for (UserSectionDto userSectionDto : userSectionDtos) {
-            UserRegisterDetails userDetail = userDetailRepository.findByUserId(userSectionDto.getId());
-            userSectionDto.setFirstName(userDetail.getFirstName());
-            userSectionDto.setLastName(userDetail.getLastName());
-            userSectionDto.setMiddleName(userDetail.getMiddleName());
+            Optional<UserRegisterDetails> optional = userDetailRepository.findByUserId(userSectionDto.getId());
+            optional.ifPresent(userRegisterDetails -> modelMapper.map(userRegisterDetails, userSectionDto));
         }
-        AdminSectionDto<UserSectionDto> adminSectionDto = new AdminSectionDto<>();
+        AdminSectionDto adminSectionDto = new AdminSectionDto();
         adminSectionDto.setHeaders(List.of("id","firstName","LastName","middleName","phoneNumber"));
         adminSectionDto.setBody(userSectionDtos);
-        adminSectionDto.setEdit(getPermission(sections).isUpdate());
-        adminSectionDto.setDelete(getPermission(sections).isDelete());
-        adminSectionDto.setInfo(getPermission(sections).isInfo());
+        modelMapper.map(getPermission(sections),adminSectionDto);
         return adminSectionDto;
     }
 
-    public AdminSectionDto<CourseSectionDto> getCourse (Pageable pageable, Sections sections) {
-        AdminSectionDto<CourseSectionDto> adminSectionDto = new AdminSectionDto<>();
+    public AdminSectionDto getCourse (Pageable pageable, Sections sections) {
+        AdminSectionDto adminSectionDto = new AdminSectionDto();
         adminSectionDto.setHeaders(List.of("id","name","description","price","duration"));
-        adminSectionDto.setBody(courseFeign.getCourseList(pageable));
-        adminSectionDto.setEdit(getPermission(sections).isUpdate());
-        adminSectionDto.setDelete(getPermission(sections).isDelete());
-        adminSectionDto.setInfo(getPermission(sections).isInfo());
+        RestAPIResponse apiResponse = courseFeign.getCourses(pageable);
+        adminSectionDto.setBody(apiResponse.getData());
+        modelMapper.map(getPermission(sections),adminSectionDto);
         return adminSectionDto;
     }
 
-    public AdminSectionDto<GroupSectionDto> getGroup (Pageable pageable, Sections sections) {
-        AdminSectionDto<GroupSectionDto> adminSectionDto = new AdminSectionDto<>();
+    public AdminSectionDto getGroup (Pageable pageable, Sections sections) {
+        AdminSectionDto adminSectionDto = new AdminSectionDto();
         adminSectionDto.setHeaders(List.of("id","name","memberCount","type","startDate","courseId"));
-        adminSectionDto.setBody(groupFeign.getGroupList(pageable));
-        adminSectionDto.setEdit(getPermission(sections).isUpdate());
-        adminSectionDto.setDelete(getPermission(sections).isDelete());
-        adminSectionDto.setInfo(getPermission(sections).isInfo());
+        RestAPIResponse apiResponse = groupFeign.getGroupPage(pageable);
+        adminSectionDto.setBody(apiResponse.getData());
+        modelMapper.map(getPermission(sections),adminSectionDto);
+        return adminSectionDto;
+    }
+
+    public AdminSectionDto getQueue (Pageable pageable, Sections sections) {
+        AdminSectionDto adminSectionDto = new AdminSectionDto();
+        adminSectionDto.setHeaders(List.of(""));
+        RestAPIResponse apiResponse = queueFeign.getQueue(pageable);
+        adminSectionDto.setBody(apiResponse.getData());
+        modelMapper.map(getPermission(sections),adminSectionDto);
         return adminSectionDto;
     }
 
@@ -122,4 +128,6 @@ public class AdminSectionService {
         }
         return permission;
     }
+
+
 }
