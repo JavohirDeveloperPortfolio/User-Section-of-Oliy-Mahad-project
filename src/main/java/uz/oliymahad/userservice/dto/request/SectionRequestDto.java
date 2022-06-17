@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @AllArgsConstructor
@@ -12,7 +13,9 @@ import java.util.List;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SectionRequestDto {
-    private String sectionName;
+
+    @NotBlank private String sectionName;
+
     @JsonProperty("content")
     private List<RolePermission> rolePermissionList;
 }

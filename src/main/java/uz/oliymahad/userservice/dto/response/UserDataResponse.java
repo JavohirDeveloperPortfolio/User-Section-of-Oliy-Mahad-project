@@ -37,7 +37,7 @@ public class UserDataResponse {
 
     private Set<RoleEntity> roles;
 
-    private UserRegisterDetails userDetails;
+    private UserRegisterDetails userRegisterDetails;
 
     private Timestamp createdAt;
 

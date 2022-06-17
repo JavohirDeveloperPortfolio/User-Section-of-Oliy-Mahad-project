@@ -8,6 +8,8 @@ import uz.oliymahad.userservice.dto.request.SectionRequestDto;
 import uz.oliymahad.userservice.dto.response.RestAPIResponse;
 import uz.oliymahad.userservice.service.SectionService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("api/v1/section")
 @RequiredArgsConstructor
@@ -15,7 +17,7 @@ public class SectionController {
     private final SectionService sectionService;
 
     @PostMapping("/edit")
-    public Boolean addSection(@RequestBody SectionRequestDto sectionRequestDto) {
+    public Boolean addSection(@RequestBody  @Valid SectionRequestDto sectionRequestDto) {
         sectionService.addSection(sectionRequestDto);
         return true;
     }
