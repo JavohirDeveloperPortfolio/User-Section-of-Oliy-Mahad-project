@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import uz.oliymahad.userservice.security.jwt.JWTokenEntryPoint;
 import uz.oliymahad.userservice.security.jwt.JWTokenFilter;
-import uz.oliymahad.userservice.security.jwt.JWTokenProvider;
+import uz.oliymahad.userservice.security.jwt.JwtProvider;
 import uz.oliymahad.userservice.security.oauth2.UserPrincipal;
 import uz.oliymahad.userservice.service.oauth2.CustomOAuth2UserService;
 import uz.oliymahad.userservice.service.oauth2.CustomUserDetailsService;
@@ -39,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final PasswordEncoder passwordEncoder;
-    private final JWTokenProvider jwtProvider;
+    private final JwtProvider jwtProvider;
     private final JWTokenFilter jwTokenFilter;
 
     @Override
@@ -47,7 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .cors().and()
+                .cors().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .exceptionHandling().authenticationEntryPoint(new JWTokenEntryPoint())

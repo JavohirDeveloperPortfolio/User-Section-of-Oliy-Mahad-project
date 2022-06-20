@@ -106,7 +106,8 @@ public class AdminSectionService implements Section {
         AdminSectionDto adminSectionDto = new AdminSectionDto();
         adminSectionDto.setHeaders(List.of(""));
         RestAPIResponse apiResponse = queueFeign.getQueue((PageRequest) pageable);
-        adminSectionDto.setBody(apiResponse.getData());
+      //  adminSectionDto.setBody(apiResponse.getData());
+        adminSectionDto.setBody(null);
         modelMapper.map(getPermission(sections),adminSectionDto);
         return adminSectionDto;
     }

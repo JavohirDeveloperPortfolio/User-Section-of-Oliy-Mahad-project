@@ -21,7 +21,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/v1/user/auth")
 @PreAuthorize(value = "permitAll()")
 public class AuthController {
 

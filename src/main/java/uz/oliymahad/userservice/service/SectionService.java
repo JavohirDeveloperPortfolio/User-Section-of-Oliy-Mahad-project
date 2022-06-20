@@ -12,13 +12,11 @@ import uz.oliymahad.userservice.dto.request.RolePermission;
 import uz.oliymahad.userservice.dto.request.SectionRequestDto;
 import uz.oliymahad.userservice.dto.response.*;
 import uz.oliymahad.userservice.dto.response.SectionAccessResponse;
-import uz.oliymahad.userservice.dto.response.SectionDto;
 import uz.oliymahad.userservice.model.entity.RoleEntity;
 import uz.oliymahad.userservice.model.entity.Sections;
 import uz.oliymahad.userservice.model.entity.UserEntity;
 import uz.oliymahad.userservice.model.enums.ERole;
 import uz.oliymahad.userservice.repository.SectionRepository;
-import uz.oliymahad.userservice.security.jwt.JWTokenProvider;
 import uz.oliymahad.userservice.security.jwt.UserDetailsServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +34,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SectionService {
 
     private final SectionRepository sectionRepository;
-    private final JWTokenProvider jwTokenProvider;
     private final UserDetailsServiceImpl userDetailsService;
     private final ModelMapper modelMapper;
 
