@@ -12,9 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import uz.oliymahad.userservice.dto.admin.*;
-import uz.oliymahad.userservice.dto.response.RestAPIResponse;
-import uz.oliymahad.userservice.dto.response.SectionPermissionDto;
-import uz.oliymahad.userservice.dto.response.UserDataResponse;
+import uz.oliymahad.userservice.dto.response.*;
 import uz.oliymahad.userservice.feign.CourseFeign;
 import uz.oliymahad.userservice.feign.GroupFeign;
 import uz.oliymahad.userservice.feign.QueueFeign;
@@ -104,8 +102,8 @@ public class AdminSectionService implements Section {
 
     public AdminSectionDto getQueue (Pageable pageable, Sections sections) {
         AdminSectionDto adminSectionDto = new AdminSectionDto();
-        adminSectionDto.setHeaders(List.of(""));
-        RestAPIResponse apiResponse = queueFeign.getQueue((PageRequest) pageable);
+        adminSectionDto.setHeaders(List.of("id","firstName","phoneNumber","courseName","startDate","endDate"));
+        RestAPIResponse apiResponse = queueFeign.getQueue(pageable);
         adminSectionDto.setBody(apiResponse.getData());
         modelMapper.map(getPermission(sections),adminSectionDto);
         return adminSectionDto;
@@ -127,6 +125,4 @@ public class AdminSectionService implements Section {
         return permission;
     }
 
-    public static void main(String[] args) {
-    }
 }
