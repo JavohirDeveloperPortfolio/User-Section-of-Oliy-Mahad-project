@@ -7,7 +7,7 @@ pipeline {
 
     stage("test"){
     steps{
-    sh 'echo ketdi'
+    sh 'mvn test'
 
      }
     }
@@ -15,7 +15,7 @@ pipeline {
 
     stage("package") {
       steps{
-//        sh 'mvn clean install'
+       sh 'mvn clean install'
         sh 'echo vaqtincha'
 
       }
@@ -24,10 +24,10 @@ pipeline {
     stage("docker run") {
       steps{
       sh 'echo bu ham'
-//      sh 'docker-compose ps'
-//      sh 'docker-compose rm'
-//      sh 'docker-compose build'
-//      sh 'docker-compose up -d'
+     sh 'docker-compose ps'
+     sh 'docker-compose rm'
+     sh 'docker-compose build'
+     sh 'docker-compose up -d'
 
       }
     }
