@@ -15,18 +15,19 @@ pipeline {
 
     stage("package") {
       steps{
-       sh 'mvn clean install'
+//        sh 'mvn clean install'
+        sh 'echo vaqtincha'
 
       }
     }
 
     stage("docker run") {
       steps{
-
-     sh 'docker-compose ps'
-     sh 'docker-compose rm'
-     sh 'docker-compose build'
-     sh 'docker-compose up -d'
+      sh 'echo bu ham'
+//      sh 'docker-compose ps'
+//      sh 'docker-compose rm'
+//      sh 'docker-compose build'
+//      sh 'docker-compose up -d'
 
       }
     }
