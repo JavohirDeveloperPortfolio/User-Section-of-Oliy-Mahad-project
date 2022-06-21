@@ -2,14 +2,11 @@ package uz.oliymahad.userservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import uz.oliymahad.userservice.dto.admin.*;
 import uz.oliymahad.userservice.dto.response.*;
@@ -47,22 +44,22 @@ public class AdminSectionService implements Section {
             return new RestAPIResponse("Finding item not found with  : " + id,false, HttpStatus.NOT_FOUND.value());
         }
         Sections sections = optionalSections.get();
-        Object data = null;
+        AdminSectionDto adminSectionDto = new AdminSectionDto();
         switch (sections.getName()) {
             case USERS :
-                data = getUser(pageable,sections);
+                adminSectionDto = getUser(pageable,sections);
                 break;
             case COURSE :
-                data = getCourse(pageable,sections);
+                adminSectionDto = getCourse(pageable,sections);
                 break;
             case QUEUE :
-                data = getQueue(pageable,sections);
+                adminSectionDto = getQueue(pageable,sections);
                 break;
             case GROUP :
-                data = getGroup(pageable,sections);
+                adminSectionDto = getGroup(pageable,sections);
                 break;
         }
-        return new RestAPIResponse("Data list", true , HttpStatus.OK.value(),data);
+        return new RestAPIResponse("Data list", true , HttpStatus.OK.value(),adminSectionDto);
     }
 
     public AdminSectionDto getUser(Pageable pageable, Sections sections) {
@@ -93,7 +90,7 @@ public class AdminSectionService implements Section {
 
     public AdminSectionDto getGroup (Pageable pageable, Sections sections) {
         AdminSectionDto adminSectionDto = new AdminSectionDto();
-        adminSectionDto.setHeaders(List.of("id","name","memberCount","type","startDate","courseId"));
+        adminSectionDto.setHeaders(List.of("id","name","memberCount","type","startDate","courseName","courseId"));
         RestAPIResponse apiResponse = groupFeign.getGroupPage(pageable);
         adminSectionDto.setBody(apiResponse.getData());
         modelMapper.map(getPermission(sections),adminSectionDto);
@@ -102,7 +99,7 @@ public class AdminSectionService implements Section {
 
     public AdminSectionDto getQueue (Pageable pageable, Sections sections) {
         AdminSectionDto adminSectionDto = new AdminSectionDto();
-        adminSectionDto.setHeaders(List.of("id","firstName","phoneNumber","courseName","startDate","endDate"));
+        adminSectionDto.setHeaders(List.of("id","userId","firstName","lastName","phoneNumber","courseName","appliedDate","endDate"));
         RestAPIResponse apiResponse = queueFeign.getQueue(pageable);
         adminSectionDto.setBody(apiResponse.getData());
         modelMapper.map(getPermission(sections),adminSectionDto);
@@ -124,5 +121,4 @@ public class AdminSectionService implements Section {
         }
         return permission;
     }
-
 }
