@@ -189,6 +189,7 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <finalName>user-server</finalName>
                 </configuration>
             </plugin>
         </plugins>
