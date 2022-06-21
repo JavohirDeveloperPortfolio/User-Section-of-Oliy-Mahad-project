@@ -1,5 +1,6 @@
 package uz.oliymahad.userservice.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class UserRegisterDetails extends Auditable<String> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     private UserEntity user;
 

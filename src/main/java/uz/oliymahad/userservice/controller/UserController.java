@@ -23,7 +23,7 @@ public class    UserController {
 
     private final CustomOAuth0UserService oAuth0UserService;
 
-    @PreAuthorize(value = "hasAnyRole(\"ADMIN\")")
+//    @PreAuthorize(value = "hasAnyRole(\"ADMIN\",\"OWNER\")")
     @GetMapping()
     public ResponseEntity<?> userList(
             @RequestParam(name = "search",required = false) String search,
@@ -43,6 +43,8 @@ public class    UserController {
         )));
     }
 
+
+
     @PutMapping()
     public ResponseEntity<?> modifyUser(
             @RequestParam(required = true) Long id,
@@ -52,12 +54,12 @@ public class    UserController {
     }
 
 
-    @GetMapping("/{phonenumber}")
-    public ResponseEntity<?> getUserByPhone(@PathVariable String phonenumber){
-        return ResponseEntity.ok( new RestAPIResponse(OK.name(), true , OK.value(),
-            userService.getByPhone(phonenumber)));
-
-    }
+//    @GetMapping("/{phonenumber}")
+//    public ResponseEntity<?> getUserByPhone(@PathVariable String phonenumber){
+//        return ResponseEntity.ok( new RestAPIResponse(OK.name(), true , OK.value(),
+//            userService.getByPhone(phonenumber)));
+//
+//    }
 
 //    @PutMapping("/{userId}/auth")
 //    @PreAuthorize(value = "hasAnyRole(\"ADMIN\")")
