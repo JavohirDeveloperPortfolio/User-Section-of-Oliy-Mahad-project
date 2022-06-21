@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import uz.oliymahad.dto.request.UsersIDSRequest;
 import uz.oliymahad.userservice.converter.UserDataModelConverter;
 import uz.oliymahad.userservice.dto.request.ImageRequest;
 import uz.oliymahad.userservice.dto.request.UserUpdateRequest;
@@ -127,6 +128,12 @@ public class UserService {
 
 
         return uploadUrl;
+    }
+    public List<UserDataResponse> getUsersByIds(UsersIDSRequest userIds) {
+        if(userIds.getIds() == null || userIds.getIds().isEmpty())
+            throw new InputMismatchException("Users ids list is null or empty");
+
+        return UserDataModelConverter.convert(userRepository.findAllById(userIds.getIds()));
     }
 
     public RestAPIResponse updateUserRole(Long userId, Integer roleId) {
