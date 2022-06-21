@@ -24,7 +24,7 @@
             <version>1.0.0</version>
             <scope>system</scope>
             <systemPath>
-                D:\PersonalProject\Oliy-Mahad-User-Details-Component\out\artifacts\oliy_mahad_user_details_component_jar\oliy-mahad-user-details-component.jar
+                /home/ubuntu/jars/oliy-mahad-user-details-component.jar
             </systemPath>
         </dependency>
         <dependency>
@@ -145,7 +145,7 @@
             <version>1.0.0</version>
             <scope>system</scope>
             <systemPath>
-                C:\Users\Akhror_Mamasodirov\Desktop\User-Section-of-Oliy-Mahad-project\lib\oliy-mahad-user-details-component.jar
+                /home/ubuntu/jars/oliy-mahad-user-details-component.jar
             </systemPath>
         </dependency>
         <dependency>
