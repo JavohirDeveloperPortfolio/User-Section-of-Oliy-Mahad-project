@@ -8,9 +8,12 @@ import uz.oliymahad.userservice.dto.request.SectionRequestDto;
 import uz.oliymahad.userservice.dto.response.RestAPIResponse;
 import uz.oliymahad.userservice.service.SectionService;
 
+import static org.springframework.web.bind.annotation.RequestMethod.*;
+
 @RestController
 @RequestMapping("api/v1/section")
 @RequiredArgsConstructor
+
 public class SectionController {
     private final SectionService sectionService;
 
