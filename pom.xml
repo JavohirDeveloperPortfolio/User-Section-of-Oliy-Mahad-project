@@ -24,7 +24,7 @@
             <version>1.0.0</version>
             <scope>system</scope>
             <systemPath>
-                /jenkins-file/jenkins-data/jenkins_home/workspace/user-server-oliy-mahad/lib/oliy-mahad-user-details-component.jar
+               home/ubuntu/jenkins-file/jenkins-data/jenkins_home/workspace/user-server-oliy-mahad/lib/oliy-mahad-user-details-component.jar
             </systemPath>
         </dependency>
         <dependency>
@@ -140,15 +140,15 @@
 <!--        </dependency>-->
 
 
-        <dependency>
-            <groupId>uz.oliymahad</groupId>
-            <artifactId>sample</artifactId>
-            <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>
-               /jenkins-file/jenkins-data/jenkins_home/workspace/user-server-oliy-mahad/lib/oliy-mahad-user-details-component.jar
-            </systemPath>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>uz.oliymahad</groupId>-->
+<!--            <artifactId>sample</artifactId>-->
+<!--            <version>1.0.0</version>-->
+<!--            <scope>system</scope>-->
+<!--            <systemPath>-->
+<!--               /jenkins-file/jenkins-data/jenkins_home/workspace/user-server-oliy-mahad/lib/oliy-mahad-user-details-component.jar-->
+<!--            </systemPath>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
