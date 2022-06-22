@@ -24,7 +24,7 @@
             <version>1.0.0</version>
             <scope>system</scope>
             <systemPath>
-                /home/ubuntu/jenkins-file/jenkins-data/jenkins_home/workspace/user-server-oliy-mahad/lib/oliy-mahad-user-details-component.jar
+                /jenkins-file/jenkins-data/jenkins_home/workspace/user-server-oliy-mahad/lib/oliy-mahad-user-details-component.jar
             </systemPath>
         </dependency>
         <dependency>
@@ -145,7 +145,7 @@
             <version>1.0.0</version>
             <scope>system</scope>
             <systemPath>
-                /home/ubuntu/jenkins-file/jenkins-data/jenkins_home/workspace/user-server-oliy-mahad/lib/oliy-mahad-user-details-component.jar
+               /jenkins-file/jenkins-data/jenkins_home/workspace/user-server-oliy-mahad/lib/oliy-mahad-user-details-component.jar
             </systemPath>
         </dependency>
         <dependency>
