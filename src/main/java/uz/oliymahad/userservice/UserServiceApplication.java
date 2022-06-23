@@ -50,6 +50,7 @@ public class UserServiceApplication implements CommandLineRunner {
 
             UserEntity entity = new UserEntity(
                     passwordEncoder.encode("123456789"),
+                    
                     "+998974022722",
                     new HashSet<>() {{
                         add(new RoleEntity(ERole.ROLE_OWNER.id, ERole.ROLE_OWNER));

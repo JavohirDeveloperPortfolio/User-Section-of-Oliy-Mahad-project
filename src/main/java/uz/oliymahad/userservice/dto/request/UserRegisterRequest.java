@@ -8,6 +8,7 @@ import uz.oliymahad.userservice.annotation.phone_num_constraint.PhoneNumber;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -15,11 +16,10 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class UserRegisterRequest {
 
-    @PhoneNumber
-    private String phoneNumber;
-    @Email
-    private String email;
-    @NotBlank
-    private String password;
+    @PhoneNumber private String phoneNumber;
+
+    @Email private String email;
+
+    @NotBlank @Size(min = 4, max = 16) private String password;
 
 }

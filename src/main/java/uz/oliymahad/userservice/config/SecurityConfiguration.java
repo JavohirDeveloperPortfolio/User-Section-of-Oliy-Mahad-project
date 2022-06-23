@@ -20,10 +20,11 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import uz.oliymahad.userservice.security.jwt.JWTokenEntryPoint;
 import uz.oliymahad.userservice.security.jwt.JWTokenFilter;
-import uz.oliymahad.userservice.security.jwt.JWTokenProvider;
+import uz.oliymahad.userservice.security.jwt.JwtProvider;
 import uz.oliymahad.userservice.security.oauth2.UserPrincipal;
 import uz.oliymahad.userservice.service.oauth2.CustomOAuth2UserService;
 import uz.oliymahad.userservice.service.oauth2.CustomUserDetailsService;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -45,10 +46,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final PasswordEncoder passwordEncoder;
-    private final JWTokenProvider jwtProvider;
+    private final JwtProvider jwtProvider;
     private final JWTokenFilter jwTokenFilter;
 
     @Override
+
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .cors().disable()

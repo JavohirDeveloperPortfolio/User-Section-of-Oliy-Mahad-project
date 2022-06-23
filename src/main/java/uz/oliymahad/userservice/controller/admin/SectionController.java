@@ -1,24 +1,28 @@
 package uz.oliymahad.userservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.oliymahad.userservice.dto.request.SectionRequestDto;
 import uz.oliymahad.userservice.dto.response.RestAPIResponse;
+import uz.oliymahad.userservice.service.AdminSectionService;
 import uz.oliymahad.userservice.service.SectionService;
+
+import javax.validation.Valid;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
-@RequestMapping("api/v1/section")
+@RequestMapping("api/v1/user/admin/section")
 @RequiredArgsConstructor
-
 public class SectionController {
     private final SectionService sectionService;
+    private final AdminSectionService adminSectionService;
 
     @PostMapping("/edit")
-    public Boolean addSection(@RequestBody SectionRequestDto sectionRequestDto) {
+    public Boolean addSection(@RequestBody  @Valid SectionRequestDto sectionRequestDto) {
         sectionService.addSection(sectionRequestDto);
         return true;
     }
@@ -39,4 +43,11 @@ public class SectionController {
         return ResponseEntity.status(restAPIResponse.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(restAPIResponse);
     }
 
+    @GetMapping("/data")
+    public ResponseEntity<?> getSections(
+            @RequestParam Long id,
+            Pageable pageable
+    ){
+        return ResponseEntity.ok().body(adminSectionService.getSections(id,pageable));
+    }
 }
