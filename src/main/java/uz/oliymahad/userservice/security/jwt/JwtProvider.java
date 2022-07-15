@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import uz.oliymahad.userservice.exception.custom_ex_model.UserNotFoundException;
 import uz.oliymahad.userservice.model.entity.UserEntity;
 import uz.oliymahad.userservice.security.oauth2.UserPrincipal;
 
@@ -79,7 +80,8 @@ public class JwtProvider {
       logger.error("JWT claims string is empty: {}", e.getMessage());
     }
 
-    return null;
+    throw new UserNotFoundException("Phone number or password is incorrect");
+
   }
 
   public Jws<Claims> validateJwtRefreshToken(String authToken) {
@@ -97,7 +99,8 @@ public class JwtProvider {
       logger.error("JWT claims string is empty: {}", e.getMessage());
     }
 
-    return null;
+    throw new UserNotFoundException("Phone number or password is incorrect");
+
   }
 
 }

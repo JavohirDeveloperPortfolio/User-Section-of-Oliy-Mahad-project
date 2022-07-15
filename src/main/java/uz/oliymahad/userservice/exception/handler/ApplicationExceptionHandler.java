@@ -16,6 +16,8 @@ import org.springframework.web.context.request.WebRequest;
 import uz.oliymahad.userservice.exception.custom_ex_model.UserAlreadyRegisteredException;
 import uz.oliymahad.userservice.exception.custom_ex_model.UserAuthenticationException;
 import uz.oliymahad.userservice.dto.response.ErrorMessageResponse;
+import uz.oliymahad.userservice.exception.custom_ex_model.UserNotFoundException;
+
 import java.util.Date;
 
 
@@ -89,6 +91,18 @@ public class ApplicationExceptionHandler {
                 HttpStatus.NOT_ACCEPTABLE.value(),
                 new Date(),
                 ex.getFieldError().getDefaultMessage(),
+                request.getDescription(false)
+        );
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorMessageResponse processUserNotFoundException(final UserNotFoundException ex, WebRequest request) {
+        logger.warn(ex.getMessage());
+        return new ErrorMessageResponse(
+                HttpStatus.UNAUTHORIZED.value(),
+                new Date(),
+                ex.getMessage(),
                 request.getDescription(false)
         );
     }

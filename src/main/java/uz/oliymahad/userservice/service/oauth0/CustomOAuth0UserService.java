@@ -11,6 +11,7 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import uz.oliymahad.userservice.dto.request.UserLoginRequest;
@@ -28,6 +29,7 @@ import uz.oliymahad.userservice.security.jwt.UserDetailsServiceImpl;
 import uz.oliymahad.userservice.security.jwt.payload.response.JWTokenResponse;
 import uz.oliymahad.userservice.service.SectionService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -53,7 +55,7 @@ public class CustomOAuth0UserService {
         try {
             userRegisterRequest.setPassword(passwordEncoder.encode(userRegisterRequest.getPassword()));
             user.setRoles(new HashSet<>() {{
-                add(new RoleEntity(1,ERole.ROLE_USER));
+                add(new RoleEntity(1, ERole.ROLE_USER));
             }});
             modelMapper.map(userRegisterRequest, user);
             UserEntity entity = repository.save(user);
@@ -61,7 +63,7 @@ public class CustomOAuth0UserService {
 
         } catch (
                 IllegalArgumentException | ClassCastException | IllegalStateException |
-                InvalidDataAccessApiUsageException e
+                        InvalidDataAccessApiUsageException e
         ) {
             logger.error(e.getMessage());
             throw new IllegalArgumentException(e.getMessage());
@@ -102,5 +104,19 @@ public class CustomOAuth0UserService {
         Jws<Claims> jws = jwTokenProvider.validateJwtRefreshToken(jwtRefreshToken);
         UserEntity user = userDetailsService.loadUserByUsername(jws.getBody().getSubject());
         return new String[]{jwTokenProvider.generateAccessToken(user), jwtRefreshToken};
+    }
+
+    public long getUserByToken(HttpServletRequest request) {
+        String headerAuth = request.getHeader("Authorization");
+
+        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+            headerAuth = headerAuth.substring(7);
+            String subject = jwTokenProvider.validateJwtAccessToken(headerAuth)
+                    .getBody()
+                    .getSubject();
+            UserEntity entity = userDetailsService.loadUserByUsername(subject);
+            return entity.getId();
+        }
+        else throw new UserNotFoundException("User not found");
     }
 }

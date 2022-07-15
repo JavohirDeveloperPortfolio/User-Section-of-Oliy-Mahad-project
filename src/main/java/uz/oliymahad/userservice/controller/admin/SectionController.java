@@ -1,4 +1,4 @@
-package uz.oliymahad.userservice.controller;
+package uz.oliymahad.userservice.controller.admin;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

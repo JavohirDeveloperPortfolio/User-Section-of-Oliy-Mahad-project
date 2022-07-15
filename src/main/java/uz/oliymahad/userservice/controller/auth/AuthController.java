@@ -12,6 +12,7 @@ import uz.oliymahad.userservice.exception.custom_ex_model.UserAuthenticationExce
 import uz.oliymahad.userservice.security.jwt.payload.response.JWTokenResponse;
 import uz.oliymahad.userservice.service.oauth0.CustomOAuth0UserService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -73,6 +74,11 @@ public class AuthController {
             @RequestBody @Valid UserLoginRequest userLoginRequest
     ) throws UserAuthenticationException {
         return ResponseEntity.ok(oAuth0UserService.loginUser(userLoginRequest));
+    }
+
+    @GetMapping("/getMe")
+    public ResponseEntity<?> getUserByToken(HttpServletRequest request) throws UserAuthenticationException {
+        return ResponseEntity.ok(oAuth0UserService.getUserByToken(request));
     }
 
     @PostMapping("/akdjndn1ad?dand/RE_dqkqekb?FR")

@@ -6,7 +6,7 @@ import uz.oliymahad.userservice.model.entity.Sections;
 
 import java.util.Optional;
 
-@Repository
+
 public interface SectionRepository extends JpaRepository<Sections , Long> {
 
     Optional<Sections> findByName(String  name);

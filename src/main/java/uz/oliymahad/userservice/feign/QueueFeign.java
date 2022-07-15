@@ -9,6 +9,6 @@ import uz.oliymahad.userservice.dto.response.RestAPIResponse;
 
 @FeignClient(name = "localhost", url = "http://localhost:8081")
 public interface QueueFeign {
-    @GetMapping("/api/v1/course/queue/details")
+    @GetMapping("/api/v1/course/queue/list")
     RestAPIResponse getQueue(Pageable pageable);
 }

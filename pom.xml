@@ -24,7 +24,7 @@
             <version>1.0.0</version>
             <scope>system</scope>
             <systemPath>
-               home/ubuntu/jenkins-file/jenkins-data/jenkins_home/workspace/user-server-oliy-mahad/lib/oliy-mahad-user-details-component.jar
+                D:\PDP\OnsiteLessons\Oliy-Mahad-User-Details-Component\out\artifacts\oliy_mahad_user_details_component_jar\oliy-mahad-user-details-component.jar
             </systemPath>
         </dependency>
         <dependency>
