@@ -44,7 +44,7 @@ public class SectionController {
     @GetMapping("/data")
     public ResponseEntity<?> getSections(
             @RequestParam Long id,
-            Pageable pageable
+             Pageable pageable
     ){
         return ResponseEntity.ok().body(adminSectionService.getSections(id,pageable));
     }

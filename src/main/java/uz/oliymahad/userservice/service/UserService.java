@@ -11,10 +11,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import uz.oliymahad.dto.request.UsersIDSRequest;
 import uz.oliymahad.userservice.converter.UserDataModelConverter;
 import uz.oliymahad.userservice.dto.request.ImageRequest;
 import uz.oliymahad.userservice.dto.request.UserUpdateRequest;
+import uz.oliymahad.userservice.dto.request.UsersIDSRequest;
 import uz.oliymahad.userservice.dto.response.RestAPIResponse;
 import uz.oliymahad.userservice.dto.response.UserDataResponse;
 import uz.oliymahad.userservice.exception.custom_ex_model.UserNotFoundException;
@@ -44,7 +44,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
-    private final  String  baseImagePath = "C:\\Users\\99897\\IdeaProjects\\User-Section-of-Oliy-Mahad-project\\images\\avatar";
+    private final String baseImagePath = "C:\\Users\\99897\\IdeaProjects\\User-Section-of-Oliy-Mahad-project\\images\\avatar";
 
     public Page<?> list(String search, String[] categories, int page, int size, String order) {
         Page<UserEntity> list;
@@ -95,12 +95,12 @@ public class UserService {
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> {
             throw new UserNotFoundException("User not found with id - " + id);
         });
-          if(userUpdateRequest.getPassword() != null){
+        if (userUpdateRequest.getPassword() != null) {
             userUpdateRequest.setPassword(passwordEncoder.encode(userUpdateRequest.getPassword()));
         }
 
-        if(userUpdateRequest.getImage() != null){
-            String saveImage = imageSave(userUpdateRequest.getImage() , userEntity.getImageUrl());
+        if (userUpdateRequest.getImage() != null) {
+            String saveImage = imageSave(userUpdateRequest.getImage(), userEntity.getImageUrl());
             userEntity.setImageUrl(saveImage);
         }
 
@@ -109,7 +109,7 @@ public class UserService {
 
     }
 
-    private String imageSave(ImageRequest imageRequest , String oldImageUrl) {
+    private String imageSave(ImageRequest imageRequest, String oldImageUrl) {
         byte[] de = Base64.decodeBase64(imageRequest.getContent());
         String uploadUrl = null;
         try {
@@ -120,7 +120,7 @@ public class UserService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(oldImageUrl!= null){
+        if (oldImageUrl != null) {
             File file = new File(oldImageUrl);
             file.delete();
         }
@@ -128,11 +128,12 @@ public class UserService {
 
         return uploadUrl;
     }
-    public List<UserDataResponse> getUsersByIds(UsersIDSRequest userIds) {
-        if(userIds.getIds() == null || userIds.getIds().isEmpty())
-            throw new InputMismatchException("Users ids list is null or empty");
 
-        return UserDataModelConverter.convert(userRepository.findAllById(userIds.getIds()));
+    public List<UserDataResponse> getUsersByIds(List<Long> userIds) {
+        if (userIds == null)
+            throw new InputMismatchException("Users ids list is null");
+
+        return UserDataModelConverter.convert(userRepository.findAllById(userIds));
     }
 
     public RestAPIResponse updateUserRole(Long userId, Integer roleId) {
