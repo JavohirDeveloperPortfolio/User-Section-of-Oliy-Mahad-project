@@ -2,23 +2,20 @@ package uz.oliymahad.userservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.oliymahad.userservice.dto.request.UserUpdateRequest;
 import uz.oliymahad.userservice.dto.response.RestAPIResponse;
 import uz.oliymahad.userservice.service.UserService;
 import uz.oliymahad.userservice.service.oauth0.CustomOAuth0UserService;
 
-import javax.management.relation.RoleNotFoundException;
 import javax.validation.Valid;
-import javax.ws.rs.Path;
 
 import static org.springframework.http.HttpStatus.OK;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/user")
-public class    UserController {
+public class UserController {
     private final UserService userService;
 
     private final CustomOAuth0UserService oAuth0UserService;

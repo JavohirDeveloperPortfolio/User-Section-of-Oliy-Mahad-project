@@ -24,7 +24,7 @@ import java.util.Date;
 public class ApplicationExceptionHandler {
     private final static Logger logger = LoggerFactory.getLogger(ApplicationExceptionHandler.class);
 
-    @ExceptionHandler(value = {IllegalArgumentException.class,ClassCastException.class, IllegalStateException.class,
+    @ExceptionHandler(value = {IllegalArgumentException.class, ClassCastException.class, IllegalStateException.class,
             InvalidDataAccessApiUsageException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorMessageResponse handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request){

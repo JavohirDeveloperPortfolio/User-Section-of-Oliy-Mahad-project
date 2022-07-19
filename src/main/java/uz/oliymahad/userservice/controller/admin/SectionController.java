@@ -27,7 +27,6 @@ public class SectionController {
 
     @GetMapping()
     public ResponseEntity<?> getAccessForSections() {
-
         return ResponseEntity.ok(sectionService.getAccessForSections());
     }
     @GetMapping("/get")
@@ -44,7 +43,7 @@ public class SectionController {
     @GetMapping("/data")
     public ResponseEntity<?> getSections(
             @RequestParam Long id,
-            Pageable pageable
+             Pageable pageable
     ){
         return ResponseEntity.ok().body(adminSectionService.getSections(id,pageable));
     }

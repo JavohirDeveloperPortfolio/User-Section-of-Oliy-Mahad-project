@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,8 +23,6 @@ import java.util.HashSet;
 import java.util.List;
 
 @SpringBootApplication
-@EnableEurekaClient
-@EnableFeignClients
 public class UserServiceApplication implements CommandLineRunner {
     @Autowired
     private UserRepository userRepository;
@@ -81,14 +78,14 @@ public class UserServiceApplication implements CommandLineRunner {
 //        return source;
 //    }
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource(){
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedOrigin("*");
-        configuration.setAllowedMethods(List.of("GET","PUT","POST","DELETE","OPTIONS","PATCH"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**",configuration);
-        return source;
-    }
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource(){
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.addAllowedHeader("*");
+//        configuration.addAllowedOrigin("*");
+//        configuration.setAllowedMethods(List.of("GET","PUT","POST","DELETE","OPTIONS","PATCH"));
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**",configuration);
+//        return source;
+//    }
 }

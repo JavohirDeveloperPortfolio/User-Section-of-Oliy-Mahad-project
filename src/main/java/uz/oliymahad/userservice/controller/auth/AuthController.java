@@ -3,6 +3,7 @@ package uz.oliymahad.userservice.controller.auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import uz.oliymahad.userservice.dto.request.UserLoginRequest;
@@ -74,6 +75,12 @@ public class AuthController {
     ) throws UserAuthenticationException {
         return ResponseEntity.ok(oAuth0UserService.loginUser(userLoginRequest));
     }
+
+    @GetMapping("/getMe")
+    public ResponseEntity<?> getMe(){
+        return ResponseEntity.ok(oAuth0UserService.getUser());
+    }
+
 
     @PostMapping("/akdjndn1ad?dand/RE_dqkqekb?FR")
     public ResponseEntity<?> tokenRefresher(

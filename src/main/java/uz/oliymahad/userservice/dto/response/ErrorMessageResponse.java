@@ -1,7 +1,12 @@
 package uz.oliymahad.userservice.dto.response;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 
+@Getter
+@Setter
 public class ErrorMessageResponse {
   private int statusCode;
   private Date timestamp;
@@ -13,21 +18,5 @@ public class ErrorMessageResponse {
     this.timestamp = timestamp;
     this.message = message;
     this.description = description;
-  }
-
-  public int getStatusCode() {
-    return statusCode;
-  }
-
-  public Date getTimestamp() {
-    return timestamp;
-  }
-
-  public String getMessage() {
-    return message;
-  }
-
-  public String getDescription() {
-    return description;
   }
 }

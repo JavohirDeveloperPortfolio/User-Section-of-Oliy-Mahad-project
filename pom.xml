@@ -18,15 +18,15 @@
         <spring-cloud.version>2021.0.2</spring-cloud.version>
     </properties>
     <dependencies>
-        <dependency>
-            <groupId>uz.oliymahad</groupId>
-            <artifactId>sample</artifactId>
-            <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>
-                /home/ubuntu/jenkins-file/jenkins-data/jenkins_home/workspace/user-server-oliy-mahad/lib/oliy-mahad-user-details-component.jar
-            </systemPath>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>uz.oliymahad</groupId>-->
+<!--            <artifactId>sample</artifactId>-->
+<!--            <version>1.0.0</version>-->
+<!--            <scope>system</scope>-->
+<!--            <systemPath>-->
+<!--                /home/ubuntu/jenkins-file/jenkins-data/jenkins_home/workspace/user-server-oliy-mahad/lib/oliy-mahad-user-details-component.jar-->
+<!--            </systemPath>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -59,10 +59,10 @@
             <version>0.9.1</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.netflix.eureka</groupId>
-            <artifactId>eureka-client</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.netflix.eureka</groupId>-->
+<!--            <artifactId>eureka-client</artifactId>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -139,25 +139,25 @@
 <!--            <version>3.1.2</version>-->
 <!--        </dependency>-->
 
-        <dependency>
-            <groupId>uz.oliymahad</groupId>
-            <artifactId>sample</artifactId>
-            <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>
-                /home/ubuntu/jenkins-file/jenkins-data/jenkins_home/workspace/user-server-oliy-mahad/lib/oliy-mahad-user-details-component.jar
-            </systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-            <version>3.1.2</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>uz.oliymahad</groupId>-->
+<!--            <artifactId>sample</artifactId>-->
+<!--            <version>1.0.0</version>-->
+<!--            <scope>system</scope>-->
+<!--            <systemPath>-->
+<!--                /home/ubuntu/jenkins-file/jenkins-data/jenkins_home/workspace/user-server-oliy-mahad/lib/oliy-mahad-user-details-component.jar-->
+<!--            </systemPath>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>-->
+<!--            <version>3.1.2</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-bootstrap</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-bootstrap</artifactId>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>io.springfox</groupId>

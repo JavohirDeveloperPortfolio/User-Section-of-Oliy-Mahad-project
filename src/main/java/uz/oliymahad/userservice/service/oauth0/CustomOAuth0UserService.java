@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import uz.oliymahad.userservice.dto.request.UserLoginRequest;
 import uz.oliymahad.userservice.dto.request.UserRegisterRequest;
 import uz.oliymahad.userservice.dto.response.SectionAccessResponse;
+import uz.oliymahad.userservice.dto.response.UserDataResponse;
 import uz.oliymahad.userservice.exception.custom_ex_model.UserAlreadyRegisteredException;
 import uz.oliymahad.userservice.exception.custom_ex_model.UserInvalidPasswordException;
 import uz.oliymahad.userservice.exception.custom_ex_model.UserNotFoundException;
@@ -30,6 +33,7 @@ import uz.oliymahad.userservice.service.SectionService;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.springframework.http.HttpStatus.OK;
@@ -102,5 +106,10 @@ public class CustomOAuth0UserService {
         Jws<Claims> jws = jwTokenProvider.validateJwtRefreshToken(jwtRefreshToken);
         UserEntity user = userDetailsService.loadUserByUsername(jws.getBody().getSubject());
         return new String[]{jwTokenProvider.generateAccessToken(user), jwtRefreshToken};
+    }
+
+    public UserDataResponse getUser() {
+        final UserEntity principal = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return modelMapper.map(principal, UserDataResponse.class);
     }
 }

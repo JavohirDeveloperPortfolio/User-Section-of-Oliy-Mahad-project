@@ -1,5 +1,7 @@
 package uz.oliymahad.userservice.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
@@ -30,6 +32,10 @@ public class APIConfiguration {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public ObjectMapper objectMapper(){
+        return new ObjectMapper().registerModule(new JavaTimeModule());
+    }
 
     @Bean
     public ClientRegistrationRepository clientRegistrationRepository(OAuth2ClientProperties clientProperties){

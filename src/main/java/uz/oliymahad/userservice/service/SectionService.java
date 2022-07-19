@@ -116,14 +116,11 @@ public class SectionService {
     }
 
     public List<SectionAccessResponse> getAccessForSections(){
-        Collection<? extends GrantedAuthority> authorities =
-                SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-        RoleEntity role = (RoleEntity) authorities.iterator().next();
-
+        UserEntity principal = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int number = principal.getRoles().stream().mapToInt(roleEntity -> (1 << roleEntity.getRoleName().getVal())).sum();
         List<SectionAccessResponse> responseList = new ArrayList<>() ;
-        int val = (int) Math.pow(2,role.getRoleName().getVal());
          for (Sections section : sectionRepository.findAll()) {
-            if((section.getVisibility() & val) > 0){
+            if((section.getVisibility() & number) > 0){
                 responseList.add(new SectionAccessResponse(section.getId(), section.getName()));
             }
         }
