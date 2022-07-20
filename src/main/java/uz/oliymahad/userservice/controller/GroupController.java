@@ -19,22 +19,24 @@ public class GroupController implements BaseController{
 
     private final GroupService groupService ;
 
-    @PostMapping("/add")
+    @PostMapping(ADD)
     public ResponseEntity<?> add (@RequestBody GroupRequestDto groupRequestDto) {
         RestAPIResponse apiResponse = groupService.addGroup(groupRequestDto);
         return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.CONFLICT).body(apiResponse);
     }
 
-    @GetMapping("/getAllGroups")
-    public ResponseEntity<?> getAllGroups () {
-        RestAPIResponse apiResponse = groupService.getAllGroups();
-        return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.CONFLICT).body(apiResponse);
-    }
-
-    @GetMapping("/getGroups")
+    @GetMapping(GET)
     public ResponseEntity<?> getGroupPage(Pageable pageable) {
         RestAPIResponse apiResponse = groupService.getGroups(pageable);
         return ResponseEntity.ok(apiResponse);
     }
+
+    @GetMapping(GET+"/{id}")
+    public ResponseEntity<?> getGroupUsers (@PathVariable long id) {
+        RestAPIResponse apiResponse = groupService.getGroupUsers(id);
+        return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(apiResponse);
+    }
+
+
 
 }

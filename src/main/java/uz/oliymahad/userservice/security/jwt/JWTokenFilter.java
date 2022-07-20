@@ -59,6 +59,7 @@ public class JWTokenFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+            else throw new RuntimeException("Jwt parse error");
         } catch (Exception e) {
             response.setStatus(UNAUTHORIZED.value());
             response

@@ -43,8 +43,8 @@ public class UserRegisterDetails extends Auditable<String> {
     //    @Column(nullable = false, length = 50)
     private String lastName;
 
-    //    @Column(nullable = false)
-    //    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private EGender gender;
 
     //    @Column(nullable = false, unique = true)

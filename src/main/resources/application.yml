@@ -4,9 +4,9 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/oliy_mahad_course_db
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
-    password: 8
+    password: 7475
   jpa:
     open-in-view: false
     hibernate:
@@ -21,18 +21,18 @@ spring:
     oauth2:
       client:
         registration:
-          #          facebook:
-          #            client-id:
-          #            client-secret:
-          #            scope:
-          #              - email
-          #              - public_profile
+#          facebook:
+#            client-id:
+#            client-secret:
+#            scope:
+#              - email
+#              - public_profile
           google:
             client-id: 517447956930-ks6o0nu247mmb6pe9ag6gl2533443hvf.apps.googleusercontent.com
             client-secret: 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
-  #            scope:
-  #              - email
-  #              - profile
+#            scope:
+#              - email
+#              - profile
   application:
     name: USER-SERVICE
 

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import uz.oliymahad.userservice.dto.request.QueueDto;
 import uz.oliymahad.userservice.dto.response.RestAPIResponse;
 import uz.oliymahad.userservice.service.QueueService;
@@ -22,7 +23,7 @@ public class QueueController implements BaseController {
     private final QueueService queueService;
 
     @GetMapping("/getQueue")
-    public RestAPIResponse getQueueDetails (Pageable pageable) {
+    public RestAPIResponse getQueue (Pageable pageable) {
        return queueService.getQueueDetails(pageable);
     }
 
@@ -57,14 +58,14 @@ public class QueueController implements BaseController {
         return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.NO_CONTENT : HttpStatus.NOT_FOUND).body(apiResponse);
     }
 
-    @GetMapping("/user/{userId}/course/{courseId}") //userning shu kursda neccinci orinda turganini korsatadi
-    public ResponseEntity<?> getUserCourseQueue(
-            @PathVariable Long userId,
-            @PathVariable Long courseId
-    ){
-        RestAPIResponse apiResponse = queueService.getUserCourseQueue(userId,courseId);
-        return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(apiResponse);
-    }
+//    @GetMapping("/user/{userId}/course/{courseId}") //userning shu kursda neccinci orinda turganini korsatadi
+//    public ResponseEntity<?> getUserCourseQueue(
+//            @PathVariable Long userId,
+//            @PathVariable Long courseId
+//    ){
+//        RestAPIResponse apiResponse = queueService.getUserCourseQueue(userId,courseId);
+//        return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(apiResponse);
+//    }
 //
 //    @GetMapping(GET_USERS_BY_FILTER)
 //    public ResponseEntity<?> getUsersByFilter(@RequestBody FilterQueueForGroupsDTO filterQueueDTO){

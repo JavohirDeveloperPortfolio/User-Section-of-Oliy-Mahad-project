@@ -9,9 +9,9 @@ public class GroupRequestDto {
 
     private String name ;
 
-    private long membersCount ;
+    private int membersCount ;
 
-    private String type ;
+    private String gender;
 
     private Date startDate ;
 

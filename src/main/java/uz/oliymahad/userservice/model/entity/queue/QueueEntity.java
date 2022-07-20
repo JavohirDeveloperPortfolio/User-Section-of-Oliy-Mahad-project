@@ -23,7 +23,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "queue_entity")
 public class QueueEntity extends Auditable<String> {
 
     @Id

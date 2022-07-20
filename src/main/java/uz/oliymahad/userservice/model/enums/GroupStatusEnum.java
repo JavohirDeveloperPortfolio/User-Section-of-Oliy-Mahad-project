@@ -4,5 +4,4 @@ public enum GroupStatusEnum {
     UPCOMING,
     IN_PROGRESS,
     COMPLETED,
-
 }

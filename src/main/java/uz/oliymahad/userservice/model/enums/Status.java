@@ -6,5 +6,6 @@ public enum Status {
     ACCEPT,
     REJECT,
     CANCEL,
-    COMPLETED
+    COMPLETED,
+    INACTIVE
 }

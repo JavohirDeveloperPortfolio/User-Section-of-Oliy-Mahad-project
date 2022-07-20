@@ -125,5 +125,4 @@ public class AdminSectionService implements Section {
         }
         return permissionDto;
     }
-
 }

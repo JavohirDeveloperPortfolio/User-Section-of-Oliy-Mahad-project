@@ -1,13 +1,11 @@
 package uz.oliymahad.userservice.service;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import uz.oliymahad.userservice.dto.request.FilterQueueForGroupsDTO;
 import uz.oliymahad.userservice.dto.request.QueueDto;
 import uz.oliymahad.userservice.dto.response.*;
 import uz.oliymahad.userservice.model.entity.UserEntity;
@@ -16,6 +14,7 @@ import uz.oliymahad.userservice.model.entity.queue.QueueEntity;
 import uz.oliymahad.userservice.model.enums.Status;
 import uz.oliymahad.userservice.repository.CourseRepository;
 import uz.oliymahad.userservice.repository.QueueRepository;
+import uz.oliymahad.userservice.repository.UserRepository;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,21 +30,19 @@ public class QueueService implements BaseService<QueueDto, Long, QueueEntity, Pa
     private final QueueRepository queueRepository;
     private final CourseRepository courseRepository;
     private final ModelMapper modelMapper;
+    private final UserRepository userRepository;
     private final UserService userService;
 
     @Override
     public RestAPIResponse add(QueueDto queueDto) {
-//        boolean exist = userFeign.isExist(queueDto.getUserId());
-//        if (!exist) {
-//            return new ApiResponse<>(USER + NOT_FOUND,false);
-//        }
         Optional<CourseEntity> optionalCourse = courseRepository.findById(queueDto.getCourseId());
         if (optionalCourse.isEmpty()) {
             return new RestAPIResponse(COURSE + NOT_FOUND, false, 404);
         }
-        QueueEntity queueEntity = modelMapper.map(queueDto, QueueEntity.class);
+        QueueEntity queueEntity = new QueueEntity();
         queueEntity.setCourse(optionalCourse.get());
         queueEntity.setStatus(Status.PENDING);
+        queueEntity.setUser(userRepository.findById(queueDto.getUserId()).orElseThrow());
         queueRepository.save(queueEntity);
         return new RestAPIResponse(SUCCESSFULLY_SAVED, true, 200);
     }
@@ -54,7 +50,6 @@ public class QueueService implements BaseService<QueueDto, Long, QueueEntity, Pa
     @Override
     public RestAPIResponse getList(Pageable page) {
         return new RestAPIResponse(DATA_LIST, true, 200, queueRepository.findAll(page));
-
     }
 
     @Override
@@ -91,17 +86,6 @@ public class QueueService implements BaseService<QueueDto, Long, QueueEntity, Pa
         return new RestAPIResponse(SUCCESSFULLY_UPDATED, true, 200);
     }
 
-    public RestAPIResponse getUserCourseQueue(Long userId, Long courseId) {
-        List<Long> userCourseQueue = queueRepository.getUserCourseQueue(userId, courseId);
-        return new RestAPIResponse(SUCCESS, true, 200, userCourseQueue);
-    }
-
-    public RestAPIResponse getUsersByFilter(FilterQueueForGroupsDTO filterQueueDTO) {
-        List<Long> users = queueRepository.filterByCourseStatusGenderLimitForGroups(filterQueueDTO.getCourseId(), filterQueueDTO.getStatus(), filterQueueDTO.getGender(), filterQueueDTO.getLimit());
-        return new RestAPIResponse(SUCCESS, true, 200, users);
-    }
-
-
     public RestAPIResponse getQueueByFilter(Long userId, String gender, String status, Long courseId, String appliedDate) {
         String appliedDateAfter = null;
         if (appliedDate != null) {
@@ -112,6 +96,18 @@ public class QueueService implements BaseService<QueueDto, Long, QueueEntity, Pa
 
     }
 
+    public List<UserEntity> getUsers (long courseId, String status, int limit, String gender) {
+        List<QueueEntity> queueEntities = queueRepository.filterByCourseStatusGenderLimitForGroups(courseId,status,gender,limit);
+        List<UserEntity> users = new ArrayList<>();
+        for (QueueEntity queue : queueEntities) {
+            if (queue.getStatus().equals(Status.PENDING)) {
+                users.add(queue.getUser());
+                queue.setStatus(Status.INACTIVE);
+                queueRepository.save(queue);
+            }
+        }
+        return users;
+    }
 
     private String getDayAfterDay(String day) {
         String sDay = day.substring(0, 10);
@@ -146,7 +142,7 @@ public class QueueService implements BaseService<QueueDto, Long, QueueEntity, Pa
                     cont.getStatus()
                     ));
         });
-        response.setContent(list);
+//        response.setContent(list);
         return new RestAPIResponse(HttpStatus.OK.name(), true, 200,response);
     }
 

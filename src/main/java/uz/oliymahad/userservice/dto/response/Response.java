@@ -11,4 +11,5 @@ public interface Response {
     String COURSE = "Course";
     String QUEUE = "Queue";
     String SUCCESS = "Success";
+    String GROUP = "Group";
 }
