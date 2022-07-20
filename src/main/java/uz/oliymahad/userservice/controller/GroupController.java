@@ -37,6 +37,4 @@ public class GroupController implements BaseController{
         return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(apiResponse);
     }
 
-
-
 }
