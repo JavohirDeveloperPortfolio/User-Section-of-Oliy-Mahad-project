@@ -16,7 +16,7 @@ public class GroupSectionDto {
 
     private long membersCount ;
 
-    private String type ;
+    private String gender ;
 
     private Date startDate ;
 
