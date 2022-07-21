@@ -38,7 +38,7 @@ public class GroupController implements BaseController{
     }
 
     @GetMapping(GET+"/{id}")
-    public ResponseEntity<?> getGroupUsers (@PathVariable long id) {
+    public ResponseEntity<?> getGroupUsers (@PathVariable Long id) {
         RestAPIResponse apiResponse = groupService.getGroupUsers(id);
         return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(apiResponse);
     }

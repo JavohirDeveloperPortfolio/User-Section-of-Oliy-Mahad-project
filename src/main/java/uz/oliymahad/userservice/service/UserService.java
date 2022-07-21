@@ -6,12 +6,11 @@ import org.apache.commons.codec.binary.Base64;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.oliymahad.userservice.converter.UserDataModelConverter;
+import uz.oliymahad.userservice.dto.admin.UserSectionDto;
 import uz.oliymahad.userservice.dto.request.ImageRequest;
 import uz.oliymahad.userservice.dto.request.UserUpdateRequest;
 import uz.oliymahad.userservice.dto.request.UsersIDSRequest;
@@ -22,7 +21,9 @@ import uz.oliymahad.userservice.exception.custom_ex_model.UserNotFoundException;
 import uz.oliymahad.userservice.model.entity.RoleEntity;
 import uz.oliymahad.userservice.exception.custom_ex_model.UserNotFoundException;
 import uz.oliymahad.userservice.model.entity.UserEntity;
+import uz.oliymahad.userservice.model.entity.UserRegisterDetails;
 import uz.oliymahad.userservice.model.enums.ERole;
+import uz.oliymahad.userservice.repository.UserDetailRepository;
 import uz.oliymahad.userservice.repository.UserRepository;
 
 import javax.management.relation.RoleNotFoundException;
@@ -40,6 +41,7 @@ public class UserService implements Response {
 
     private final static Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
+    private final UserDetailRepository userDetailRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
     private final String baseImagePath = "C:\\Users\\99897\\IdeaProjects\\User-Section-of-Oliy-Mahad-project\\images\\avatar";
@@ -105,6 +107,19 @@ public class UserService implements Response {
         modelMapper.map(userUpdateRequest, userEntity);
         return modelMapper.map(userRepository.save(userEntity), UserDataResponse.class);
 
+    }
+
+    public RestAPIResponse getUsers (Pageable pageable) {
+        Page<UserEntity> userEntities = userRepository.findAll(pageable);
+        List<UserSectionDto> list = userEntities.getContent().size() > 0 ?
+                userEntities.getContent().stream().map(u -> modelMapper.map(u, UserSectionDto.class)).toList() :
+                new ArrayList<>();
+        PageImpl<UserSectionDto> userSectionDtos = new PageImpl<>(list, userEntities.getPageable(), userEntities.getTotalPages());
+        for (UserSectionDto userSectionDto : userSectionDtos) {
+            Optional<UserRegisterDetails> optional = userDetailRepository.findByUserId(userSectionDto.getId());
+            optional.ifPresent(userRegisterDetails -> modelMapper.map(userRegisterDetails, userSectionDto));
+        }
+        return new RestAPIResponse(USER,true,200,userSectionDtos);
     }
 
     public RestAPIResponse getUserDetails (long userId) {

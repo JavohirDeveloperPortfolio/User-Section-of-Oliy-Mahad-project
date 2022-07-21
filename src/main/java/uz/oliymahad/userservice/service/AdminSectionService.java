@@ -37,6 +37,7 @@ public class AdminSectionService implements Section {
     private final CourseService courseService;
     private final GroupService groupService;
     private final QueueService queueService;
+    private final UserService userService;
 
     private final static int ZERO = 0;
 
@@ -66,18 +67,10 @@ public class AdminSectionService implements Section {
     }
 
     public AdminSectionDto getUsers(Pageable pageable, Sections sections) {
-        Page<UserEntity> userEntities = userRepository.findAll(pageable);
-        List<UserSectionDto> list = userEntities.getContent().size() > 0 ?
-                userEntities.getContent().stream().map(u -> modelMapper.map(u, UserSectionDto.class)).toList() :
-                new ArrayList<>();
-        PageImpl<UserSectionDto> userSectionDtos = new PageImpl<>(list, userEntities.getPageable(), userEntities.getTotalPages());
-        for (UserSectionDto userSectionDto : userSectionDtos) {
-            Optional<UserRegisterDetails> optional = userDetailRepository.findByUserId(userSectionDto.getId());
-            optional.ifPresent(userRegisterDetails -> modelMapper.map(userRegisterDetails, userSectionDto));
-        }
+        RestAPIResponse apiResponse = userService.getUsers(pageable);
         AdminSectionDto adminSectionDto = new AdminSectionDto();
         adminSectionDto.setHeaders(List.of("id", "firstName", "lastName", "middleName", "phoneNumber"));
-        adminSectionDto.setBody(userSectionDtos);
+        adminSectionDto.setBody(apiResponse.getData());
         modelMapper.map(getPermission(sections), adminSectionDto);
         return adminSectionDto;
     }

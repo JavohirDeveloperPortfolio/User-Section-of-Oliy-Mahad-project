@@ -3,12 +3,15 @@ package uz.oliymahad.userservice.service;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import uz.oliymahad.userservice.dto.admin.UserSectionDto;
 import uz.oliymahad.userservice.dto.request.QueueDto;
 import uz.oliymahad.userservice.dto.response.*;
 import uz.oliymahad.userservice.model.entity.UserEntity;
+import uz.oliymahad.userservice.model.entity.UserRegisterDetails;
 import uz.oliymahad.userservice.model.entity.course.CourseEntity;
 import uz.oliymahad.userservice.model.entity.queue.QueueEntity;
 import uz.oliymahad.userservice.model.enums.Status;
@@ -121,7 +124,7 @@ public class QueueService implements BaseService<QueueDto, Long, QueueEntity, Pa
         for (QueueEntity queue : queueEntities) {
             if (queue.getStatus().equals(Status.PENDING)) {
                 users.add(queue.getUser());
-                queue.setStatus(Status.INACTIVE);
+                queue.setStatus(Status.ACCEPT);
                 queueRepository.save(queue);
             }
         }
@@ -142,43 +145,70 @@ public class QueueService implements BaseService<QueueDto, Long, QueueEntity, Pa
         String afterDay = new SimpleDateFormat("yyyy-MM-dd").format(date1);
         return afterDay;
     }
+//
+//    public RestAPIResponse getQueueDetails(Pageable pageable) {
+//
+//        Page<QueueEntity> page = queueRepository.findAll(pageable);
+//        QueueUserPageableResponse response = modelMapper.map(pageable, QueueUserPageableResponse.class);
+//        List<QueueResponse> list = new ArrayList<>();
+//        page.getContent().forEach(cont -> {
+//            list.add(new QueueResponse(
+//                    cont.getId(),
+//                    cont.getCourse().getName(),
+//                    cont.getUser().getId(),
+//                    cont.getUser().getPhoneNumber(),
+//                    cont.getUser().getEmail(),
+//                    cont.getUser().getUserRegisterDetails().getFirstName(),
+//                    cont.getUser().getUserRegisterDetails().getLastName(),
+//                    cont.getAppliedDate(),
+//                    null,
+//                    cont.getStatus()
+//                    ));
+//        });
+////        response.setContent(list);
+//        return new RestAPIResponse(HttpStatus.OK.name(), true, 200,response);
+//    }
+//
+//    private List<QueueUserDetailsDTO> creatingQueueUserDetailsResponse(List<QueueEntity> queues, List<UserDataResponse> users) {
+//        List<QueueUserDetailsDTO> queueUserDetailsDTOS = new ArrayList<>();
+//
+//        queues.forEach(queue -> {
+//            queueUserDetailsDTOS.add(modelMapper.map(queue, QueueUserDetailsDTO.class));
+//        });
+//        int index = 0;
+//        for (QueueEntity queue : queues) {
+//            UserDataResponse userDataResponse =
+//                    users.parallelStream().filter(u -> u.getId().equals(queue.getUser().getId()))
+//                            .findFirst().orElse(new UserDataResponse());
+//            queueUserDetailsDTOS.get(index++).setUserData(userDataResponse);
+//        }
+//        return queueUserDetailsDTOS;
+//    }
 
-    public RestAPIResponse getQueueDetails(Pageable pageable) {
-
-        Page<QueueEntity> page = queueRepository.findAll(pageable);
-        QueueUserPageableResponse response = modelMapper.map(pageable, QueueUserPageableResponse.class);
-        List<QueueResponse> list = new ArrayList<>();
-        page.getContent().forEach(cont -> {
-            list.add(new QueueResponse(
-                    cont.getId(),
-                    cont.getCourse().getName(),
-                    cont.getUser().getId(),
-                    cont.getUser().getPhoneNumber(),
-                    cont.getUser().getEmail(),
-                    cont.getUser().getUserRegisterDetails().getFirstName(),
-                    cont.getUser().getUserRegisterDetails().getLastName(),
-                    cont.getAppliedDate(),
-                    null,
-                    cont.getStatus()
-                    ));
-        });
-//        response.setContent(list);
-        return new RestAPIResponse(HttpStatus.OK.name(), true, 200,response);
-    }
-
-    private List<QueueUserDetailsDTO> creatingQueueUserDetailsResponse(List<QueueEntity> queues, List<UserDataResponse> users) {
-        List<QueueUserDetailsDTO> queueUserDetailsDTOS = new ArrayList<>();
-
-        queues.forEach(queue -> {
-            queueUserDetailsDTOS.add(modelMapper.map(queue, QueueUserDetailsDTO.class));
-        });
-        int index = 0;
-        for (QueueEntity queue : queues) {
-            UserDataResponse userDataResponse =
-                    users.parallelStream().filter(u -> u.getId().equals(queue.getUser().getId()))
-                            .findFirst().orElse(new UserDataResponse());
-            queueUserDetailsDTOS.get(index++).setUserData(userDataResponse);
+    public RestAPIResponse getQueueDetails (Pageable pageable) {
+        Page<QueueEntity> queueEntities = queueRepository.findAllByStatus("PENDING",pageable);
+        List<QueueResponse> list = queueEntities.getContent().size() > 0 ?
+                queueEntities.getContent().stream().map(u ->
+                        modelMapper.map(u, QueueResponse.class)).toList() :
+                new ArrayList<>();
+        for (QueueResponse queueResponse : list) {
+            for (QueueEntity queueEntity : queueEntities) {
+                if (queueResponse.getId().equals(queueEntity.getId())) {
+                    UserEntity user = queueEntity.getUser();
+                    queueResponse.setEmail(user.getEmail());
+                    queueResponse.setFirstName(user.getUserRegisterDetails().getFirstName());
+                    queueResponse.setPhoneNumber(user.getPhoneNumber());
+                    queueResponse.setLastName(user.getUserRegisterDetails().getLastName());
+                    queueResponse.setUserId(user.getId());
+                    CourseEntity course = queueEntity.getCourse();
+                    queueResponse.setCourseName(course.getName());
+                    queueResponse.setStatus(queueEntity.getStatus());
+                    queueResponse.setAppliedDate(queueEntity.getAppliedDate());
+                }
+            }
         }
-        return queueUserDetailsDTOS;
+        PageImpl<QueueResponse> queueResponses = new PageImpl<>(list, queueEntities.getPageable(), queueEntities.getTotalPages());
+        return new RestAPIResponse(USER,true,200,queueResponses);
+
     }
 }

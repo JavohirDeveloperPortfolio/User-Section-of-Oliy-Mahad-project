@@ -7,13 +7,11 @@ import lombok.Setter;
 import uz.oliymahad.userservice.audit.Auditable;
 import uz.oliymahad.userservice.model.entity.UserEntity;
 import uz.oliymahad.userservice.model.entity.course.CourseEntity;
-import uz.oliymahad.userservice.model.enums.EGender;
 import uz.oliymahad.userservice.model.enums.GroupStatusEnum;
 
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @NoArgsConstructor
@@ -40,7 +38,6 @@ import java.util.List;
     @ManyToOne
     private CourseEntity course ;
 
-    @OneToMany()
+    @OneToMany(fetch = FetchType.EAGER)
     private List<UserEntity> userEntities;
-
 }

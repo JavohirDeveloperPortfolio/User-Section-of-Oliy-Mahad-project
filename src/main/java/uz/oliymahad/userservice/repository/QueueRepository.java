@@ -1,6 +1,8 @@
 package uz.oliymahad.userservice.repository;
 
 import feign.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -29,7 +31,11 @@ public interface QueueRepository extends JpaRepository<QueueEntity,Long> {
 
     );
 
-//    @Query(value = "SELECT q FROM QueueEntity q WHERE q.status =: status and q.course.id =: courseId and q.user.userRegisterDetails.gender = :gender ORDER BY q.appliedDate ASC limit :limit ", nativeQuery = true)
-//    List<QueueEntity> findAllByCourseEntityId(@Param("courseId") long courseId, @Param("status") String status, @Param("gender") String gender, @Param("membersCount") int limit);
+    @Query(value = "select * from queue_entity q where q.status = :status",nativeQuery = true)
+    Page<QueueEntity> findAllByStatus(@Param("status") String status,
+                                      Pageable pageable);
+
+    //    @Query(value = "SELECT q FROM QueueEntity q WHERE q.status =: status and q.course.id =: courseId and q.user.userRegisterDetails.gender = :gender ORDER BY q.appliedDate ASC limit :limit ", nativeQuery = true)
+    //    List<QueueEntity> findAllByCourseEntityId(@Param("courseId") long courseId, @Param("status") String status, @Param("gender") String gender, @Param("membersCount") int limit);
 
 }

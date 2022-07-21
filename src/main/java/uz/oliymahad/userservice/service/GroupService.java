@@ -72,12 +72,13 @@ public class GroupService implements Response {
         return new RestAPIResponse(DATA_LIST, true, 200, groupResponseDtos);
     }
 
-    public RestAPIResponse getGroupUsers (long id) {
+    public RestAPIResponse getGroupUsers (Long id) {
         Optional<GroupEntity> optionalGroup = groupRepository.findById(id);
         if (optionalGroup.isEmpty()) {
             return new RestAPIResponse(GROUP + NOT_FOUND, false,404);
         }
-        return new RestAPIResponse(DATA_LIST, true,200,optionalGroup.get().getUserEntities());
+        List<UserEntity> userEntities = optionalGroup.get().getUserEntities();
+        return new RestAPIResponse(DATA_LIST, true,200,userEntities);
     }
 
     public RestAPIResponse updateGroup (long id, GroupRequestDto groupRequestDto) {

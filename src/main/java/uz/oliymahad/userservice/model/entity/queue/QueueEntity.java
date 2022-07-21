@@ -29,7 +29,7 @@ public class QueueEntity extends Auditable<String> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private UserEntity user;
 
     @Column(nullable = false)
@@ -43,7 +43,7 @@ public class QueueEntity extends Auditable<String> {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private CourseEntity course;
 
 }
