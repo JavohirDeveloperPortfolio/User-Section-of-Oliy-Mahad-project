@@ -2,6 +2,7 @@ package uz.oliymahad.userservice.dto.admin;
 
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -16,7 +17,7 @@ public class GroupSectionDto {
 
     private long membersCount ;
 
-    private Date startDate;
+    private LocalDate startDate;
 
     private long courseId ;
 }
