@@ -38,6 +38,7 @@ public class GroupService implements Response {
 
     private final ModelMapper modelMapper;
 
+    private final UserService userService;
 
     public RestAPIResponse addGroup(GroupRequestDto groupRequestDto) {
         Optional<CourseEntity> optionalCourse = courseRepository.findById(groupRequestDto.getCourseId());
@@ -52,6 +53,14 @@ public class GroupService implements Response {
         groupEntity.setUserEntities(queueService.getUsers(groupRequestDto.getCourseId(),"PENDING",groupRequestDto.getMembersCount(),groupRequestDto.getGender()));
         groupRepository.save(groupEntity);
         return new RestAPIResponse(SUCCESSFULLY_SAVED, true, 200);
+    }
+
+    public RestAPIResponse getUserDetails (long userId) {
+        RestAPIResponse apiResponse = userService.getUserDetails(userId);
+        if (!apiResponse.isSuccess()) {
+            return new RestAPIResponse(USER + NOT_FOUND,false,404);
+        }
+        return new RestAPIResponse("User Register Details",true,200,apiResponse.getData());
     }
 
     public RestAPIResponse getGroups(final Pageable page) {
@@ -69,6 +78,17 @@ public class GroupService implements Response {
             return new RestAPIResponse(GROUP + NOT_FOUND, false,404);
         }
         return new RestAPIResponse(DATA_LIST, true,200,optionalGroup.get().getUserEntities());
+    }
+
+    public RestAPIResponse updateGroup (long id, GroupRequestDto groupRequestDto) {
+        Optional<GroupEntity> optionalGroup = groupRepository.findById(id);
+        if (optionalGroup.isEmpty()) {
+            return new RestAPIResponse(GROUP + NOT_FOUND,false,404);
+        }
+        GroupEntity groupEntity = optionalGroup.get();
+        modelMapper.map(groupRequestDto,groupEntity);
+        groupRepository.save(groupEntity);
+        return new RestAPIResponse(SUCCESSFULLY_UPDATED,true,200);
     }
 
 

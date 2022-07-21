@@ -22,37 +22,50 @@ public class QueueController implements BaseController {
 
     private final QueueService queueService;
 
-    @GetMapping("/getQueue")
+    @GetMapping(GET + "/getQueue")
     public RestAPIResponse getQueue (Pageable pageable) {
        return queueService.getQueueDetails(pageable);
     }
 
-    @PostMapping()
+    @PostMapping(ADD)
     public ResponseEntity<?> addQueue(@RequestBody QueueDto queueDto) {
         RestAPIResponse apiResponse = queueService.add(queueDto);
         return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.CREATED : HttpStatus.CONFLICT).body(apiResponse);
     }
 
-    @GetMapping()
+    @GetMapping(GET + "/user_details/{queueId}")
+    public ResponseEntity<?> getUserDetails (@PathVariable long queueId) {
+        RestAPIResponse apiResponse = queueService.getUserDetails(queueId);
+        return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(apiResponse);
+    }
+
+    @PutMapping(UPDATE + "/change_status/{id}")
+    public ResponseEntity<?> changeStatus (@PathVariable long id, QueueDto queueDto) {
+        RestAPIResponse apiResponse = queueService.changeQueueStatus(id, queueDto);
+        return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(apiResponse);
+    }
+
+
+    @GetMapping(GET)
     public ResponseEntity<?> getList (
           Pageable page
     ) {
         return ResponseEntity.ok(queueService.getList(page));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(GET+ "/{id}")
     public ResponseEntity<?> getQueue (@PathVariable Long id) {
         RestAPIResponse apiResponse = queueService.get(id);
         return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(apiResponse);
     }
 
-    @PutMapping( "/{id}")
+    @PutMapping(UPDATE+ "/{id}")
     public ResponseEntity<?> updateQueue (@PathVariable Long id, @RequestBody QueueDto queueDto) {
         RestAPIResponse apiResponse = queueService.edit(id, queueDto);
         return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(apiResponse);
     }
     
-    @DeleteMapping( "/{id}")
+    @DeleteMapping(DELETE + "/{id}")
     public ResponseEntity<?> deleteQueue (@PathVariable Long id) {
         RestAPIResponse apiResponse = queueService.delete(id);
         return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.NO_CONTENT : HttpStatus.NOT_FOUND).body(apiResponse);
@@ -85,7 +98,7 @@ public class QueueController implements BaseController {
         return ResponseEntity.status(HttpStatus.OK).body(queueByFilter);
     }
 
-    @GetMapping("/details")
+    @GetMapping( GET + "/details")
     private ResponseEntity<?> getQueueDetails(
             @RequestParam(required = false, defaultValue = "0") Integer page,
             @RequestParam(required = false) Integer size,

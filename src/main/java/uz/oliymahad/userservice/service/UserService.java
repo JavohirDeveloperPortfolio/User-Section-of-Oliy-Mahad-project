@@ -15,6 +15,7 @@ import uz.oliymahad.userservice.converter.UserDataModelConverter;
 import uz.oliymahad.userservice.dto.request.ImageRequest;
 import uz.oliymahad.userservice.dto.request.UserUpdateRequest;
 import uz.oliymahad.userservice.dto.request.UsersIDSRequest;
+import uz.oliymahad.userservice.dto.response.Response;
 import uz.oliymahad.userservice.dto.response.RestAPIResponse;
 import uz.oliymahad.userservice.dto.response.UserDataResponse;
 import uz.oliymahad.userservice.exception.custom_ex_model.UserNotFoundException;
@@ -25,20 +26,17 @@ import uz.oliymahad.userservice.model.enums.ERole;
 import uz.oliymahad.userservice.repository.UserRepository;
 
 import javax.management.relation.RoleNotFoundException;
-import java.util.Arrays;
+import java.util.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements Response {
 
     private final static Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
@@ -107,6 +105,14 @@ public class UserService {
         modelMapper.map(userUpdateRequest, userEntity);
         return modelMapper.map(userRepository.save(userEntity), UserDataResponse.class);
 
+    }
+
+    public RestAPIResponse getUserDetails (long userId) {
+        Optional<UserEntity> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
+            return new RestAPIResponse(USER + NOT_FOUND, false,404);
+        }
+        return new RestAPIResponse(USER,true,200,optionalUser.get().getUserRegisterDetails());
     }
 
     private String imageSave(ImageRequest imageRequest, String oldImageUrl) {

@@ -96,6 +96,25 @@ public class QueueService implements BaseService<QueueDto, Long, QueueEntity, Pa
 
     }
 
+    public RestAPIResponse changeQueueStatus (long id, QueueDto queueDto) {
+        Optional<QueueEntity> optionalQueue = queueRepository.findById(id);
+        if (optionalQueue.isEmpty()) {
+            return new RestAPIResponse(QUEUE + NOT_FOUND,false,404);
+        }
+        QueueEntity queue = optionalQueue.get();
+        queue.setStatus(Status.valueOf(queueDto.getStatus()));
+        queueRepository.save(queue);
+        return new RestAPIResponse(SUCCESSFULLY_UPDATED,true,200);
+    }
+
+    public RestAPIResponse getUserDetails (long queueId) {
+        Optional<QueueEntity> optionalQueue = queueRepository.findById(queueId);
+        if (optionalQueue.isEmpty()) {
+            return new RestAPIResponse(QUEUE + NOT_FOUND,false,404);
+        }
+        return new RestAPIResponse(USER,true,200,optionalQueue.get().getUser().getUserRegisterDetails());
+    }
+
     public List<UserEntity> getUsers (long courseId, String status, int limit, String gender) {
         List<QueueEntity> queueEntities = queueRepository.filterByCourseStatusGenderLimitForGroups(courseId,status,gender,limit);
         List<UserEntity> users = new ArrayList<>();

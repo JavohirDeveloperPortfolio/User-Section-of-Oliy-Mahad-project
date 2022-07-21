@@ -22,4 +22,6 @@ public class QueueDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime appliedDate;
 
+    private String status;
+
 }

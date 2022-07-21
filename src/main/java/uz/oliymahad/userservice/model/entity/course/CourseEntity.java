@@ -15,7 +15,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Getter
 @Setter
-@Entity
+@Entity(name = "course_entity")
 public class CourseEntity extends Auditable<String> {
 
     @Id

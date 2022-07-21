@@ -31,10 +31,21 @@ public class GroupController implements BaseController{
         return ResponseEntity.ok(apiResponse);
     }
 
+    @RequestMapping(GET + "/user_details/{userId}")
+    public ResponseEntity<?> getUserDetails (@PathVariable long userId) {
+        RestAPIResponse apiResponse = groupService.getUserDetails(userId);
+        return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(apiResponse);
+    }
+
     @GetMapping(GET+"/{id}")
     public ResponseEntity<?> getGroupUsers (@PathVariable long id) {
         RestAPIResponse apiResponse = groupService.getGroupUsers(id);
         return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(apiResponse);
     }
 
+    @PutMapping(UPDATE + "/{id}")
+    public ResponseEntity<?> updateGroup (@PathVariable long id, @RequestBody GroupRequestDto groupRequestDto) {
+        RestAPIResponse apiResponse = groupService.updateGroup(id, groupRequestDto);
+        return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(apiResponse);
+    }
 }
