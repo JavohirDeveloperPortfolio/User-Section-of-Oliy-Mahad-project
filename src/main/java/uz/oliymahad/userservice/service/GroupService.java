@@ -11,6 +11,8 @@ import uz.oliymahad.userservice.dto.admin.GroupSectionDto;
 import uz.oliymahad.userservice.dto.request.GroupRequestDto;
 import uz.oliymahad.userservice.dto.response.Response;
 import uz.oliymahad.userservice.dto.response.RestAPIResponse;
+import uz.oliymahad.userservice.dto.response.UserDetailResponse;
+import uz.oliymahad.userservice.dto.response.UserResponse;
 import uz.oliymahad.userservice.model.entity.UserEntity;
 import uz.oliymahad.userservice.model.entity.course.CourseEntity;
 import uz.oliymahad.userservice.model.entity.group.GroupEntity;
@@ -63,9 +65,9 @@ public class GroupService implements Response {
         return new RestAPIResponse("User Register Details",true,200,apiResponse.getData());
     }
 
-    public RestAPIResponse getGroups(final Pageable page) {
-        final Page<GroupEntity> groupEntities = groupRepository.findAll(page);
-        final List<GroupSectionDto> list = groupEntities.getContent().size() > 0 ?
+    public RestAPIResponse getGroups(Pageable page) {
+        Page<GroupEntity> groupEntities = groupRepository.findAll(page);
+        List<GroupSectionDto> list = groupEntities.getContent().size() > 0 ?
                 groupEntities.getContent().stream().map(u -> modelMapper.map(u, GroupSectionDto.class)).toList() :
                 new ArrayList<>();
         PageImpl<GroupSectionDto> groupResponseDtos = new PageImpl<>(list, groupEntities.getPageable(), groupEntities.getTotalPages());
@@ -78,7 +80,11 @@ public class GroupService implements Response {
             return new RestAPIResponse(GROUP + NOT_FOUND, false,404);
         }
         List<UserEntity> userEntities = optionalGroup.get().getUserEntities();
-        return new RestAPIResponse(DATA_LIST, true,200,userEntities);
+        List<UserResponse> userResponseList = new ArrayList<>();
+        for (UserEntity user : userEntities) {
+            userResponseList.add(modelMapper.map(user, UserResponse.class));
+        }
+        return new RestAPIResponse(DATA_LIST, true,200,userResponseList);
     }
 
     public RestAPIResponse updateGroup (long id, GroupRequestDto groupRequestDto) {

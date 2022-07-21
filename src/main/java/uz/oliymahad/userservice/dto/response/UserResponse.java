@@ -10,10 +10,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class UserSectionResponse {
+public class UserResponse {
 
-    private Long id;
-    private String name;
+    private long id;
     private String username;
-
+    private String phoneNumber;
+    private String email;
+    private long userRegisterDetailsId;
+    private String imageUrl;
 }

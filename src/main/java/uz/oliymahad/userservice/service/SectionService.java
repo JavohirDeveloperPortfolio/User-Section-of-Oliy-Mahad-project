@@ -1,33 +1,26 @@
 package uz.oliymahad.userservice.service;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
+
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import uz.oliymahad.userservice.dto.request.RolePermission;
 import uz.oliymahad.userservice.dto.request.SectionRequestDto;
 import uz.oliymahad.userservice.dto.response.*;
 import uz.oliymahad.userservice.dto.response.SectionAccessResponse;
-import uz.oliymahad.userservice.model.entity.RoleEntity;
 import uz.oliymahad.userservice.model.entity.Sections;
 import uz.oliymahad.userservice.model.entity.UserEntity;
 import uz.oliymahad.userservice.model.enums.ERole;
 import uz.oliymahad.userservice.repository.SectionRepository;
 import uz.oliymahad.userservice.security.jwt.UserDetailsServiceImpl;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import static uz.oliymahad.userservice.model.enums.ERole.*;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor

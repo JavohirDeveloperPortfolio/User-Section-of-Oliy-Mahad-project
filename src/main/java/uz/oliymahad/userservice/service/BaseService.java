@@ -17,5 +17,4 @@ public interface BaseService<D ,K,E,P> {
     RestAPIResponse get(K id);
     RestAPIResponse delete(K id);
     RestAPIResponse edit(K id, D d);
-
 }

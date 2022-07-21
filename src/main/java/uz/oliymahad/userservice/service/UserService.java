@@ -17,6 +17,7 @@ import uz.oliymahad.userservice.dto.request.UsersIDSRequest;
 import uz.oliymahad.userservice.dto.response.Response;
 import uz.oliymahad.userservice.dto.response.RestAPIResponse;
 import uz.oliymahad.userservice.dto.response.UserDataResponse;
+import uz.oliymahad.userservice.dto.response.UserDetailResponse;
 import uz.oliymahad.userservice.exception.custom_ex_model.UserNotFoundException;
 import uz.oliymahad.userservice.model.entity.RoleEntity;
 import uz.oliymahad.userservice.exception.custom_ex_model.UserNotFoundException;
@@ -127,7 +128,9 @@ public class UserService implements Response {
         if (optionalUser.isEmpty()) {
             return new RestAPIResponse(USER + NOT_FOUND, false,404);
         }
-        return new RestAPIResponse(USER,true,200,optionalUser.get().getUserRegisterDetails());
+        UserEntity userEntity = optionalUser.get();
+        UserDetailResponse userDetailResponse = modelMapper.map(userEntity.getUserRegisterDetails(), UserDetailResponse.class);
+        return new RestAPIResponse(USER,true,200,userDetailResponse);
     }
 
     private String imageSave(ImageRequest imageRequest, String oldImageUrl) {
