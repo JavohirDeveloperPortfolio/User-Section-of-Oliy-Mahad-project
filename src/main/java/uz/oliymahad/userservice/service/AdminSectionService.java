@@ -49,7 +49,7 @@ public class AdminSectionService implements Section {
         Sections sections = optionalSections.get();
         AdminSectionDto adminSectionDto = new AdminSectionDto();
         switch (sections.getName()) {
-            case USERS:
+            case USER:
                 adminSectionDto = getUsers(pageable, sections);
                 break;
             case GROUP:
@@ -93,7 +93,7 @@ public class AdminSectionService implements Section {
 
     public AdminSectionDto getGroup(Pageable pageable, Sections sections) {
         AdminSectionDto adminSectionDto = new AdminSectionDto();
-        adminSectionDto.setHeaders(List.of("id", "name", "memberCount", "type", "startDate", "courseName", "courseId"));
+        adminSectionDto.setHeaders(List.of("id", "name", "memberCount", "startDate", "courseName", "courseId"));
         RestAPIResponse apiResponse = groupService.getGroups(pageable);
         adminSectionDto.setBody(apiResponse.getData());
         modelMapper.map(getPermission(sections), adminSectionDto);

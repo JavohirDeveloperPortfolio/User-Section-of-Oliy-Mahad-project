@@ -16,7 +16,7 @@ public interface QueueRepository extends JpaRepository<QueueEntity,Long> {
     @Query(value = "select rank from (select user_id,applieddate, rank() over (order by applieddate) from queue_entity where course_id = :courseId) as sub where user_id = :userId", nativeQuery = true)
     List<Long> getUserCourseQueue(@Param("userId") Long userId, @Param("courseId") Long courseId);
 
-    @Query(value = "select * from (select *,RANK() over(order by applieddate asc) from queueentity q inner join users u on q.user_id = u.id inner join user_register_details urd on u.id = urd.user_id where q.course_id = :courseId and q.status = :status and urd.gender = :gender ) as sub  limit :limit", nativeQuery = true)
+    @Query(value = "select * from (select *,RANK() over(order by applieddate asc) from queue_entity q inner join users u on q.user_id = u.id inner join user_register_details urd on u.id = urd.user_id where q.course_id = :courseId and q.status = :status and urd.gender = :gender ) as sub  limit :limit", nativeQuery = true)
     List<QueueEntity> filterByCourseStatusGenderLimitForGroups(@Param("courseId") Long courseId, @Param("status") String status, @Param("gender") String gender, @Param("limit") int limit);
 
 

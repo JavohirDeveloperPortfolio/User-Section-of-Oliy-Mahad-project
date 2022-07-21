@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 @Setter
-@Entity
+@Entity(name = "queue_entity")
 public class QueueEntity extends Auditable<String> {
 
     @Id

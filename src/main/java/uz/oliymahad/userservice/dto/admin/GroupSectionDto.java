@@ -16,9 +16,7 @@ public class GroupSectionDto {
 
     private long membersCount ;
 
-    private String type ;
-
-    private Date startDate ;
+    private Date startDate;
 
     private long courseId ;
 }

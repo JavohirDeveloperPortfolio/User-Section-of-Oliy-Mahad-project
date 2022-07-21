@@ -12,6 +12,7 @@ import uz.oliymahad.userservice.model.enums.GroupStatusEnum;
 
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +35,7 @@ import java.util.List;
     @Enumerated
     private GroupStatusEnum groupStatus ;
 
-    private Date startDate;
+    private LocalDate startDate = LocalDate.now();
 
     @ManyToOne
     private CourseEntity course ;

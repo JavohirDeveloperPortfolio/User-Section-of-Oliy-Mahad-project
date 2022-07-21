@@ -2,6 +2,7 @@ package uz.oliymahad.userservice.dto.request;
 
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -13,9 +14,9 @@ public class GroupRequestDto {
 
     private String gender;
 
-    private Date startDate ;
+    private LocalDate startDate;
 
-    private long courseId ;
+    private long courseId;
 
 
 }
