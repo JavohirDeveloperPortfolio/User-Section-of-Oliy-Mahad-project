@@ -7,6 +7,7 @@ import lombok.Setter;
 import uz.oliymahad.userservice.audit.Auditable;
 import uz.oliymahad.userservice.model.entity.UserEntity;
 import uz.oliymahad.userservice.model.entity.course.CourseEntity;
+import uz.oliymahad.userservice.model.enums.EGender;
 import uz.oliymahad.userservice.model.enums.GroupStatusEnum;
 
 
@@ -37,6 +38,9 @@ import java.util.List;
 
     @ManyToOne
     private CourseEntity course ;
+
+    @Enumerated(EnumType.STRING)
+    private EGender gender;
 
     @OneToMany(fetch = FetchType.EAGER)
     private List<UserEntity> userEntities;

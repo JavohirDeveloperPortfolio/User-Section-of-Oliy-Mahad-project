@@ -52,6 +52,7 @@ public class GroupService implements Response {
         modelMapper.map(groupRequestDto,groupEntity);
         groupEntity.setCourse(optionalCourse.get());
         groupEntity.setGroupStatus(GroupStatusEnum.IN_PROGRESS);
+        groupEntity.setGender(EGender.valueOf(groupRequestDto.getGender()));
         groupEntity.setUserEntities(queueService.getUsers(groupRequestDto.getCourseId(),"PENDING",groupRequestDto.getMembersCount(),groupRequestDto.getGender()));
         groupRepository.save(groupEntity);
         return new RestAPIResponse(SUCCESSFULLY_SAVED, true, 200);

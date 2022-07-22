@@ -19,5 +19,7 @@ public class GroupSectionDto {
 
     private LocalDate startDate;
 
+    private String gender;
+
     private long courseId ;
 }
