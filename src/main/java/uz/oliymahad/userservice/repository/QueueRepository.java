@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import uz.oliymahad.userservice.model.entity.queue.QueueEntity;
+import uz.oliymahad.userservice.model.enums.Status;
 
 
 import java.util.List;
@@ -27,6 +28,11 @@ public interface QueueRepository extends JpaRepository<QueueEntity,Long> {
             @Param("status") String status,
             @Param("courseId") Long courseId
 
+    );
+
+    @Query(value = "select status from queue_entity q inner join users u on q.user_id = u.id where u.id = :userId",nativeQuery = true)
+    Status getStatus(
+            @Param("userId") Long userId
     );
 
 //    @Query(value = "SELECT q FROM QueueEntity q WHERE q.status =: status and q.course.id =: courseId and q.user.userRegisterDetails.gender = :gender ORDER BY q.appliedDate ASC limit :limit ", nativeQuery = true)

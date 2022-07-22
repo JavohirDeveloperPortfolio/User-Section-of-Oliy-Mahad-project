@@ -62,7 +62,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(jwTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/api/v1/auth/**").permitAll()
-                .antMatchers("/api/v1/user/**").permitAll()
+                .antMatchers("/api/v1/user/**","/api/v1/group/add").permitAll()
                 .antMatchers("/app/v1/admin/**").permitAll()
                 .antMatchers("/app/v1/adminSection/**").permitAll()
                 .antMatchers("/swagger-ui.html**", "/swagger-resources/**",
