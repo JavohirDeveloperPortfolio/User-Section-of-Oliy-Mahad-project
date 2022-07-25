@@ -5,10 +5,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.oliymahad.userservice.dto.request.UserUpdateRequest;
 import uz.oliymahad.userservice.dto.response.RestAPIResponse;
+import uz.oliymahad.userservice.model.entity.RoleEntity;
+import uz.oliymahad.userservice.model.entity.UserEntity;
+import uz.oliymahad.userservice.model.entity.UserRegisterDetails;
+import uz.oliymahad.userservice.model.entity.course.CourseEntity;
+import uz.oliymahad.userservice.model.entity.queue.QueueEntity;
+import uz.oliymahad.userservice.model.enums.EGender;
+import uz.oliymahad.userservice.model.enums.ERole;
+import uz.oliymahad.userservice.model.enums.Status;
+import uz.oliymahad.userservice.repository.CourseRepository;
+import uz.oliymahad.userservice.repository.QueueRepository;
+import uz.oliymahad.userservice.repository.UserDetailRepository;
+import uz.oliymahad.userservice.repository.UserRepository;
 import uz.oliymahad.userservice.service.UserService;
 import uz.oliymahad.userservice.service.oauth0.CustomOAuth0UserService;
 
 import javax.validation.Valid;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -17,6 +34,10 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping("/api/v1/user")
 public class UserController {
     private final UserService userService;
+    private final UserRepository userRepository;
+    private final QueueRepository queueRepository;
+    private final UserDetailRepository userDetailRepository;
+    private final CourseRepository courseRepository;
 
     private final CustomOAuth0UserService oAuth0UserService;
 
@@ -73,4 +94,45 @@ public class UserController {
 //                )
 //        );
 //    }
+
+
+    @GetMapping("/fake")
+    public void fake() {
+        for (int i = 0; i < 1_000; i++) {
+            UserEntity userEntity = new UserEntity();
+            userEntity.setRoles(Set.of(new RoleEntity(2, ERole.ROLE_ADMIN)));
+            userEntity.setPhoneNumber(generator(6));
+            userEntity.setPassword("root123");
+            UserEntity savedUserEntity = userRepository.save(userEntity);
+
+            UserRegisterDetails userRegisterDetails = new UserRegisterDetails();
+            userRegisterDetails.setFirstName(generator(5));
+            userRegisterDetails.setLastName(generator(5));
+            if (i % 2 == 0) {
+                userRegisterDetails.setGender(EGender.FEMALE);
+            } else {
+                userRegisterDetails.setGender(EGender.MALE);
+            }
+            userRegisterDetails.setUser(savedUserEntity);
+            UserRegisterDetails save = userDetailRepository.save(userRegisterDetails);
+            savedUserEntity.setUserRegisterDetails(save);
+            userRepository.save(savedUserEntity);
+
+
+            Optional<CourseEntity> optionalCourse = courseRepository.findById(1l);
+            QueueEntity queueEntity = new QueueEntity();
+            queueEntity.setUser(savedUserEntity);
+            queueEntity.setStatus(Status.PENDING);
+            queueEntity.setAppliedDate(LocalDateTime.now());
+            queueEntity.setCourse(optionalCourse.get());
+            queueRepository.save(queueEntity);
+        }
+
+    }
+
+    private String generator(int range){
+        String s = UUID.randomUUID().toString();
+        s.substring(0,range).replace("_","");
+        return s;
+    }
 }

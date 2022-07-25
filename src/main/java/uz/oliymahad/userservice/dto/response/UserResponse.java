@@ -17,5 +17,4 @@ public class UserResponse {
     private String phoneNumber;
     private String email;
     private long userRegisterDetailsId;
-    private String imageUrl;
 }

@@ -21,5 +21,7 @@ public class GroupSectionDto {
 
     private String gender;
 
+    private String courseName;
+
     private long courseId ;
 }
