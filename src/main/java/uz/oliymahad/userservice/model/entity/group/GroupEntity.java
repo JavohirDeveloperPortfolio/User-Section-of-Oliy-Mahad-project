@@ -21,12 +21,13 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "group_entity")
-    public class GroupEntity extends Auditable<String> {
+public class GroupEntity extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true,nullable = false)
     private String name;
 
     private int membersCount ;
@@ -37,11 +38,11 @@ import java.util.List;
     private LocalDate startDate = LocalDate.now();
 
     @ManyToOne
-    private CourseEntity course ;
+    private CourseEntity course;
 
     @Enumerated(EnumType.STRING)
     private EGender gender;
 
     @OneToMany(fetch = FetchType.EAGER)
-    private List<UserEntity> userEntities;
+    private List<UserEntity> users;
 }

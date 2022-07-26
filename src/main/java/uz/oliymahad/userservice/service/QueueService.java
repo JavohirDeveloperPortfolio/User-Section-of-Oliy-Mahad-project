@@ -133,7 +133,6 @@ public class QueueService implements BaseService<QueueDto, Long, QueueEntity, Pa
         return users;
     }
 
-
     private String getDayAfterDay(String day) {
         String sDay = day.substring(0, 10);
         Date date = null;
@@ -173,6 +172,5 @@ public class QueueService implements BaseService<QueueDto, Long, QueueEntity, Pa
         }
         PageImpl<QueueResponse> queueResponses = new PageImpl<>(list, queueEntities.getPageable(), queueEntities.getTotalPages());
         return new RestAPIResponse(USER,true,200,queueResponses);
-
     }
 }

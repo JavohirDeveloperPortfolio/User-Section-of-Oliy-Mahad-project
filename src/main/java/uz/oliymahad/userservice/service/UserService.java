@@ -115,11 +115,14 @@ public class UserService implements Response {
         List<UserSectionDto> list = userEntities.getContent().size() > 0 ?
                 userEntities.getContent().stream().map(u -> modelMapper.map(u, UserSectionDto.class)).toList() :
                 new ArrayList<>();
-        PageImpl<UserSectionDto> userSectionDtos = new PageImpl<>(list, userEntities.getPageable(), userEntities.getTotalPages());
+        int number = userEntities.getTotalPages();
+       Page<UserSectionDto> userSectionDtos =new PageImpl<>(list, pageable,userEntities.getTotalPages());
         for (UserSectionDto userSectionDto : userSectionDtos) {
             Optional<UserRegisterDetails> optional = userDetailRepository.findByUserId(userSectionDto.getId());
             optional.ifPresent(userRegisterDetails -> modelMapper.map(userRegisterDetails, userSectionDto));
         }
+
+        int number2 = userSectionDtos.getTotalPages();
         return new RestAPIResponse(USER,true,200,userSectionDtos);
     }
 

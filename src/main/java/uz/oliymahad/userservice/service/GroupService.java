@@ -2,10 +2,7 @@ package uz.oliymahad.userservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import uz.oliymahad.userservice.dto.admin.GroupSectionDto;
 import uz.oliymahad.userservice.dto.request.GroupRequestDto;
@@ -21,6 +18,7 @@ import uz.oliymahad.userservice.model.enums.GroupStatusEnum;
 import uz.oliymahad.userservice.repository.CourseRepository;
 import uz.oliymahad.userservice.repository.GroupRepository;
 import uz.oliymahad.userservice.repository.QueueRepository;
+import uz.oliymahad.userservice.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +40,8 @@ public class GroupService implements Response {
 
     private final UserService userService;
 
+    private final UserRepository userRepository;
+
     public RestAPIResponse addGroup(GroupRequestDto groupRequestDto) {
         Optional<CourseEntity> optionalCourse = courseRepository.findById(groupRequestDto.getCourseId());
 
@@ -53,7 +53,7 @@ public class GroupService implements Response {
         groupEntity.setCourse(optionalCourse.get());
         groupEntity.setGroupStatus(GroupStatusEnum.IN_PROGRESS);
         groupEntity.setGender(EGender.valueOf(groupRequestDto.getGender()));
-        groupEntity.setUserEntities(queueService.getUsers(groupRequestDto.getCourseId(),"PENDING",groupRequestDto.getMembersCount(),groupRequestDto.getGender()));
+        groupEntity.setUsers(queueService.getUsers(groupRequestDto.getCourseId(),"PENDING",groupRequestDto.getMembersCount(),groupRequestDto.getGender()));
         groupRepository.save(groupEntity);
         return new RestAPIResponse(SUCCESSFULLY_SAVED, true, 200);
     }
@@ -71,19 +71,25 @@ public class GroupService implements Response {
         List<GroupSectionDto> list = groupEntities.getContent().size() > 0 ?
                 groupEntities.getContent().stream().map(u -> modelMapper.map(u, GroupSectionDto.class)).toList() :
                 new ArrayList<>();
+        for (GroupSectionDto groupSectionDto : list) {
+            Optional<CourseEntity> optionalCourse = courseRepository.findById(groupSectionDto.getCourseId());
+            groupSectionDto.setCourseName(optionalCourse.get().getName());
+        }
         PageImpl<GroupSectionDto> groupResponseDtos = new PageImpl<>(list, groupEntities.getPageable(), groupEntities.getTotalPages());
         return new RestAPIResponse(DATA_LIST, true, 200, groupResponseDtos);
     }
 
-    public RestAPIResponse getGroupUsers (Long id) {
+    public RestAPIResponse  getGroupUsers (Long id) {
         Optional<GroupEntity> optionalGroup = groupRepository.findById(id);
         if (optionalGroup.isEmpty()) {
             return new RestAPIResponse(GROUP + NOT_FOUND, false,404);
         }
-        List<UserEntity> userEntities = optionalGroup.get().getUserEntities();
+        List<UserEntity> userEntities = optionalGroup.get().getUsers();
         List<UserResponse> userResponseList = new ArrayList<>();
         for (UserEntity user : userEntities) {
-            userResponseList.add(modelMapper.map(user, UserResponse.class));
+            UserResponse userResponse = new UserResponse();
+            modelMapper.map(user,userResponse);
+            userResponseList.add(userResponse);
         }
         return new RestAPIResponse(DATA_LIST, true,200,userResponseList);
     }

@@ -17,4 +17,5 @@ public class UserSectionDto {
     private String lastName;
     private String middleName;
     private String phoneNumber;
+    private String gender;
 }
