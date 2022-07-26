@@ -75,7 +75,7 @@ public class GroupService implements Response {
             Optional<CourseEntity> optionalCourse = courseRepository.findById(groupSectionDto.getCourseId());
             groupSectionDto.setCourseName(optionalCourse.get().getName());
         }
-        PageImpl<GroupSectionDto> groupResponseDtos = new PageImpl<>(list, groupEntities.getPageable(), groupEntities.getTotalPages());
+        PageImpl<GroupSectionDto> groupResponseDtos = new PageImpl<>(list, groupEntities.getPageable(), groupEntities.getTotalElements());
         return new RestAPIResponse(DATA_LIST, true, 200, groupResponseDtos);
     }
 

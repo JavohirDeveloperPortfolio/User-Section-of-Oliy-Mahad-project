@@ -42,7 +42,7 @@ public class CourseService implements BaseService<CourseDto,Long, CourseEntity, 
         List<CourseSectionDto> list = courseEntities.getContent().size() > 0 ?
                 courseEntities.getContent().stream().map(u -> modelMapper.map(u, CourseSectionDto.class)).toList() :
                 new ArrayList<>();
-        PageImpl<CourseSectionDto> courseSectionDtos = new PageImpl<>(list, courseEntities.getPageable(), courseEntities.getTotalPages());
+        PageImpl<CourseSectionDto> courseSectionDtos = new PageImpl<>(list, courseEntities.getPageable(), courseEntities.getTotalElements());
         return new RestAPIResponse(COURSE + DATA_LIST,true,200,courseSectionDtos);
     }
 

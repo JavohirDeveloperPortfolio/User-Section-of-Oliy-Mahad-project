@@ -170,7 +170,7 @@ public class QueueService implements BaseService<QueueDto, Long, QueueEntity, Pa
                 }
             }
         }
-        PageImpl<QueueResponse> queueResponses = new PageImpl<>(list, queueEntities.getPageable(), queueEntities.getTotalPages());
+        PageImpl<QueueResponse> queueResponses = new PageImpl<>(list, queueEntities.getPageable(), queueEntities.getTotalElements());
         return new RestAPIResponse(USER,true,200,queueResponses);
     }
 }
